@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 
+import { LoginComponent } from './login/login.component';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [],
+  imports: [ LoginComponent ],
   styleUrl: './app.component.css',
   template: `
-    <h1>Roast Report</h1>
-    <button>Add Coffee</button>
+    <login></login>
   `,
 })
 export class AppComponent {
