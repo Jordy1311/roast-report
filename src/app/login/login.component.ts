@@ -53,7 +53,6 @@ export class LoginComponent {
       return;
     }
 
-    this.authService.login(this.email!, this.password!)
-      .subscribe((response) => console.log(response));
+    this.authService.login(this.email!, this.password!);
   }
 }
