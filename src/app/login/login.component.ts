@@ -13,11 +13,28 @@ import { LoginService } from '../services/login.service';
       <fieldset>
         <label>
           Email
-          <input type="email" name="email" autocomplete="email" [(ngModel)]="email" required />
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            aria-label="Email"
+            aria-describedby="email-helper"
+            autocomplete="email" />
+          <small id="email-helper">
+            We'll never share your email with anyone else.
+          </small>
         </label>
+
         <label>
           Password
-          <input type="password" name="password" autocomplete="current-password" [(ngModel)]="password" required />
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            aria-label="Password"
+            autocomplete="current-password" />
         </label>
       </fieldset>
 
