@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { LoginService } from '../services/login.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'login',
@@ -46,14 +46,14 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
 
-  constructor(private loginService: LoginService) {}
+  constructor(private authService: AuthService) {}
 
   login(): void {
     if (!this.email || !this.password) {
       return;
     }
 
-    this.loginService.login(this.email!, this.password!)
+    this.authService.login(this.email!, this.password!)
       .subscribe((response) => console.log(response));
   }
 }
