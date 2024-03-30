@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+export const accessTokenAddress = 'access_token';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private accessTokenAddress = 'access_token';
 
   constructor(private http: HttpClient) { }
 
@@ -17,15 +17,15 @@ export class AuthService {
   }
 
   private storeToken(accessToken: string) {
-    localStorage.setItem(this.accessTokenAddress, accessToken);
+    localStorage.setItem(accessTokenAddress, accessToken);
   }
 
   logout(): void {
-    localStorage.removeItem(this.accessTokenAddress);
+    localStorage.removeItem(accessTokenAddress);
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem(this.accessTokenAddress);
+    return !!localStorage.getItem(accessTokenAddress);
   }
 
   isLoggedOut(): boolean {
