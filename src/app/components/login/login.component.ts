@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NgIf } from '@angular/common';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ ReactiveFormsModule ],
+  imports: [ NgIf, ReactiveFormsModule ],
   styleUrl: './login.component.css',
   template: `
     <form [formGroup]="credentials" (ngSubmit)="login()">
@@ -22,13 +24,10 @@ import { AuthService } from '../../services/auth.service';
             type="email"
             formControlName="email"
             aria-label="Email"
-            [attr.aria-invalid]="isInvalidEmail"
-            aria-describedby="email-helper"
+            [attr.aria-invalid]="error || isInvalidEmail"
             autocomplete="email"
             />
-          <small id="email-helper">
-            {{ isInvalidEmail ? "That doesn't look right." : "We'll never share your email with anyone else." }}
-          </small>
+
         </label>
 
         <label>
@@ -37,9 +36,13 @@ import { AuthService } from '../../services/auth.service';
             type="password"
             formControlName="password"
             aria-label="Password"
-            [attr.aria-invalid]="isInvalidPassword"
+            [attr.aria-invalid]="error || isInvalidPassword"
+            [attr.aria-describedby]="error ? 'password-helper' : null"
             autocomplete="current-password"
             />
+          <small *ngIf="error" id="password-helper">
+            Please check your email & password.
+          </small>
         </label>
       </fieldset>
 
@@ -50,7 +53,8 @@ import { AuthService } from '../../services/auth.service';
     </form>
   `,
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  error?: boolean;
   credentials = new FormGroup({
     email: new FormControl<string>(
       '', { validators: [ Validators.required, Validators.email ] }
@@ -60,7 +64,22 @@ export class LoginComponent {
     ),
   });
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
+
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn) {
+      this.router.navigate(['/']);
+    }
+
+    this.credentials.valueChanges.subscribe(() => {
+      if (this.error) {
+        this.error = false;
+      }
+    });
+  }
 
   get email() {
     return this.credentials.get('email');
@@ -88,9 +107,18 @@ export class LoginComponent {
     return false;
   }
 
-  login(): void {
+  login() {
     if (this.credentials.valid && this.email?.value && this.password?.value) {
-      this.authService.login(this.email?.value, this.password?.value);
+      this.authService.login(this.email?.value, this.password?.value)
+        .subscribe(
+          (response) => {
+            this.authService.storeToken(response.accessToken);
+            this.router.navigate(['/']);
+          },
+          (err) => {
+            this.error = true;
+          }
+        );
     }
   }
 }
