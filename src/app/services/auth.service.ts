@@ -9,6 +9,10 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  private storeToken(accessToken: string): void {
+    localStorage.setItem(accessTokenAddress, accessToken);
+  }
+
   login(email: string, password: string): void {
     this.http.post<{ accessToken: string }>('/api/login', { email, password })
       .subscribe((loginResult) => {
@@ -16,19 +20,15 @@ export class AuthService {
       });
   }
 
-  private storeToken(accessToken: string) {
-    localStorage.setItem(accessTokenAddress, accessToken);
-  }
-
   logout(): void {
     localStorage.removeItem(accessTokenAddress);
   }
 
-  isLoggedIn(): boolean {
+  get isLoggedIn(): boolean {
     return !!localStorage.getItem(accessTokenAddress);
   }
 
-  isLoggedOut(): boolean {
-    return !this.isLoggedIn();
+  get isLoggedOut(): boolean {
+    return !this.isLoggedIn;
   }
 }
