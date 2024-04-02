@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  width: 95vw;
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.roast-hgroup, .roast-hgroup p {
+  margin-bottom: 0;
+}
+
+.sub-header {
+  display: flex;
+  justify-content: space-between;
+}

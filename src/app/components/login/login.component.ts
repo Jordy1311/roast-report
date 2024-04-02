@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
             this.authService.storeToken(response.accessToken);
             this.router.navigate(['/']);
           },
-          (err) => {
+          () => {
             this.error = true;
           }
         );
