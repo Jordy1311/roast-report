@@ -7,7 +7,6 @@ export const accessTokenAddress = 'access_token';
   providedIn: 'root'
 })
 export class AuthService {
-
   constructor(private http: HttpClient) { }
 
   storeToken(accessToken: string): void {
@@ -15,7 +14,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<{ accessToken: string; }> {
-    return this.http.post<{ accessToken: string; }>('/api/login', { email, password })
+    return this.http.post<{ accessToken: string; }>('/api/v1/login', { email, password })
       .pipe(catchError(this.handleError));
   }
 
