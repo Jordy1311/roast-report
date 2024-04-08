@@ -11,12 +11,17 @@ import { Roast } from '../../types/roast.type';
   imports: [ NgFor, RoastSummaryComponent ],
   styleUrl: './dashboard.component.css',
   template: `
-    <h1>Roast Report</h1>
-    <app-roast-summary
-      *ngFor="let roast of usersRoasts"
-      [roast]="roast"
-      >
-    </app-roast-summary>
+    <header>
+      <h1>Roast Report</h1>
+    </header>
+
+    <main>
+      <app-roast-summary
+        *ngFor="let roast of usersRoasts"
+        [roast]="roast"
+        >
+      </app-roast-summary>
+    </main>
   `,
 })
 export class DashboardComponent implements OnInit {

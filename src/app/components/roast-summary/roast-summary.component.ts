@@ -9,28 +9,24 @@ import { Roast } from '../../types/roast.type';
   imports: [ NgIf ],
   styleUrl: './roast-summary.component.css',
   template: `
-    <hgroup class="roast-hgroup">
-      <h3>{{ roast.name }}</h3>
-      <div class="sub-header">
-        <p>{{ roast.roaster }}</p>
-        <p>{{ roast.origin }}</p>
-      </div>
-    </hgroup>
+    <article>
+      <header>
+        <span>{{ roast.name }}</span>
+        <span>{{ roast.roaster }}</span>
+      </header>
 
-    <p>
       <small *ngIf="roast.composition || roast.processMethod">
         {{ [roast.composition, roast.processMethod].join(', ') }}
-        <br />
+        <br>
       </small>
-      <small>
-        Tastes like {{ roast.tastingNotes?.join(', ') }}
-        <br />
+      <small *ngIf="roast.tastingNotes">
+        Tastes like: {{ roast.tastingNotes!.join(', ') }}
+        <br>
       </small>
-      <small>
-        Roasted for {{ roast.roastedFor?.join(', ') }}
-        <br />
+      <small *ngIf="roast.roastedFor">
+        Roasted for: {{ roast.roastedFor!.join(', ') }}
       </small>
-    </p>
+    </article>
   `,
 })
 export class RoastSummaryComponent {
