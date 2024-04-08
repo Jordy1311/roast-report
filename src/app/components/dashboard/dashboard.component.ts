@@ -16,11 +16,15 @@ import { Roast } from '../../types/roast.type';
     </header>
 
     <main>
-      <app-roast-summary
-        *ngFor="let roast of usersRoasts"
-        [roast]="roast"
-        >
-      </app-roast-summary>
+      <div class="roasts">
+        <app-roast-summary
+          *ngFor="let roast of usersRoasts"
+          [roast]="roast"
+          >
+        </app-roast-summary>
+      </div>
+
+      <button class="add-roast">Add roast</button>
     </main>
   `,
 })

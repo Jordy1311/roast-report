@@ -9,7 +9,7 @@ import { Roast } from '../../types/roast.type';
   imports: [ NgIf ],
   styleUrl: './roast-summary.component.css',
   template: `
-    <article>
+    <article class="card">
       <header>
         <span>{{ roast.name }}</span>
         <span>{{ roast.roaster }}</span>

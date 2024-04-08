@@ -2,10 +2,16 @@
   display: block;
   width: 95vw;
   max-width: 500px;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
-article header {
+.card header {
   display: flex;
   justify-content: space-between;
+}
+
+@media (min-width: 1280px) {
+  :host {
+    margin-right: 2rem;
+  }
 }
