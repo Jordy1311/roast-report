@@ -18,4 +18,8 @@ button.add-roast {
     flex-wrap: wrap;
     align-items: flex-start;
   }
+
+  button.add-roast {
+    right: 8rem;
+  }
 }
