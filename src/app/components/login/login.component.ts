@@ -81,11 +81,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  get email() {
+  private get email() {
     return this.credentials.get('email');
   }
 
-  get password() {
+  private get password() {
     return this.credentials.get('password');
   }
 
