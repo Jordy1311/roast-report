@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NgIf } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -13,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ NgIf, ReactiveFormsModule ],
+  imports: [ ReactiveFormsModule ],
   styleUrl: './login.component.css',
   template: `
     <form [formGroup]="credentials" (ngSubmit)="login()">
@@ -40,9 +39,9 @@ import { AuthService } from '../../services/auth.service';
             [attr.aria-describedby]="error ? 'password-helper' : null"
             autocomplete="current-password"
             />
-          <small *ngIf="error" id="password-helper">
-            Please check your email & password.
-          </small>
+          @if (error) {
+            <small id="password-helper">Please check your email & password.</small>
+          }
         </label>
       </fieldset>
 

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NgFor } from '@angular/common';
 
 import { RoastService } from '../../services/roast.service';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
@@ -8,7 +7,7 @@ import { Roast } from '../../types/roast.type';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ NgFor, RoastSummaryComponent ],
+  imports: [ RoastSummaryComponent ],
   styleUrl: './dashboard.component.css',
   template: `
     <header>
@@ -17,11 +16,9 @@ import { Roast } from '../../types/roast.type';
 
     <main>
       <div class="roasts">
-        <app-roast-summary
-          *ngFor="let roast of usersRoasts"
-          [roast]="roast"
-          >
-        </app-roast-summary>
+        @for (roast of usersRoasts; track roast._id) {
+          <app-roast-summary [roast]="roast"></app-roast-summary>
+        }
       </div>
 
       <button class="add-roast">Add roast</button>

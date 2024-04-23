@@ -1,12 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { NgIf } from '@angular/common';
 
 import { Roast } from '../../types/roast.type';
 
 @Component({
   selector: 'app-roast-summary',
   standalone: true,
-  imports: [ NgIf ],
+  imports: [],
   styleUrl: './roast-summary.component.css',
   template: `
     <article class="card">
@@ -15,17 +14,15 @@ import { Roast } from '../../types/roast.type';
         <span>{{ roast.roaster }}</span>
       </header>
 
-      <small *ngIf="roast.composition || roast.processMethod">
-        {{ [roast.composition, roast.processMethod].join(', ') }}
-        <br>
-      </small>
-      <small *ngIf="roast.tastingNotes">
-        Tastes like: {{ roast.tastingNotes!.join(', ') }}
-        <br>
-      </small>
-      <small *ngIf="roast.roastedFor">
-        Roasted for: {{ roast.roastedFor!.join(', ') }}
-      </small>
+      @if (roast.composition || roast.processMethod) {
+        <small>{{ [roast.composition, roast.processMethod].join(', ') }}<br></small>
+      }
+      @if (roast.tastingNotes) {
+        <small>Tastes like: {{ roast.tastingNotes!.join(', ') }}<br></small>
+      }
+      @if (roast.roastedFor) {
+        <small>Roasted for: {{ roast.roastedFor!.join(', ') }}</small>
+      }
     </article>
   `,
 })

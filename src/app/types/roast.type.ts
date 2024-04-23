@@ -1,4 +1,5 @@
 export interface Roast {
+  _id: string;
   composition?: string;
   name: string;
   origin?: [ string ];
