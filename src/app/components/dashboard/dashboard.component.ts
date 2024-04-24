@@ -15,22 +15,25 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
 
     <main>
       <div class="roasts">
-        @for (roast of usersRoasts; track roast._id) {
+        @for (roast of usersRoasts(); track roast._id) {
           <app-roast-summary [roast]="roast"></app-roast-summary>
         }
       </div>
 
-      <button class="add-roast">Add roast</button>
+      <button (click)="toggleAddRoast()" class="add-roast">Add roast</button>
     </main>
   `,
 })
 export class DashboardComponent implements OnInit {
-  usersRoasts: Roast[] = [];
   private roastService = inject(RoastService);
 
+  usersRoasts = this.roastService.roastsSignal;
 
   ngOnInit(): void {
-    this.roastService.getUsersRoasts()
-      .subscribe((roasts) => this.usersRoasts = roasts);
+    this.roastService.getUsersRoasts();
+  }
+
+  toggleAddRoast(): void {
+    this.roastService.addRoast()
   }
 }

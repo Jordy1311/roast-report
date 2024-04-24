@@ -9,7 +9,22 @@ import { Roast } from '../types/roast.type';
 export class RoastService {
   private http = inject(HttpClient);
 
-  getUsersRoasts(): Observable<Roast[]> {
-    return this.http.get<Roast[]>('/api/v1/roasts');
+  roastsSignal = signal<Roast[]>([]);
+
+  getUsersRoasts(): void {
+    console.log('getUsersRoasts ran');
+    this.http.get<Roast[]>('/api/v1/roasts')
+      .subscribe((roasts) => this.roastsSignal.set(roasts));
+  }
+
+  addRoast(): void {
+    this.roastsSignal.update((currentRoasts) => {
+      return [...currentRoasts, {
+        _id: '12331343',
+        name: 'Things',
+        roaster: 'Someone',
+        userId: '123123123'
+      }]
+  });
   }
 }
