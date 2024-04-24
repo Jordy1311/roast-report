@@ -26,7 +26,6 @@ import { AuthService } from '../../services/auth.service';
             [attr.aria-invalid]="error || isInvalidEmail"
             autocomplete="email"
             />
-
         </label>
 
         <label>
@@ -56,13 +55,14 @@ export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  // toggles error on form submit
   error?: boolean;
   credentials = new FormGroup({
-    email: new FormControl<string>(
-      '', { validators: [ Validators.required, Validators.email ] }
+    email: new FormControl<string>('',
+      { validators: [ Validators.required, Validators.email ] }
     ),
-    password: new FormControl<string>(
-      '', { validators: [ Validators.required ] }
+    password: new FormControl<string>('',
+      { validators: [ Validators.required ] }
     ),
   });
 
@@ -72,6 +72,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.credentials.valueChanges.subscribe(() => {
+      // if error, clears error on form change
       if (this.error) {
         this.error = false;
       }
@@ -87,26 +88,20 @@ export class LoginComponent implements OnInit {
   }
 
   get isInvalidEmail(): boolean | undefined {
-    if (!this.email?.value) {
-      return undefined;
-    } else if (!this.email?.valid) {
-      return true;
-    }
+    if (!this.email?.value) undefined;
+    if (!this.email!.valid) true;
     return false;
   }
 
   get isInvalidPassword(): boolean | undefined {
-    if (!this.password?.touched) {
-      return undefined;
-    } else if (!this.password?.valid) {
-      return true;
-    }
+    if (!this.password?.touched) undefined;
+    if (!this.password!.valid) true;
     return false;
   }
 
   login() {
     if (this.credentials.valid && this.email?.value && this.password?.value) {
-      this.authService.login(this.email?.value, this.password?.value)
+      this.authService.login(this.email!.value, this.password!.value)
         .subscribe(
           (response) => {
             this.authService.storeToken(response.accessToken);
