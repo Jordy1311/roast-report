@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -53,6 +53,9 @@ import { AuthService } from '../../services/auth.service';
   `,
 })
 export class LoginComponent implements OnInit {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   error?: boolean;
   credentials = new FormGroup({
     email: new FormControl<string>(
@@ -62,11 +65,6 @@ export class LoginComponent implements OnInit {
       '', { validators: [ Validators.required ] }
     ),
   });
-
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {}
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn) {

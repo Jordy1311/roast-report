@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { RoastService } from '../../services/roast.service';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
-import { Roast } from '../../types/roast.type';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,8 +26,8 @@ import { Roast } from '../../types/roast.type';
 })
 export class DashboardComponent implements OnInit {
   usersRoasts: Roast[] = [];
+  private roastService = inject(RoastService);
 
-  constructor(private roastService: RoastService) { }
 
   ngOnInit(): void {
     this.roastService.getUsersRoasts()

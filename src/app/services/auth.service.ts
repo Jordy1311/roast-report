@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 
@@ -7,7 +7,7 @@ export const accessTokenAddress = 'access_token';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
 
   storeToken(accessToken: string): void {
     localStorage.setItem(accessTokenAddress, accessToken);

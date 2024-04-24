@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, inject, signal } from '@angular/core';
 
 import { Roast } from '../types/roast.type';
 
@@ -8,7 +7,7 @@ import { Roast } from '../types/roast.type';
   providedIn: 'root'
 })
 export class RoastService {
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
 
   getUsersRoasts(): Observable<Roast[]> {
     return this.http.get<Roast[]>('/api/v1/roasts');
