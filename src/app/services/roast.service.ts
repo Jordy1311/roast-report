@@ -12,7 +12,6 @@ export class RoastService {
   roastsSignal = signal<Roast[]>([]);
 
   getUsersRoasts(): void {
-    console.log('getUsersRoasts ran');
     this.http.get<Roast[]>('/api/v1/roasts')
       .subscribe((roasts) => this.roastsSignal.set(roasts));
   }
@@ -25,6 +24,6 @@ export class RoastService {
         roaster: 'Someone',
         userId: '123123123'
       }]
-  });
+    });
   }
 }
