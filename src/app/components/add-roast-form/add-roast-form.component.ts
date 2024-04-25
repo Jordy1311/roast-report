@@ -24,7 +24,7 @@ import { RoastService } from '../../services/roast.service';
               Roast
               <input
                 type="text"
-                formControlName="name"
+                formControlName="roast"
                 aria-label="Roast"
                 [attr.aria-invalid]="roastError"
                 />
@@ -94,8 +94,7 @@ export class AddRoastFormComponent implements OnInit {
   roasterError: boolean | undefined;
 
   newRoast = new FormGroup({
-    // aka roast
-    name: new FormControl<string>('',
+    roast: new FormControl<string>('',
       { validators: [ Validators.required ], nonNullable: true }
     ),
     roaster: new FormControl<string>('',
@@ -113,12 +112,14 @@ export class AddRoastFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.name?.valueChanges.subscribe(() => {
+    // clears errors on form change
+    this.roast?.valueChanges.subscribe(() => {
       if (this.roastError) {
         return this.roastError = undefined;
       }
     });
 
+    // clears errors on form change
     this.roaster?.valueChanges.subscribe(() => {
       if (this.roasterError) {
         return this.roasterError = undefined;
@@ -132,8 +133,8 @@ export class AddRoastFormComponent implements OnInit {
     rating - a star rating
   */
 
-  private get name() {
-    return this.newRoast.get('name');
+  private get roast() {
+    return this.newRoast.get('roast');
   }
 
   private get roaster() {
@@ -141,7 +142,7 @@ export class AddRoastFormComponent implements OnInit {
   }
 
   createRoast() {
-    if (this.name?.errors) {
+    if (this.roast?.errors) {
       this.roastError = true;
       return;
     }
@@ -154,7 +155,7 @@ export class AddRoastFormComponent implements OnInit {
     if (this.newRoast.valid) {
       const { composition, processMethod, notes } = this.newRoast.value;
       const newRoast = {
-        name: this.name!.value,
+        name: this.roast!.value,
         roaster: this.roaster!.value,
         composition,
         processMethod,
