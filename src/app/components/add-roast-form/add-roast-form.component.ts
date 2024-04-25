@@ -1,0 +1,156 @@
+import { Component, EventEmitter, Output, inject } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+
+import { RoastService } from '../../services/roast.service';
+
+@Component({
+  selector: 'app-add-roast-form',
+  standalone: true,
+  imports: [ ReactiveFormsModule ],
+  styleUrl: './add-roast-form.component.css',
+  template: `
+    <dialog open>
+      <article>
+        <h2>Add a new roast:</h2>
+
+        <form [formGroup]="newRoast">
+          <fieldset>
+            <label>
+              Roast
+              <input
+                type="text"
+                formControlName="name"
+                aria-label="Roast"
+                [attr.aria-invalid]="isNameEmpty"
+                />
+            </label>
+            <label>
+              Roaster
+              <input
+                type="text"
+                formControlName="roaster"
+                aria-label="Roaster"
+                [attr.aria-invalid]="isRoasterEmpty"
+                />
+            </label>
+
+            <details>
+              <summary>More details?</summary>
+              <label>
+                Roast composition
+                <select
+                  formControlName="composition"
+                  name="composition"
+                  aria-label="Select the composition of this roast"
+                  >
+                  <option selected value="">-</option>
+                  <option value="Single Origin">Single Origin</option>
+                  <option value="Blend">Blend</option>
+                </select>
+              </label>
+              <label>
+                Process method
+                <select
+                  formControlName="processMethod"
+                  name="process-method"
+                  aria-label="Select how this roast was processed"
+                  >
+                  <option selected value="">-</option>
+                  <option value="Washed">Washed</option>
+                  <option value="Natural">Natural</option>
+                </select>
+              </label>
+              <label>
+                Notes
+                <textarea
+                  formControlName="notes"
+                  name="notes"
+                  placeholder="Your notes about this coffee..."
+                  aria-label="Your notes about this coffee"
+                  ></textarea>
+              </label>
+            </details>
+          </fieldset>
+        </form>
+
+        <footer>
+          <button (click)="formClosed.emit()" class="outline">Cancel</button>
+          <button (click)="createRoast()">Add</button>
+        </footer>
+      </article>
+    </dialog>
+  `,
+})
+export class AddRoastFormComponent {
+  private roastService = inject(RoastService);
+
+  @Output() formClosed = new EventEmitter<void>();
+
+  newRoast = new FormGroup({
+    name: new FormControl<string>('',
+      { validators: [ Validators.required ], nonNullable: true }
+    ),
+    roaster: new FormControl<string>('',
+      { validators: [ Validators.required ], nonNullable: true }
+    ),
+    composition: new FormControl<'' | 'single origin' | 'blend'>('',
+      { nonNullable: true }
+    ),
+    processMethod: new FormControl<'' | 'washed' | 'natural'>('',
+      { nonNullable: true }
+    ),
+    notes: new FormControl<string>('',
+      { nonNullable: true }
+    ),
+  });
+
+  /* TOBE implemented
+    roastedFor - some sort of chips
+    tastingNotes - some sort of chips
+    rating - a star rating
+  */
+
+  private get name() {
+    return this.newRoast.get('name');
+  }
+
+  private get roaster() {
+    return this.newRoast.get('roaster');
+  }
+
+  get isNameEmpty(): boolean | undefined {
+    if (!this.name?.value) {return undefined}
+    if (!this.name!.valid) {return true}
+    return false;
+  }
+
+  get isRoasterEmpty(): boolean | undefined {
+    if (!this.roaster?.value) {return undefined}
+    if (!this.roaster!.valid) {return true}
+    return false;
+  }
+
+  createRoast() {
+    if (this.newRoast.valid && this.name?.value && this.roaster?.value) {
+      const { composition, processMethod, notes } = this.newRoast.value;
+      const newRoast = {
+        name: this.name?.value,
+        roaster: this.roaster?.value,
+        composition,
+        processMethod,
+        notes,
+      };
+
+      this.roastService.createRoast(newRoast)
+        .then(() => this.formClosed.emit())
+        .catch(() => console.log('Form says there was error!'));
+    } else {
+      // error or something
+    }
+  }
+}

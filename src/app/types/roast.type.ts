@@ -1,11 +1,23 @@
 export interface Roast {
   _id: string;
-  composition?: string;
+  userId: string;
   name: string;
+  roaster: string;
+
   origin?: [ string ];
+  composition?: string;
   processMethod?: string;
   roastedFor?: [ string ];
-  roaster: string;
   tastingNotes?: [ string ];
-  userId: string;
+  rating?: string;
+  notes?: string;
+}
+
+export interface NewRoast {
+  name: string;
+  roaster: string;
+
+  composition?: string;
+  processMethod?: string;
+  notes?: string;
 }
