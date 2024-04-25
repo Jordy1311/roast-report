@@ -113,11 +113,15 @@ export class AddRoastFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.newRoast.valueChanges.subscribe(() => {
-      // clears errors on form change
-      if (this.roastError || this.roasterError) {
-        this.roastError = undefined;
-        this.roasterError = undefined;
+    this.name?.valueChanges.subscribe(() => {
+      if (this.roastError) {
+        return this.roastError = undefined;
+      }
+    });
+
+    this.roaster?.valueChanges.subscribe(() => {
+      if (this.roasterError) {
+        return this.roasterError = undefined;
       }
     });
   }
