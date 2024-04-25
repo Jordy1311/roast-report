@@ -75,24 +75,24 @@ export class LoginComponent implements OnInit {
     }
 
     // toggle error state dependant on input validity
-    this.email?.valueChanges.pipe(
-      debounceTime(500)
-    ).subscribe(() => {
-      if (this.email!.errors) {
-        this.invalidEmail = true;
-      } else {
-        this.invalidEmail = false;
-      }
-    });
-    this.password?.valueChanges.pipe(
-      debounceTime(250)
-    ).subscribe(() => {
-      if (this.password!.errors) {
-        this.invalidPassword = true;
-      } else {
-        this.invalidPassword = false;
-      }
-    });
+    this.email?.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe(() => {
+        if (this.email!.errors) {
+          this.invalidEmail = true;
+        } else {
+          this.invalidEmail = false;
+        }
+      });
+    this.password?.valueChanges
+      .pipe(debounceTime(250))
+      .subscribe(() => {
+        if (this.password!.errors) {
+          this.invalidPassword = true;
+        } else {
+          this.invalidPassword = false;
+        }
+      });
 
     // remove error state on value change
     this.credentials.valueChanges.subscribe(() => {
