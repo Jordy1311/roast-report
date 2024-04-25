@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 
 import { Roast } from '../../types/roast.type';
+import { RoastService } from '../../services/roast.service';
 
 @Component({
   selector: 'app-roast-summary',
@@ -23,9 +24,16 @@ import { Roast } from '../../types/roast.type';
       @if (roast.roastedFor) {
         <small>Roasted for: {{ roast.roastedFor!.join(', ') }}</small>
       }
+      <button (click)="deleteRoast(roast._id)" class="outline">Delete</button>
     </article>
   `,
 })
 export class RoastSummaryComponent {
+  roastService = inject(RoastService);
+
   @Input() roast!: Roast;
+
+  deleteRoast(id: string): void {
+    this.roastService.deleteRoast(id);
+  }
 }

@@ -11,17 +11,12 @@ export class RoastService {
 
   roastsSignal = signal<Roast[]>([]);
 
-  getUsersRoasts(): void {
-    this.http.get<Roast[]>('/api/v1/roasts')
-      .subscribe((roasts) => this.roastsSignal.set(roasts));
-  }
-
   createRoast(newRoast: NewRoast): Promise<void> {
     return new Promise((resolve, reject) => {
       this.http.post<Roast>('/api/v1/roasts', newRoast)
         .subscribe({
           next: (newRoastObject) => {
-            this.roastsSignal.update((currentRoasts) => [ ...currentRoasts, newRoastObject ])
+            this.roastsSignal.update((currentRoasts) => [ ...currentRoasts, newRoastObject ]);
             resolve();
           },
           error: (err) => {
@@ -30,5 +25,17 @@ export class RoastService {
           }
         });
     });
+  }
+
+  getUsersRoasts(): void {
+    this.http.get<Roast[]>('/api/v1/roasts')
+      .subscribe((roasts) => this.roastsSignal.set(roasts));
+  }
+
+  deleteRoast(id: string): void {
+    this.http.delete(`/api/v1/roasts/${id}`)
+      .subscribe(() => this.roastsSignal.update(
+        currentRoasts => currentRoasts.filter((roast) => roast._id !== id)
+      ));
   }
 }
