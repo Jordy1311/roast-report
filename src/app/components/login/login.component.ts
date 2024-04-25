@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ import { AuthService } from '../../services/auth.service';
             type="email"
             formControlName="email"
             aria-label="Email"
-            [attr.aria-invalid]="error || isInvalidEmail"
+            [attr.aria-invalid]="invalidCredentialsSubmitted || invalidEmail"
             autocomplete="email"
             />
         </label>
@@ -34,11 +35,11 @@ import { AuthService } from '../../services/auth.service';
             type="password"
             formControlName="password"
             aria-label="Password"
-            [attr.aria-invalid]="error || isInvalidPassword"
-            [attr.aria-describedby]="error ? 'password-helper' : null"
+            [attr.aria-invalid]="invalidCredentialsSubmitted || invalidPassword"
+            [attr.aria-describedby]="invalidCredentialsSubmitted ? 'password-helper' : null"
             autocomplete="current-password"
             />
-          @if (error) {
+          @if (invalidCredentialsSubmitted) {
             <small id="password-helper">Please check your email & password.</small>
           }
         </label>
@@ -55,8 +56,10 @@ export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  // toggles error on form submit
-  error?: boolean;
+  invalidCredentialsSubmitted?: boolean;
+  invalidEmail?: boolean;
+  invalidPassword?: boolean;
+
   credentials = new FormGroup({
     email: new FormControl<string>('',
       { validators: [ Validators.required, Validators.email ], nonNullable: true }
@@ -71,11 +74,35 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/']);
     }
 
-    this.credentials.valueChanges.subscribe(() => {
-      // clears errors on form change
-      if (this.error) {
-        this.error = false;
+    // toggle error state dependant on input validity
+    this.email?.valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe(() => {
+      if (this.email!.errors) {
+        this.invalidEmail = true;
+      } else {
+        this.invalidEmail = false;
       }
+    });
+    this.password?.valueChanges.pipe(
+      debounceTime(250)
+    ).subscribe(() => {
+      if (this.password!.errors) {
+        this.invalidPassword = true;
+      } else {
+        this.invalidPassword = false;
+      }
+    });
+
+    // remove error state on value change
+    this.credentials.valueChanges.subscribe(() => {
+      this.invalidCredentialsSubmitted = undefined;
+    });
+    this.email?.valueChanges.subscribe(() => {
+      this.invalidEmail = undefined;
+    });
+    this.password?.valueChanges.subscribe(() => {
+      this.invalidPassword = undefined;
     });
   }
 
@@ -87,18 +114,6 @@ export class LoginComponent implements OnInit {
     return this.credentials.get('password');
   }
 
-  get isInvalidEmail(): boolean | undefined {
-    if (!this.email?.value) {return undefined}
-    if (!this.email?.valid) {return true}
-    return false;
-  }
-
-  get isInvalidPassword(): boolean | undefined {
-    if (!this.password?.touched) {return undefined}
-    if (!this.password?.valid) {return true}
-    return false;
-  }
-
   login() {
     if (this.credentials.valid && this.email?.value && this.password?.value) {
       this.authService.login(this.email!.value, this.password!.value)
@@ -108,7 +123,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/']);
           },
           () => {
-            this.error = true;
+            this.invalidCredentialsSubmitted = true;
           }
         );
     }

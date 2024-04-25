@@ -21,21 +21,21 @@ import { RoastService } from '../../services/roast.service';
         <form [formGroup]="newRoast">
           <fieldset>
             <label>
-              Roast
+              Roast*
               <input
                 type="text"
                 formControlName="roast"
                 aria-label="Roast"
-                [attr.aria-invalid]="roastError"
+                [attr.aria-invalid]="invalidRoast"
                 />
             </label>
             <label>
-              Roaster
+              Roaster*
               <input
                 type="text"
                 formControlName="roaster"
                 aria-label="Roaster"
-                [attr.aria-invalid]="roasterError"
+                [attr.aria-invalid]="invalidRoaster"
                 />
             </label>
 
@@ -90,8 +90,8 @@ export class AddRoastFormComponent implements OnInit {
   private roastService = inject(RoastService);
 
   @Output() formClosed = new EventEmitter<void>();
-  roastError: boolean | undefined;
-  roasterError: boolean | undefined;
+  invalidRoast?: boolean;
+  invalidRoaster?: boolean;
 
   newRoast = new FormGroup({
     roast: new FormControl<string>('',
@@ -114,16 +114,10 @@ export class AddRoastFormComponent implements OnInit {
   ngOnInit(): void {
     // clears errors on form change
     this.roast?.valueChanges.subscribe(() => {
-      if (this.roastError) {
-        return this.roastError = undefined;
-      }
+      this.invalidRoast = undefined;
     });
-
-    // clears errors on form change
     this.roaster?.valueChanges.subscribe(() => {
-      if (this.roasterError) {
-        return this.roasterError = undefined;
-      }
+      this.invalidRoaster = undefined;
     });
   }
 
@@ -143,12 +137,12 @@ export class AddRoastFormComponent implements OnInit {
 
   createRoast() {
     if (this.roast?.errors) {
-      this.roastError = true;
+      this.invalidRoast = true;
       return;
     }
 
     if (this.roaster?.errors) {
-      this.roasterError = true;
+      this.invalidRoaster = true;
       return;
     }
 
