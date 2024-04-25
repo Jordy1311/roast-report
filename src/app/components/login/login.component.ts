@@ -59,10 +59,10 @@ export class LoginComponent implements OnInit {
   error?: boolean;
   credentials = new FormGroup({
     email: new FormControl<string>('',
-      { validators: [ Validators.required, Validators.email ] }
+      { validators: [ Validators.required, Validators.email ], nonNullable: true }
     ),
     password: new FormControl<string>('',
-      { validators: [ Validators.required ] }
+      { validators: [ Validators.required ], nonNullable: true }
     ),
   });
 
@@ -88,14 +88,14 @@ export class LoginComponent implements OnInit {
   }
 
   get isInvalidEmail(): boolean | undefined {
-    if (!this.email?.value) undefined;
-    if (!this.email!.valid) true;
+    if (!this.email?.value) {return undefined}
+    if (!this.email?.valid) {return true}
     return false;
   }
 
   get isInvalidPassword(): boolean | undefined {
-    if (!this.password?.touched) undefined;
-    if (!this.password!.valid) true;
+    if (!this.password?.touched) {return undefined}
+    if (!this.password?.valid) {return true}
     return false;
   }
 
