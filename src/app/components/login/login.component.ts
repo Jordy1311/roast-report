@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.credentials.valueChanges.subscribe(() => {
-      // if error, clears error on form change
+      // clears errors on form change
       if (this.error) {
         this.error = false;
       }

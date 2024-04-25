@@ -16,7 +16,9 @@ export class RoastService {
       this.http.post<Roast>('/api/v1/roasts', newRoast)
         .subscribe({
           next: (newRoastObject) => {
-            this.roastsSignal.update((currentRoasts) => [ ...currentRoasts, newRoastObject ]);
+            this.roastsSignal.update(
+              (currentRoasts) => [ ...currentRoasts, newRoastObject ]
+            );
             resolve();
           },
           error: (err) => {

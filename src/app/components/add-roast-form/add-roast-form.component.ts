@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -26,7 +26,7 @@ import { RoastService } from '../../services/roast.service';
                 type="text"
                 formControlName="name"
                 aria-label="Roast"
-                [attr.aria-invalid]="isNameEmpty"
+                [attr.aria-invalid]="roastError"
                 />
             </label>
             <label>
@@ -35,7 +35,7 @@ import { RoastService } from '../../services/roast.service';
                 type="text"
                 formControlName="roaster"
                 aria-label="Roaster"
-                [attr.aria-invalid]="isRoasterEmpty"
+                [attr.aria-invalid]="roasterError"
                 />
             </label>
 
@@ -86,12 +86,15 @@ import { RoastService } from '../../services/roast.service';
     </dialog>
   `,
 })
-export class AddRoastFormComponent {
+export class AddRoastFormComponent implements OnInit {
   private roastService = inject(RoastService);
 
   @Output() formClosed = new EventEmitter<void>();
+  roastError: boolean | undefined;
+  roasterError: boolean | undefined;
 
   newRoast = new FormGroup({
+    // aka roast
     name: new FormControl<string>('',
       { validators: [ Validators.required ], nonNullable: true }
     ),
@@ -109,6 +112,16 @@ export class AddRoastFormComponent {
     ),
   });
 
+  ngOnInit(): void {
+    this.newRoast.valueChanges.subscribe(() => {
+      // clears errors on form change
+      if (this.roastError || this.roasterError) {
+        this.roastError = undefined;
+        this.roasterError = undefined;
+      }
+    });
+  }
+
   /* TOBE implemented
     roastedFor - some sort of chips
     tastingNotes - some sort of chips
@@ -123,24 +136,22 @@ export class AddRoastFormComponent {
     return this.newRoast.get('roaster');
   }
 
-  get isNameEmpty(): boolean | undefined {
-    if (!this.name?.value) {return undefined}
-    if (!this.name!.valid) {return true}
-    return false;
-  }
-
-  get isRoasterEmpty(): boolean | undefined {
-    if (!this.roaster?.value) {return undefined}
-    if (!this.roaster!.valid) {return true}
-    return false;
-  }
-
   createRoast() {
-    if (this.newRoast.valid && this.name?.value && this.roaster?.value) {
+    if (this.name?.errors) {
+      this.roastError = true;
+      return;
+    }
+
+    if (this.roaster?.errors) {
+      this.roasterError = true;
+      return;
+    }
+
+    if (this.newRoast.valid) {
       const { composition, processMethod, notes } = this.newRoast.value;
       const newRoast = {
-        name: this.name?.value,
-        roaster: this.roaster?.value,
+        name: this.name!.value,
+        roaster: this.roaster!.value,
         composition,
         processMethod,
         notes,
@@ -149,8 +160,6 @@ export class AddRoastFormComponent {
       this.roastService.createRoast(newRoast)
         .then(() => this.formClosed.emit())
         .catch(() => console.log('Form says there was error!'));
-    } else {
-      // error or something
     }
   }
 }
