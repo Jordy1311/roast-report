@@ -16,40 +16,43 @@ import { debounceTime } from 'rxjs';
   imports: [ ReactiveFormsModule ],
   styleUrl: './login.component.css',
   template: `
-    <form [formGroup]="credentials" (ngSubmit)="login()">
-      <fieldset>
-        <label>
-          Email
-          <input
-            type="email"
-            formControlName="email"
-            aria-label="Email"
-            [attr.aria-invalid]="invalidCredentialsSubmitted || invalidEmail"
-            autocomplete="email"
-            />
-        </label>
-
-        <label>
-          Password
-          <input
-            type="password"
-            formControlName="password"
-            aria-label="Password"
-            [attr.aria-invalid]="invalidCredentialsSubmitted || invalidPassword"
-            [attr.aria-describedby]="invalidCredentialsSubmitted ? 'password-helper' : null"
-            autocomplete="current-password"
-            />
-          @if (invalidCredentialsSubmitted) {
-            <small id="password-helper">Please check your email & password.</small>
-          }
-        </label>
-      </fieldset>
-
-      <input
-        type="submit"
-        value="Log in"
-        />
-    </form>
+    <div>
+      <h1>Sign in</h1>
+      <form [formGroup]="credentials" (ngSubmit)="login()">
+        <fieldset>
+          <label>
+            Email
+            <input
+              type="email"
+              formControlName="email"
+              aria-label="Email"
+              [attr.aria-invalid]="invalidCredentialsSubmitted || invalidEmail"
+              autocomplete="email"
+              />
+          </label>
+  
+          <label>
+            Password
+            <input
+              type="password"
+              formControlName="password"
+              aria-label="Password"
+              [attr.aria-invalid]="invalidCredentialsSubmitted || invalidPassword"
+              [attr.aria-describedby]="invalidCredentialsSubmitted ? 'password-helper' : null"
+              autocomplete="current-password"
+              />
+            @if (invalidCredentialsSubmitted) {
+              <small id="password-helper">Please check your email & password.</small>
+            }
+          </label>
+        </fieldset>
+  
+        <input
+          type="submit"
+          value="Log in"
+          />
+      </form>
+    </div>
   `,
 })
 export class LoginComponent implements OnInit {
