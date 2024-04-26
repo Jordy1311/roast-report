@@ -24,7 +24,9 @@ import { RoastService } from '../../services/roast.service';
       @if (roast.roastedFor) {
         <small>Roasted for: {{ roast.roastedFor!.join(', ') }}</small>
       }
-      <button (click)="deleteRoast(roast._id)" class="outline">Delete</button>
+      <button (click)="deleteRoast(roast._id)" class="outline">
+        <i class="fa-regular fa-trash-can"></i>
+      </button>
     </article>
   `,
 })

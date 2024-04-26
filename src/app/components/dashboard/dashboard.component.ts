@@ -25,7 +25,9 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
         <app-add-roast-form (formClosed)="toggleAddRoast()"></app-add-roast-form>
       }
 
-      <button (click)="toggleAddRoast()" class="add-roast">Add roast</button>
+      <button (click)="toggleAddRoast()" class="add-roast" aria-label="Add coffee">
+        <i class="fa-solid fa-plus"></i>
+      </button>
     </main>
   `,
 })
