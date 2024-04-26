@@ -1,3 +1,7 @@
+header {
+  margin: 1.5rem 0 1rem 0;
+}
+
 div.roasts {
   display: flex;
   flex-direction: column;
@@ -13,12 +17,6 @@ button.add-roast {
 }
 
 @media (min-width: 1280px) {
-  div.roasts {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-  }
-
   button.add-roast {
     right: 8rem;
   }
