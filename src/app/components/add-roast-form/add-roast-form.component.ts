@@ -25,7 +25,7 @@ import { RoastService } from '../../services/roast.service';
               <input
                 type="text"
                 formControlName="roast"
-                aria-label="Roast"
+                aria-label="Roast name"
                 [attr.aria-invalid]="invalidRoast"
                 />
             </label>
@@ -34,13 +34,13 @@ import { RoastService } from '../../services/roast.service';
               <input
                 type="text"
                 formControlName="roaster"
-                aria-label="Roaster"
+                aria-label="The roaster"
                 [attr.aria-invalid]="invalidRoaster"
                 />
             </label>
 
             <details>
-              <summary>More details?</summary>
+              <summary>More details:</summary>
               <label>
                 Roast composition
                 <select
@@ -64,6 +64,15 @@ import { RoastService } from '../../services/roast.service';
                   <option value="Washed">Washed</option>
                   <option value="Natural">Natural</option>
                 </select>
+              </label>
+              <label>
+                Rating: {{ '⭐️'.repeat(rating!.value) }}
+                <input
+                  type="range"
+                  formControlName="rating"
+                  min="0" max="5"
+                  aria-label="Your notes about this coffee"
+                  />
               </label>
               <label>
                 Notes
@@ -106,6 +115,9 @@ export class AddRoastFormComponent implements OnInit {
     processMethod: new FormControl<'' | 'washed' | 'natural'>('',
       { nonNullable: true }
     ),
+    rating: new FormControl<number>(0,
+      { nonNullable: true }
+    ),
     notes: new FormControl<string>('',
       { nonNullable: true }
     ),
@@ -135,6 +147,10 @@ export class AddRoastFormComponent implements OnInit {
     return this.newRoast.get('roaster');
   }
 
+  public get rating() {
+    return this.newRoast.get('rating');
+  }
+
   createRoast() {
     if (this.roast?.errors) {
       this.invalidRoast = true;
@@ -147,12 +163,13 @@ export class AddRoastFormComponent implements OnInit {
     }
 
     if (this.newRoast.valid) {
-      const { composition, processMethod, notes } = this.newRoast.value;
+      const { composition, processMethod, rating, notes } = this.newRoast.value;
       const newRoast = {
         name: this.roast!.value,
         roaster: this.roaster!.value,
         composition,
         processMethod,
+        rating,
         notes,
       };
 
