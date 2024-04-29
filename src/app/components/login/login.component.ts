@@ -17,40 +17,49 @@ import { debounceTime } from 'rxjs';
   styleUrl: './login.component.css',
   template: `
     <div>
-      <h1>Sign in</h1>
-      <form [formGroup]="credentials" (ngSubmit)="login()">
-        <fieldset>
-          <label>
-            Email
+      <h1 class="title">Sign in</h1>
+      <form [formGroup]="credentials">
+        <div class="field">
+          <label class="label" for="email">Email</label>
+          <div class="control">
             <input
+              id="email"
               type="email"
               formControlName="email"
-              aria-label="Email"
-              [attr.aria-invalid]="invalidCredentialsSubmitted || invalidEmail"
+              class="input"
+              [class.is-success]="invalidEmail === false && !invalidCredentialsSubmitted"
+              [class.is-danger]="invalidEmail || invalidCredentialsSubmitted"
+              [attr.aria-invalid]="invalidEmail || invalidCredentialsSubmitted"
               autocomplete="email"
               />
-          </label>
-  
-          <label>
-            Password
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="password">Password</label>
+          <div class="control">
             <input
+              id="password"
               type="password"
               formControlName="password"
-              aria-label="Password"
-              [attr.aria-invalid]="invalidCredentialsSubmitted || invalidPassword"
+              class="input"
+              [class.is-success]="invalidPassword === false && !invalidCredentialsSubmitted"
+              [class.is-danger]="invalidPassword || invalidCredentialsSubmitted"
+              [attr.aria-invalid]="invalidPassword || invalidCredentialsSubmitted"
               [attr.aria-describedby]="invalidCredentialsSubmitted ? 'password-helper' : null"
               autocomplete="current-password"
               />
-            @if (invalidCredentialsSubmitted) {
-              <small id="password-helper">Please check your email & password.</small>
-            }
-          </label>
-        </fieldset>
-  
-        <input
-          type="submit"
-          value="Log in"
-          />
+          </div>
+          @if (invalidCredentialsSubmitted) {
+            <p class="help is-danger">Please check your email & password.</p>
+          }
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <button class="button is-primary" (click)="login()">Log in</button>
+          </div>
+        </div>
       </form>
     </div>
   `,
