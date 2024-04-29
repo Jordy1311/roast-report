@@ -42,7 +42,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
 
       <button
         (click)="toggleAddRoast()"
-        class="add-roast button is-primary is-medium"
+        class="add-roast button is-link is-medium"
         aria-label="Add coffee"
         >
         <span class="icon">
