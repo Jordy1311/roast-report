@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit {
         }
       });
     this.password?.valueChanges
-      .pipe(debounceTime(250))
+      .pipe(debounceTime(200))
       .subscribe(() => {
         if (this.password!.errors) {
           this.invalidPassword = true;
@@ -138,6 +138,8 @@ export class LoginComponent implements OnInit {
             this.invalidCredentialsSubmitted = true;
           }
         );
+    } else {
+      this.invalidCredentialsSubmitted = true;
     }
   }
 }
