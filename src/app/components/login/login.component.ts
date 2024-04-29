@@ -63,7 +63,7 @@ import { debounceTime } from 'rxjs';
 
         <div class="field">
           <div class="control">
-            <button class="button is-primary" (click)="login()">Log in</button>
+            <button class="button is-primary is-fullwidth" (click)="login()">Log in</button>
           </div>
         </div>
       </form>
