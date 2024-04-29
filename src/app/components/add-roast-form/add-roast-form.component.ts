@@ -14,12 +14,16 @@ import { RoastService } from '../../services/roast.service';
   imports: [ ReactiveFormsModule ],
   styleUrl: './add-roast-form.component.css',
   template: `
-    <dialog open>
-      <article>
-        <h2>Add a new roast:</h2>
+    <div class="modal is-active" open>
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <h2 class="modal-card-title">Add a roast</h2>
+          <button (click)="formClosed.emit()" class="delete" aria-label="close"></button>
+        </header>
 
-        <form [formGroup]="newRoast">
-          <fieldset>
+        <section class="modal-card-body">
+          <form [formGroup]="newRoast">
             <label>
               Roast*
               <input
@@ -84,15 +88,28 @@ import { RoastService } from '../../services/roast.service';
                   ></textarea>
               </label>
             </details>
-          </fieldset>
-        </form>
+          </form>
+        </section>
 
-        <footer>
-          <button (click)="formClosed.emit()" class="outline">Cancel</button>
-          <button (click)="createRoast()">Add</button>
+
+        <footer class="modal-card-foot">
+          <div class="field is-grouped">
+            <div class="control">
+              <button (click)="createRoast()" class="button is-link">Add</button>
+            </div>
+            <div class="control">
+              <button (click)="formClosed.emit()" class="button is-link is-light">Cancel</button>
+            </div>
+          </div>
         </footer>
-      </article>
-    </dialog>
+      </div>
+      <button
+        (click)="formClosed.emit()"
+        class="modal-close is-large"
+        aria-label="Close modal"
+        >
+      </button>
+    </div>
   `,
 })
 export class AddRoastFormComponent implements OnInit {
