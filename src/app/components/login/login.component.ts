@@ -21,7 +21,7 @@ import { debounceTime } from 'rxjs';
       <form [formGroup]="credentials">
         <div class="field">
           <label class="label" for="email">Email</label>
-          <div class="control">
+          <div class="control has-icons-left">
             <input
               id="email"
               type="email"
@@ -32,12 +32,15 @@ import { debounceTime } from 'rxjs';
               [attr.aria-invalid]="invalidEmail || invalidCredentialsSubmitted"
               autocomplete="email"
               />
+              <span class="icon is-small is-left">
+                <i class="fa-solid fa-at"></i>
+              </span>
           </div>
         </div>
 
         <div class="field">
           <label class="label" for="password">Password</label>
-          <div class="control">
+          <div class="control has-icons-left">
             <input
               id="password"
               type="password"
@@ -49,6 +52,9 @@ import { debounceTime } from 'rxjs';
               [attr.aria-describedby]="invalidCredentialsSubmitted ? 'password-helper' : null"
               autocomplete="current-password"
               />
+              <span class="icon is-small is-left">
+                <i class="fa-solid fa-key"></i>
+              </span>
           </div>
           @if (invalidCredentialsSubmitted) {
             <p class="help is-danger">Please check your email & password.</p>
