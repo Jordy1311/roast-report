@@ -11,8 +11,23 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
   styleUrl: './dashboard.component.css',
   template: `
     <header>
-      <h1>Roast Report</h1>
+      <h1 class="title">Roast Report</h1>
     </header>
+
+    <div class="level">
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">Roasts</p>
+          <p class="title">{{ usersRoasts().length }}</p>
+        </div>
+      </div>
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">Roasters</p>
+          <p class="title">{{ numberOfUniqueRoasters }}</p>
+        </div>
+      </div>
+    </div>
 
     <main>
       <div class="roasts">
@@ -25,8 +40,15 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
         <app-add-roast-form (formClosed)="toggleAddRoast()"></app-add-roast-form>
       }
 
-      <button (click)="toggleAddRoast()" class="add-roast" aria-label="Add coffee">
-        <i class="fa-solid fa-plus"></i>
+      <button
+        (click)="toggleAddRoast()"
+        class="add-roast button is-primary is-medium"
+        aria-label="Add coffee"
+        >
+        <span class="icon">
+          <i class="fa-solid fa-plus"></i>
+        </span>
+        <span>Add</span>
       </button>
     </main>
   `,
@@ -39,6 +61,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.roastService.getUsersRoasts();
+  }
+
+  get numberOfUniqueRoasters(): number {
+    return new Set(
+      this.usersRoasts().map((roast) => roast.roaster)
+    ).size;
   }
 
   toggleAddRoast(): void {

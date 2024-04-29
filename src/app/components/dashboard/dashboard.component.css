@@ -5,12 +5,10 @@ header {
 div.roasts {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
 button.add-roast {
-  display: block;
   position: fixed;
   bottom: 2rem;
   right: 2rem;
