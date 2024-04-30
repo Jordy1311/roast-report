@@ -24,69 +24,100 @@ import { RoastService } from '../../services/roast.service';
 
         <section class="modal-card-body">
           <form [formGroup]="newRoast">
-            <label>
-              Roast*
-              <input
-                type="text"
-                formControlName="roast"
-                aria-label="Roast name"
-                [attr.aria-invalid]="invalidRoast"
-                />
-            </label>
-            <label>
-              Roaster*
-              <input
-                type="text"
-                formControlName="roaster"
-                aria-label="The roaster"
-                [attr.aria-invalid]="invalidRoaster"
-                />
-            </label>
+            <div class="field">
+              <label for="roast" class="label">Roast:</label>
+              <div class="control">
+                <input
+                  id="roast"
+                  type="text"
+                  formControlName="roast"
+                  class="input"
+                  [class.is-danger]="invalidRoast"
+                  aria-label="Roast name"
+                  [attr.aria-invalid]="invalidRoast"
+                  />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="roaster" class="label">Roaster:</label>
+              <div class="control">
+                <input
+                  id="roaster"
+                  type="text"
+                  formControlName="roaster"
+                  class="input"
+                  [class.is-danger]="invalidRoaster"
+                  aria-label="The roaster"
+                  [attr.aria-invalid]="invalidRoaster"
+                  />
+              </div>
+            </div>
 
             <details>
               <summary>More details:</summary>
-              <label>
-                Roast composition
-                <select
-                  formControlName="composition"
-                  name="composition"
-                  aria-label="Select the composition of this roast"
-                  >
-                  <option selected value="">-</option>
-                  <option value="Single Origin">Single Origin</option>
-                  <option value="Blend">Blend</option>
-                </select>
-              </label>
-              <label>
-                Process method
-                <select
-                  formControlName="processMethod"
-                  name="process-method"
-                  aria-label="Select how this roast was processed"
-                  >
-                  <option selected value="">-</option>
-                  <option value="Washed">Washed</option>
-                  <option value="Natural">Natural</option>
-                </select>
-              </label>
-              <label>
-                Rating: {{ '⭐️'.repeat(rating!.value) }}
-                <input
-                  type="range"
-                  formControlName="rating"
-                  min="0" max="5"
-                  aria-label="Your notes about this coffee"
-                  />
-              </label>
-              <label>
-                Notes
-                <textarea
-                  formControlName="notes"
-                  name="notes"
-                  placeholder="Your notes about this coffee..."
-                  aria-label="Your notes about this coffee"
-                  ></textarea>
-              </label>
+              <div class="field">
+                <label for="composition" class="label">Roast composition:</label>
+                <div class="control">
+                  <div class="select">
+                    <select
+                      id="composition"
+                      formControlName="composition"
+                      name="composition"
+                      aria-label="Select the composition of this roast"
+                      >
+                      <option selected value="">-</option>
+                      <option value="Single Origin">Single Origin</option>
+                      <option value="Blend">Blend</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="processMethod" class="label">Process method:</label>
+                <div class="control">
+                  <div class="select">
+                    <select
+                      id="processMethod"
+                      formControlName="processMethod"
+                      name="process-method"
+                      aria-label="Select how this roast was processed"
+                      >
+                      <option selected value="">-</option>
+                      <option value="Washed">Washed</option>
+                      <option value="Natural">Natural</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="rating" class="label">Rating: {{ '⭐️'.repeat(rating!.value) }}</label>
+                <div class="control">
+                  <input
+                    id="rating"
+                    type="range"
+                    formControlName="rating"
+                    min="0" max="5"
+                    aria-label="Your notes about this coffee"
+                    />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="notes" class="label">Notes:</label>
+                <div class="control">
+                  <textarea
+                    id="notes"
+                    formControlName="notes"
+                    class="textarea"
+                    name="notes"
+                    placeholder="Your notes about this coffee..."
+                    aria-label="Your notes about this coffee"
+                    ></textarea>
+                </div>
+              </div>
             </details>
           </form>
         </section>
@@ -95,10 +126,10 @@ import { RoastService } from '../../services/roast.service';
         <footer class="modal-card-foot">
           <div class="field is-grouped">
             <div class="control">
-              <button (click)="createRoast()" class="button is-link">Add</button>
+              <button (click)="createRoast()" class="button is-link">Add roast</button>
             </div>
             <div class="control">
-              <button (click)="formClosed.emit()" class="button is-link is-light">Cancel</button>
+              <button (click)="formClosed.emit()" class="button is-link is-outlined">Cancel</button>
             </div>
           </div>
         </footer>
