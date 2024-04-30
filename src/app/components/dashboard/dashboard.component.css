@@ -2,6 +2,11 @@ header {
   margin: 1.5rem 0 1rem 0;
 }
 
+div.stats {
+  width: 95vw;
+  max-width: 500px;
+}
+
 div.roasts {
   display: flex;
   flex-direction: column;

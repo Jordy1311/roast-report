@@ -14,7 +14,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
       <h1 class="title">Roast Report</h1>
     </header>
 
-    <div class="level">
+    <div class="stats mx-auto level is-mobile">
       <div class="level-item has-text-centered">
         <div>
           <p class="heading">Roasts</p>
