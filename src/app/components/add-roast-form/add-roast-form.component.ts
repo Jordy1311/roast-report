@@ -54,9 +54,9 @@ import { RoastService } from '../../services/roast.service';
               </div>
             </div>
 
-            <details>
+            <details class="mt-4">
               <summary>More details:</summary>
-              <div class="field">
+              <div class="field mt-2">
                 <label for="composition" class="label">Roast composition:</label>
                 <div class="control">
                   <div class="select">
