@@ -17,7 +17,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
         <button
           (click)="logout()"
           class="button is-normal is-link is-outlined"
-          aria-label="Add coffee"
+          aria-label="Logout"
         >
           <span>Logout</span>
           <span class="icon">
@@ -27,6 +27,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
       </div>
     </header>
 
+    <!-- split out into it's own component -->
     <div class="stats mx-auto level is-mobile">
       <div class="level-item has-text-centered">
         <div>
@@ -42,6 +43,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
       </div>
     </div>
 
+    <!-- split out into it's own component -->
     <main>
       <div class="roasts">
         @for (roast of usersRoasts(); track roast._id) {
