@@ -20,6 +20,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(accessTokenAddress);
+    location.reload();
   }
 
   get isLoggedIn(): boolean {

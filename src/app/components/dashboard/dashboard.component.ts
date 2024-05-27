@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 
+import { AuthService } from '../../services/auth.service';
 import { RoastService } from '../../services/roast.service';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
 import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.component';
@@ -12,6 +13,18 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
   template: `
     <header>
       <h1 class="title">Roast Report</h1>
+      <div>
+        <button
+          (click)="logout()"
+          class="button is-normal is-link is-outlined"
+          aria-label="Add coffee"
+        >
+          <span>Logout</span>
+          <span class="icon">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </span>
+        </button>
+      </div>
     </header>
 
     <div class="stats mx-auto level is-mobile">
@@ -44,7 +57,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
         (click)="toggleAddRoast()"
         class="add-roast button is-link is-medium"
         aria-label="Add coffee"
-        >
+      >
         <span class="icon">
           <i class="fa-solid fa-plus"></i>
         </span>
@@ -54,6 +67,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
   `,
 })
 export class DashboardComponent implements OnInit {
+  private authService = inject(AuthService);
   private roastService = inject(RoastService);
 
   usersRoasts = this.roastService.roastsSignal;
@@ -67,6 +81,10 @@ export class DashboardComponent implements OnInit {
     return new Set(
       this.usersRoasts().map((roast) => roast.roaster)
     ).size;
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 
   toggleAddRoast(): void {
