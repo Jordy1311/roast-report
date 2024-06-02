@@ -19,13 +19,12 @@ import { RoastService } from '../../services/roast.service';
       <div class="modal-card">
         <header class="modal-card-head">
           <h2 class="modal-card-title">Add a roast</h2>
-          <button (click)="formClosed.emit()" class="delete" aria-label="close"></button>
         </header>
 
         <section class="modal-card-body">
           <form [formGroup]="newRoast">
             <div class="field">
-              <label for="roast" class="label">Roast:</label>
+              <label for="roast" class="label">Roast</label>
               <div class="control">
                 <input
                   id="roast"
@@ -40,7 +39,7 @@ import { RoastService } from '../../services/roast.service';
             </div>
 
             <div class="field">
-              <label for="roaster" class="label">Roaster:</label>
+              <label for="roaster" class="label">Roaster</label>
               <div class="control">
                 <input
                   id="roaster"
@@ -54,12 +53,11 @@ import { RoastService } from '../../services/roast.service';
               </div>
             </div>
 
-            <details class="mt-4">
-              <summary>More details:</summary>
-              <div class="field mt-2">
-                <label for="composition" class="label">Roast composition:</label>
+            <div class="composition-process-select-pair">
+              <div class="field">
+                <label for="composition" class="label">Roast composition</label>
                 <div class="control">
-                  <div class="select">
+                  <div class="select is-fullwidth">
                     <select
                       id="composition"
                       formControlName="composition"
@@ -73,11 +71,11 @@ import { RoastService } from '../../services/roast.service';
                   </div>
                 </div>
               </div>
-
-              <div class="field">
-                <label for="processMethod" class="label">Process method:</label>
+  
+              <div class="field ml-5">
+                <label for="processMethod" class="label">Process method</label>
                 <div class="control">
-                  <div class="select">
+                  <div class="select is-fullwidth">
                     <select
                       id="processMethod"
                       formControlName="processMethod"
@@ -91,34 +89,34 @@ import { RoastService } from '../../services/roast.service';
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div class="field">
-                <label for="rating" class="label">Rating: {{ '⭐️'.repeat(rating!.value) }}</label>
-                <div class="control">
-                  <input
-                    id="rating"
-                    type="range"
-                    formControlName="rating"
-                    min="0" max="5"
-                    aria-label="Your notes about this coffee"
-                    />
-                </div>
+            <div class="field">
+              <label for="rating" class="label">Rating: {{ '⭐️'.repeat(rating!.value) }}</label>
+              <div class="control">
+                <input
+                  id="rating"
+                  type="range"
+                  formControlName="rating"
+                  min="0" max="5"
+                  aria-label="Your notes about this coffee"
+                  />
               </div>
+            </div>
 
-              <div class="field">
-                <label for="notes" class="label">Notes:</label>
-                <div class="control">
-                  <textarea
-                    id="notes"
-                    formControlName="notes"
-                    class="textarea"
-                    name="notes"
-                    placeholder="Your notes about this coffee..."
-                    aria-label="Your notes about this coffee"
-                    ></textarea>
-                </div>
+            <div class="field">
+              <label for="notes" class="label">Notes</label>
+              <div class="control">
+                <textarea
+                  id="notes"
+                  formControlName="notes"
+                  class="textarea"
+                  name="notes"
+                  placeholder="Your notes about this coffee..."
+                  aria-label="Your notes about this coffee"
+                  ></textarea>
               </div>
-            </details>
+            </div>
           </form>
         </section>
 
