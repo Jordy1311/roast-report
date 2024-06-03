@@ -34,6 +34,9 @@ import { AuthService } from '../../services/auth.service';
             autocomplete="email"
             placeholder="you@example.com"
           />
+          @if (!invalidCredentialsSubmitted) {
+            <mat-error>Please check your email.</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field>
@@ -48,6 +51,8 @@ import { AuthService } from '../../services/auth.service';
 
           @if (invalidCredentialsSubmitted) {
             <mat-error>Please check your email & password.</mat-error>
+          } @else {
+            <mat-error>Please check your password.</mat-error>
           }
         </mat-form-field>
 
