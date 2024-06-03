@@ -1,79 +1,63 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService } from '../../services/auth.service';
-import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ ReactiveFormsModule, MatButtonModule ],
+  imports: [ ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule ],
   styleUrl: './login.component.css',
   template: `
     <div>
-      <h1 class="title">Sign in</h1>
+      <h1>Log in</h1>
+
       <form [formGroup]="credentials">
-        <div class="field">
-          <label class="label" for="email">Email</label>
-          <div class="control has-icons-left">
-            <input
-              id="email"
-              type="email"
-              formControlName="email"
-              class="input"
-              [class.is-success]="invalidEmail === false && !invalidCredentialsSubmitted"
-              [class.is-danger]="invalidEmail || invalidCredentialsSubmitted"
-              [attr.aria-invalid]="invalidEmail || invalidCredentialsSubmitted"
-              autocomplete="email"
-            />
-              <span class="icon is-small is-left">
-                <i class="fa-solid fa-at"></i>
-              </span>
-          </div>
-        </div>
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+          />
+        </mat-form-field>
 
-        <div class="field">
-          <label class="label" for="password">Password</label>
-          <div class="control has-icons-left">
-            <input
-              id="password"
-              type="password"
-              formControlName="password"
-              class="input"
-              [class.is-success]="invalidPassword === false && !invalidCredentialsSubmitted"
-              [class.is-danger]="invalidPassword || invalidCredentialsSubmitted"
-              [attr.aria-invalid]="invalidPassword || invalidCredentialsSubmitted"
-              [attr.aria-describedby]="invalidCredentialsSubmitted ? 'password-helper' : null"
-              autocomplete="current-password"
-            />
-              <span class="icon is-small is-left">
-                <i class="fa-solid fa-key"></i>
-              </span>
-          </div>
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            id="password"
+            type="password"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+
           @if (invalidCredentialsSubmitted) {
-            <p class="help is-danger">Please check your email & password.</p>
+            <mat-error>Please check your email & password.</mat-error>
           }
-        </div>
+        </mat-form-field>
 
-        <div class="field">
-          <div class="control">
-            <button
-              (click)="login()"
-              mat-flat-button
-              color="primary"
-            >
-              Log in
-            </button>
-          </div>
-        </div>
+        <button
+          (click)="login()"
+          mat-flat-button
+          color="primary"
+        >
+          Log in
+        </button>
       </form>
     </div>
   `,
@@ -82,9 +66,7 @@ export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  invalidCredentialsSubmitted?: boolean;
-  invalidEmail?: boolean;
-  invalidPassword?: boolean;
+  invalidCredentialsSubmitted = false;
 
   credentials = new FormGroup({
     email: new FormControl<string>('',
@@ -97,38 +79,16 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn) {
-      this.router.navigate(['/']);
+      this.router.navigate([ '/' ]);
     }
 
-    // toggle error state dependant on input validity
-    this.email?.valueChanges
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        if (this.email!.errors) {
-          this.invalidEmail = true;
-        } else {
-          this.invalidEmail = false;
-        }
-      });
-    this.password?.valueChanges
-      .pipe(debounceTime(200))
-      .subscribe(() => {
-        if (this.password!.errors) {
-          this.invalidPassword = true;
-        } else {
-          this.invalidPassword = false;
-        }
-      });
-
-    // remove error state on value change
+    // removes error state on value change
     this.credentials.valueChanges.subscribe(() => {
-      this.invalidCredentialsSubmitted = undefined;
-    });
-    this.email?.valueChanges.subscribe(() => {
-      this.invalidEmail = undefined;
-    });
-    this.password?.valueChanges.subscribe(() => {
-      this.invalidPassword = undefined;
+      if (this.invalidCredentialsSubmitted) {
+        this.invalidCredentialsSubmitted = false;
+        this.email!.setErrors(null);
+        this.password!.setErrors(null);
+      }
     });
   }
 
@@ -143,15 +103,18 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.credentials.valid && this.email?.value && this.password?.value) {
       this.authService.login(this.email!.value, this.password!.value)
-        .subscribe(
-          (response) => {
+        .subscribe({
+          next: (response) => {
             this.authService.storeToken(response.accessToken);
-            this.router.navigate(['/']);
+            this.router.navigate([ '/' ]);
           },
-          () => {
+          error: () => {
             this.invalidCredentialsSubmitted = true;
+            this.email!.setErrors({ invalid: 'Invalid credentials provided' });
+            this.password!.setErrors({ invalid: 'Invalid credentials provided' });
+            return;
           }
-        );
+        });
     } else {
       this.invalidCredentialsSubmitted = true;
     }
