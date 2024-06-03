@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 
 import { RoastService } from '../../services/roast.service';
+import { COUNTRIES } from '../../countries';
 
 @Component({
   selector: 'app-add-roast-form',
