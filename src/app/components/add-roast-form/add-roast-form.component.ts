@@ -7,120 +7,96 @@ import {
 } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
 
 import { RoastService } from '../../services/roast.service';
-import { COUNTRIES } from '../../countries';
+// import { COUNTRIES } from '../../countries';
 
 @Component({
   selector: 'app-add-roast-form',
   standalone: true,
-  imports: [ ReactiveFormsModule, MatButtonModule, MatIconModule ],
+  imports: [ ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule, MatSliderModule ],
   styleUrl: './add-roast-form.component.css',
   template: `
     <div class="modal is-active" open>
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <h2 class="modal-card-title">Add a roast</h2>
+          <h2>Add a roast</h2>
         </header>
 
         <section class="modal-card-body">
           <form [formGroup]="newRoast">
-            <div class="field">
-              <label for="roast" class="label">Roast</label>
-              <div class="control">
-                <input
-                  id="roast"
-                  type="text"
-                  formControlName="roast"
-                  class="input"
-                  [class.is-danger]="invalidRoast"
-                  aria-label="Roast name"
-                  [attr.aria-invalid]="invalidRoast"
-                  />
-              </div>
-            </div>
+            <mat-form-field class="is-fullwidth">
+              <mat-label>Roast</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="roast"
+                aria-label="Roast name"
+              />
+              <mat-error>Please enter a roast name.</mat-error>
+            </mat-form-field>
 
-            <div class="field">
-              <label for="roaster" class="label">Roaster</label>
-              <div class="control">
-                <input
-                  id="roaster"
-                  type="text"
-                  formControlName="roaster"
-                  class="input"
-                  [class.is-danger]="invalidRoaster"
-                  aria-label="The roaster"
-                  [attr.aria-invalid]="invalidRoaster"
-                  />
-              </div>
-            </div>
+            <mat-form-field class="is-fullwidth">
+              <mat-label>Roaster</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="roaster"
+                aria-label="The roaster"
+              />
+              <mat-error>Please enter a roaster.</mat-error>
+            </mat-form-field>
 
             <div class="composition-process-select-pair">
-              <div class="field">
-                <label for="composition" class="label">Roast composition</label>
-                <div class="control">
-                  <div class="select is-fullwidth">
-                    <select
-                      id="composition"
-                      formControlName="composition"
-                      name="composition"
-                      aria-label="Select the composition of this roast"
-                      >
-                      <option selected value="">-</option>
-                      <option value="Single Origin">Single Origin</option>
-                      <option value="Blend">Blend</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+              <mat-form-field>
+                <mat-label>Roast composition</mat-label>
+                <mat-select
+                  formControlName="composition"
+                  name="composition"
+                  aria-label="Select the composition of this roast"
+                >
+                  <mat-option selected value="">-</mat-option>
+                  <mat-option value="Single Origin">Single Origin</mat-option>
+                  <mat-option value="Blend">Blend</mat-option>
+                </mat-select>
+              </mat-form-field>
   
-              <div class="field ml-5">
-                <label for="processMethod" class="label">Process method</label>
-                <div class="control">
-                  <div class="select is-fullwidth">
-                    <select
-                      id="processMethod"
-                      formControlName="processMethod"
-                      name="process-method"
-                      aria-label="Select how this roast was processed"
-                      >
-                      <option selected value="">-</option>
-                      <option value="Washed">Washed</option>
-                      <option value="Natural">Natural</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+              <mat-form-field class="ml-16">
+                <mat-label>Process method</mat-label>
+                <mat-select
+                  formControlName="processMethod"
+                  name="process-method"
+                  aria-label="Select how this roast was processed"
+                  >
+                  <mat-option selected value="">-</mat-option>
+                  <mat-option value="Washed">Washed</mat-option>
+                  <mat-option value="Natural">Natural</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
 
-            <div class="field">
-              <label for="rating" class="label">Rating: {{ '⭐️'.repeat(rating!.value) }}</label>
-              <div class="control">
-                <input
-                  id="rating"
-                  type="range"
-                  formControlName="rating"
-                  min="0" max="5"
-                  aria-label="Your notes about this coffee"
-                  />
-              </div>
-            </div>
+            <mat-slider
+              min="0" max="5" discrete
+              [displayWith]="formatRatingLabel"
+            >
+              <input matSliderThumb formControlName="rating">
+            </mat-slider>
 
-            <div class="field">
-              <label for="notes" class="label">Notes</label>
-              <div class="control">
-                <textarea
-                  id="notes"
-                  formControlName="notes"
-                  class="textarea"
-                  name="notes"
-                  placeholder="Your notes about this coffee..."
-                  aria-label="Your notes about this coffee"
-                  ></textarea>
-              </div>
-            </div>
+            <mat-form-field class="is-fullwidth">
+              <mat-label>Notes</mat-label>
+              <textarea
+                matInput
+                formControlName="notes"
+                placeholder="Your notes about this coffee..."
+                aria-label="Your notes about this coffee"
+              ></textarea>
+            </mat-form-field>
           </form>
         </section>
 
@@ -206,6 +182,10 @@ export class AddRoastFormComponent implements OnInit {
 
   public get rating() {
     return this.newRoast.get('rating');
+  }
+
+  formatRatingLabel(value: number): string {
+    return `${value} Stars`;
   }
 
   createRoast() {

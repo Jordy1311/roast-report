@@ -1,9 +1,26 @@
-.composition-process-select-pair {
-  display: flex;
-  justify-content: space-between;
+header h2 {
+  margin: 0;
 }
 
-.composition-process-select-pair .field {
+.is-fullwidth {
+  display: block;
+  width: 100%;
+}
+
+.ml-16 {
+  margin-left: 16px;
+}
+
+mat-slider {
+  width: 80%;
+}
+
+.composition-process-select-pair {
+  display: flex;
+  align-items: space-between;
+}
+
+.composition-process-select-pair mat-form-field {
   width: 100%;
 }
 
