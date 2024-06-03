@@ -1,5 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 
+import { MatButtonModule } from '@angular/material/button';
+
 import { AuthService } from '../../services/auth.service';
 import { RoastService } from '../../services/roast.service';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
@@ -8,7 +10,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ RoastSummaryComponent, AddRoastFormComponent ],
+  imports: [ RoastSummaryComponent, AddRoastFormComponent, MatButtonModule ],
   styleUrl: './dashboard.component.css',
   template: `
     <header>
@@ -16,14 +18,14 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
       <div>
         <button
           (click)="logout()"
-          class="button is-normal is-link is-outlined"
-          aria-label="Logout"
+          mat-stroked-button
+          color="primary"
         >
-          <span>Logout</span>
-          <span class="icon">
-            <i class="fa-solid fa-right-from-bracket"></i>
-          </span>
-        </button>
+        <span>Logout</span>
+        <span class="icon">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </span>
+      </button>
       </div>
     </header>
 
@@ -57,13 +59,15 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
 
       <button
         (click)="toggleAddRoast()"
-        class="add-roast button is-link is-medium"
+        mat-flat-button
+        color="primary"
+        class="add-roast"
         aria-label="Add coffee"
       >
+        <span>Add</span>
         <span class="icon">
           <i class="fa-solid fa-plus"></i>
         </span>
-        <span>Add</span>
       </button>
     </main>
   `,

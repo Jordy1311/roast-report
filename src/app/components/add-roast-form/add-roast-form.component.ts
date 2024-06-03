@@ -6,13 +6,15 @@ import {
   Validators
 } from '@angular/forms';
 
+import { MatButtonModule } from '@angular/material/button';
+
 import { RoastService } from '../../services/roast.service';
 import { COUNTRIES } from '../../countries';
 
 @Component({
   selector: 'app-add-roast-form',
   standalone: true,
-  imports: [ ReactiveFormsModule ],
+  imports: [ ReactiveFormsModule, MatButtonModule ],
   styleUrl: './add-roast-form.component.css',
   template: `
     <div class="modal is-active" open>
@@ -125,20 +127,26 @@ import { COUNTRIES } from '../../countries';
         <footer class="modal-card-foot">
           <div class="field is-grouped">
             <div class="control">
-              <button (click)="createRoast()" class="button is-link">Add roast</button>
+              <button
+                (click)="createRoast()"
+                mat-flat-button
+                color="primary"
+              >
+                Add roast
+              </button>
             </div>
             <div class="control">
-              <button (click)="formClosed.emit()" class="button is-link is-outlined">Cancel</button>
+              <button
+                (click)="formClosed.emit()"
+                mat-stroked-button
+                color="primary"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </footer>
       </div>
-      <button
-        (click)="formClosed.emit()"
-        class="modal-close is-large"
-        aria-label="Close modal"
-        >
-      </button>
     </div>
   `,
 })

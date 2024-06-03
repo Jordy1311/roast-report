@@ -1,12 +1,14 @@
 import { Component, Input, inject } from '@angular/core';
 
+import { MatButtonModule } from '@angular/material/button';
+
 import { Roast } from '../../types/roast.type';
 import { RoastService } from '../../services/roast.service';
 
 @Component({
   selector: 'app-roast-summary',
   standalone: true,
-  imports: [],
+  imports: [ MatButtonModule ],
   styleUrl: './roast-summary.component.css',
   template: `
     <article class="box">
@@ -27,10 +29,10 @@ import { RoastService } from '../../services/roast.service';
 
       <button
         (click)="deleteRoast(roast._id)"
-        class="mt-3 button is-text is-small is-outlined"
-        [class.is-danger]=""
+        mat-button
+        color="warn"
         aria-label="Delete coffee"
-        >
+      >
         <span class="icon is-small">
           <i class="fa-regular fa-trash-can"></i>
         </span>

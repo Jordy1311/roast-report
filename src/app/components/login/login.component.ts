@@ -7,13 +7,15 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { MatButtonModule } from '@angular/material/button';
+
 import { AuthService } from '../../services/auth.service';
 import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ ReactiveFormsModule ],
+  imports: [ ReactiveFormsModule, MatButtonModule ],
   styleUrl: './login.component.css',
   template: `
     <div>
@@ -31,7 +33,7 @@ import { debounceTime } from 'rxjs';
               [class.is-danger]="invalidEmail || invalidCredentialsSubmitted"
               [attr.aria-invalid]="invalidEmail || invalidCredentialsSubmitted"
               autocomplete="email"
-              />
+            />
               <span class="icon is-small is-left">
                 <i class="fa-solid fa-at"></i>
               </span>
@@ -51,7 +53,7 @@ import { debounceTime } from 'rxjs';
               [attr.aria-invalid]="invalidPassword || invalidCredentialsSubmitted"
               [attr.aria-describedby]="invalidCredentialsSubmitted ? 'password-helper' : null"
               autocomplete="current-password"
-              />
+            />
               <span class="icon is-small is-left">
                 <i class="fa-solid fa-key"></i>
               </span>
@@ -63,7 +65,13 @@ import { debounceTime } from 'rxjs';
 
         <div class="field">
           <div class="control">
-            <button class="button is-link is-fullwidth" (click)="login()">Log in</button>
+            <button
+              (click)="login()"
+              mat-flat-button
+              color="primary"
+            >
+              Log in
+            </button>
           </div>
         </div>
       </form>
