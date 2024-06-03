@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService } from '../../services/auth.service';
 import { RoastService } from '../../services/roast.service';
@@ -10,22 +11,20 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ RoastSummaryComponent, AddRoastFormComponent, MatButtonModule ],
+  imports: [ RoastSummaryComponent, AddRoastFormComponent, MatButtonModule, MatIconModule ],
   styleUrl: './dashboard.component.css',
   template: `
     <header>
-      <h1 class="title">Roast Report</h1>
+      <h1>Roast Report</h1>
       <div>
         <button
           (click)="logout()"
           mat-stroked-button
           color="primary"
         >
-        <span>Logout</span>
-        <span class="icon">
-          <i class="fa-solid fa-right-from-bracket"></i>
-        </span>
-      </button>
+          <span>Log out</span>
+          <mat-icon aria-hidden>logout</mat-icon>
+        </button>
       </div>
     </header>
 
@@ -65,9 +64,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
         aria-label="Add coffee"
       >
         <span>Add</span>
-        <span class="icon">
-          <i class="fa-solid fa-plus"></i>
-        </span>
+        <mat-icon aria-hidden>add_circle</mat-icon>
       </button>
     </main>
   `,

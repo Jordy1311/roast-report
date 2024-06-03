@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import { RoastService } from '../../services/roast.service';
 import { COUNTRIES } from '../../countries';
@@ -14,7 +15,7 @@ import { COUNTRIES } from '../../countries';
 @Component({
   selector: 'app-add-roast-form',
   standalone: true,
-  imports: [ ReactiveFormsModule, MatButtonModule ],
+  imports: [ ReactiveFormsModule, MatButtonModule, MatIconModule ],
   styleUrl: './add-roast-form.component.css',
   template: `
     <div class="modal is-active" open>
@@ -132,7 +133,8 @@ import { COUNTRIES } from '../../countries';
                 mat-flat-button
                 color="primary"
               >
-                Add roast
+                <span>Add roast</span>
+                <mat-icon aria-hidden>add_circle</mat-icon>
               </button>
             </div>
             <div class="control">

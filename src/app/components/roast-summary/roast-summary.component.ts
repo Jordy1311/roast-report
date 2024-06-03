@@ -1,6 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import { Roast } from '../../types/roast.type';
 import { RoastService } from '../../services/roast.service';
@@ -8,7 +9,7 @@ import { RoastService } from '../../services/roast.service';
 @Component({
   selector: 'app-roast-summary',
   standalone: true,
-  imports: [ MatButtonModule ],
+  imports: [ MatButtonModule, MatIconModule ],
   styleUrl: './roast-summary.component.css',
   template: `
     <article class="box">
@@ -33,10 +34,8 @@ import { RoastService } from '../../services/roast.service';
         color="warn"
         aria-label="Delete coffee"
       >
-        <span class="icon is-small">
-          <i class="fa-regular fa-trash-can"></i>
-        </span>
         <span>Delete</span>
+        <mat-icon aria-hidden>delete</mat-icon>
       </button>
     </article>
   `,
