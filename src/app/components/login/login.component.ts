@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService } from '../../services/auth.service';
@@ -87,7 +87,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate([ '/' ]);
     }
 
-    // removes error state on value change
+    // removes error states on any input update
     this.credentials.valueChanges.subscribe(() => {
       if (this.invalidCredentialsSubmitted) {
         this.invalidCredentialsSubmitted = false;
@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit {
     return this.credentials.get('password');
   }
 
-  login() {
+  login(): void {
     if (this.credentials.valid && this.email?.value && this.password?.value) {
       this.authService.login(this.email!.value, this.password!.value)
         .subscribe({
