@@ -1,0 +1,30 @@
+div.container, mat-icon {
+  user-select: none;
+}
+
+mat-icon {
+  color: grey;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+mat-icon.rated, mat-icon:hover {
+  color: orange;
+}
+
+mat-icon.remove-rating {
+  margin-right: 1rem;
+}
+mat-icon.remove-rating:hover {
+  color: red;
+}
+
+div.readonly * {
+  cursor: default;
+}
+div.readonly *:not(.rated) {
+  color: grey;
+}
+div.readonly .remove-rating {
+  display: none;
+}

@@ -8,18 +8,19 @@ import {
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 
 import { RoastService } from '../../services/roast.service';
+import { StarRatingComponent } from '../star-rating/star-rating.component';
 // import { COUNTRIES } from '../../countries';
 
 @Component({
   selector: 'app-add-roast-form',
   standalone: true,
-  imports: [ ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatSelectModule, MatSliderModule ],
+  imports: [ MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatSliderModule, ReactiveFormsModule, StarRatingComponent ],
   styleUrl: './add-roast-form.component.css',
   template: `
     <div class="modal is-active" open>
@@ -81,7 +82,9 @@ import { RoastService } from '../../services/roast.service';
               </mat-form-field>
             </div>
 
-            <div class="rating-container">
+            <app-star-rating></app-star-rating>
+
+            <!-- <div class="rating-container">
               <label for="rating-slider">
                 @if (rating!.pristine) {
                   Your rating...
@@ -96,7 +99,7 @@ import { RoastService } from '../../services/roast.service';
                   formControlName="rating"
                 />
               </mat-slider>
-            </div>
+            </div> -->
 
             <mat-form-field class="is-fullwidth">
               <mat-label>Notes</mat-label>
