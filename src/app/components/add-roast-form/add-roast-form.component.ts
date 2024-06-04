@@ -66,8 +66,8 @@ import { RoastService } from '../../services/roast.service';
                   <mat-option value="Blend">Blend</mat-option>
                 </mat-select>
               </mat-form-field>
-  
-              <mat-form-field class="ml-16">
+
+              <mat-form-field>
                 <mat-label>Process method</mat-label>
                 <mat-select
                   formControlName="processMethod"
@@ -81,12 +81,22 @@ import { RoastService } from '../../services/roast.service';
               </mat-form-field>
             </div>
 
-            <mat-slider
-              min="0" max="5" discrete
-              [displayWith]="formatRatingLabel"
-            >
-              <input matSliderThumb formControlName="rating">
-            </mat-slider>
+            <div class="rating-container">
+              <label for="rating-slider">
+                @if (rating!.pristine) {
+                  Your rating...
+                } @else {
+                  You're rating: {{ rating!.value }} out of 5
+                }
+              </label>
+              <mat-slider min="0" max="5" discrete>
+                <input
+                  id="rating-slider"
+                  matSliderThumb
+                  formControlName="rating"
+                />
+              </mat-slider>
+            </div>
 
             <mat-form-field class="is-fullwidth">
               <mat-label>Notes</mat-label>
@@ -182,10 +192,6 @@ export class AddRoastFormComponent implements OnInit {
 
   public get rating() {
     return this.newRoast.get('rating');
-  }
-
-  formatRatingLabel(value: number): string {
-    return `${value} Stars`;
   }
 
   createRoast() {

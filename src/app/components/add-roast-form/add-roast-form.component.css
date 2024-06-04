@@ -7,23 +7,20 @@ header h2 {
   width: 100%;
 }
 
-.ml-16 {
-  margin-left: 16px;
-}
-
-mat-slider {
-  width: 80%;
-}
-
 .composition-process-select-pair {
   display: flex;
   align-items: space-between;
+  gap: 0 1rem;
 }
 
 .composition-process-select-pair mat-form-field {
   width: 100%;
 }
 
-input#rating {
+rating-container {
+  width: 100%;
+}
+
+mat-slider {
   width: 100%;
 }
