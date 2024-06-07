@@ -91,10 +91,6 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
               </mat-form-field>
             </div>
 
-            <app-star-rating
-              (valueChanged)="updateRating($event)"
-            ></app-star-rating>
-
             <mat-form-field class="is-fullwidth">
               <mat-label>Notes</mat-label>
               <textarea
@@ -104,6 +100,10 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
                 aria-label="Your notes about this coffee"
               ></textarea>
             </mat-form-field>
+
+            <app-star-rating
+              (valueChanged)="updateRating($event)"
+            ></app-star-rating>
           </form>
         </section>
 
