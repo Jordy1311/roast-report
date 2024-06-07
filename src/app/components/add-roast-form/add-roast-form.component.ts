@@ -109,63 +109,65 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
               ></textarea>
             </mat-form-field>
 
-            <mat-form-field class="is-fullwidth">
-              <mat-label>Countries of origin</mat-label>
-              <mat-chip-grid
-                #countriesChipGrid
-                aria-label="Enter the countries of origin for the roast"
-              >
-                @for (country of countriesOfOrigin!.value; track country) {
-                  <mat-chip-row
-                    (removed)="removeCountry(country)"
-                    [editable]="true"
-                    (edited)="editCountry(country, $event)"
-                    [aria-description]="'press enter to edit ' + country"
-                  >
-                    {{ country }}
-                    <button matChipRemove [attr.aria-label]="'remove ' + country">
-                      <mat-icon>cancel</mat-icon>
-                    </button>
-                  </mat-chip-row>
-                }
-                <input
-                  placeholder="New country..."
-                  [matChipInputFor]="countriesChipGrid"
-                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                  [matChipInputAddOnBlur]="true"
-                  (matChipInputTokenEnd)="addCountry($event)"
-                />
-              </mat-chip-grid>
-            </mat-form-field>
+            <div class="side-by-side">
+              <mat-form-field class="is-fullwidth">
+                <mat-label>Countries of origin</mat-label>
+                <mat-chip-grid
+                  #countriesChipGrid
+                  aria-label="Enter the countries of origin for the roast"
+                >
+                  @for (country of countriesOfOrigin!.value; track country) {
+                    <mat-chip-row
+                      (removed)="removeCountry(country)"
+                      [editable]="true"
+                      (edited)="editCountry(country, $event)"
+                      [aria-description]="'press enter to edit ' + country"
+                    >
+                      {{ country }}
+                      <button matChipRemove [attr.aria-label]="'remove ' + country">
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip-row>
+                  }
+                  <input
+                    placeholder="New country..."
+                    [matChipInputFor]="countriesChipGrid"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="addCountry($event)"
+                  />
+                </mat-chip-grid>
+              </mat-form-field>
 
-            <mat-form-field class="is-fullwidth">
-              <mat-label>Tasting notes</mat-label>
-              <mat-chip-grid
-                #tastingNotesChipGrid
-                aria-label="Enter the tasting notes of the roast"
-              >
-                @for (tastingNote of tastingNotes!.value; track tastingNote) {
-                  <mat-chip-row
-                    (removed)="removeTastingNote(tastingNote)"
-                    [editable]="true"
-                    (edited)="editTastingNote(tastingNote, $event)"
-                    [aria-description]="'press enter to edit ' + tastingNote"
-                  >
-                    {{ tastingNote }}
-                    <button matChipRemove [attr.aria-label]="'remove ' + tastingNote">
-                      <mat-icon>cancel</mat-icon>
-                    </button>
-                  </mat-chip-row>
-                }
-                <input
-                  placeholder="New tasting note..."
-                  [matChipInputFor]="tastingNotesChipGrid"
-                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                  [matChipInputAddOnBlur]="true"
-                  (matChipInputTokenEnd)="addTastingNote($event)"
-                />
-              </mat-chip-grid>
-            </mat-form-field>
+              <mat-form-field class="is-fullwidth">
+                <mat-label>Tasting notes</mat-label>
+                <mat-chip-grid
+                  #tastingNotesChipGrid
+                  aria-label="Enter the tasting notes of the roast"
+                >
+                  @for (tastingNote of tastingNotes!.value; track tastingNote) {
+                    <mat-chip-row
+                      (removed)="removeTastingNote(tastingNote)"
+                      [editable]="true"
+                      (edited)="editTastingNote(tastingNote, $event)"
+                      [aria-description]="'press enter to edit ' + tastingNote"
+                    >
+                      {{ tastingNote }}
+                      <button matChipRemove [attr.aria-label]="'remove ' + tastingNote">
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip-row>
+                  }
+                  <input
+                    placeholder="New tasting note..."
+                    [matChipInputFor]="tastingNotesChipGrid"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="addTastingNote($event)"
+                  />
+                </mat-chip-grid>
+              </mat-form-field>
+            </div>
 
             <app-star-rating
               (valueChanged)="updateRating($event)"
