@@ -111,7 +111,10 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 
             <mat-form-field class="is-fullwidth">
               <mat-label>Countries of origin</mat-label>
-              <mat-chip-grid #chipGrid aria-label="Enter countries">
+              <mat-chip-grid
+                #countriesChipGrid
+                aria-label="Enter the countries of origin for the roast"
+              >
                 @for (country of countriesOfOrigin!.value; track country) {
                   <mat-chip-row
                     (removed)="removeCountry(country)"
@@ -127,10 +130,39 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
                 }
                 <input
                   placeholder="New country..."
-                  [matChipInputFor]="chipGrid"
+                  [matChipInputFor]="countriesChipGrid"
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                   [matChipInputAddOnBlur]="true"
                   (matChipInputTokenEnd)="addCountry($event)"
+                />
+              </mat-chip-grid>
+            </mat-form-field>
+
+            <mat-form-field class="is-fullwidth">
+              <mat-label>Tasting notes</mat-label>
+              <mat-chip-grid
+                #tastingNotesChipGrid
+                aria-label="Enter the tasting notes of the roast"
+              >
+                @for (tastingNote of tastingNotes!.value; track tastingNote) {
+                  <mat-chip-row
+                    (removed)="removeTastingNote(tastingNote)"
+                    [editable]="true"
+                    (edited)="editTastingNote(tastingNote, $event)"
+                    [aria-description]="'press enter to edit ' + tastingNote"
+                  >
+                    {{ tastingNote }}
+                    <button matChipRemove [attr.aria-label]="'remove ' + tastingNote">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                }
+                <input
+                  placeholder="New tasting note..."
+                  [matChipInputFor]="tastingNotesChipGrid"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="addTastingNote($event)"
                 />
               </mat-chip-grid>
             </mat-form-field>
@@ -192,6 +224,9 @@ export class AddRoastFormComponent implements OnInit {
     countriesOfOrigin: new FormControl<string[]>([],
       { nonNullable: true }
     ),
+    tastingNotes: new FormControl<string[]>([],
+      { nonNullable: true }
+    ),
     processMethod: new FormControl<'' | 'washed' | 'natural'>('',
       { nonNullable: true }
     ),
@@ -230,6 +265,10 @@ export class AddRoastFormComponent implements OnInit {
     return this.newRoast.get('countriesOfOrigin');
   }
 
+  public get tastingNotes() {
+    return this.newRoast.get('tastingNotes');
+  }
+
   public get rating() {
     return this.newRoast.get('rating');
   }
@@ -250,12 +289,20 @@ export class AddRoastFormComponent implements OnInit {
     }
 
     if (this.newRoast.valid) {
-      const { composition, countriesOfOrigin, processMethod, rating, notes } = this.newRoast.value;
+      const {
+        composition,
+        countriesOfOrigin,
+        tastingNotes,
+        processMethod,
+        rating,
+        notes,
+      } = this.newRoast.value;
       const newRoast = {
         name: this.roast!.value,
         roaster: this.roaster!.value,
         composition,
         origin: countriesOfOrigin,
+        tastingNotes,
         processMethod,
         rating,
         notes,
@@ -305,6 +352,47 @@ export class AddRoastFormComponent implements OnInit {
       const existingCountries = this.countriesOfOrigin!.value;
       existingCountries.splice(index, 1, value);
       this.countriesOfOrigin!.setValue(existingCountries);
+    }
+  }
+
+  // methods relating to tastingNotes
+  addTastingNote(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    if (value) {
+      const existingTastingNotes = this.tastingNotes!.value;
+      this.tastingNotes!.setValue([ ...existingTastingNotes, value ]);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+  }
+  removeTastingNote(tastingNote: string): void {
+    const index = this.tastingNotes!.value.indexOf(tastingNote);
+
+    if (index >= 0) {
+      const existingTastingNotes = this.tastingNotes!.value;
+      existingTastingNotes.splice(index, 1);
+      this.tastingNotes!.setValue(existingTastingNotes);
+
+      this.announcer.announce(`Removed ${tastingNote}`);
+    }
+  }
+  editTastingNote(tastingNote: string, event: MatChipEditedEvent) {
+    const value = event.value.trim();
+
+    // Remove tastingNote if it no longer has a name
+    if (!value) {
+      this.removeTastingNote(tastingNote);
+      return;
+    }
+
+    // Edit existing tastingNote
+    const index = this.tastingNotes!.value.indexOf(tastingNote);
+    if (index >= 0) {
+      const existingTastingNotes = this.tastingNotes!.value;
+      existingTastingNotes.splice(index, 1, value);
+      this.tastingNotes!.setValue(existingTastingNotes);
     }
   }
 }
