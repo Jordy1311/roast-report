@@ -82,24 +82,9 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
               </mat-form-field>
             </div>
 
-            <app-star-rating></app-star-rating>
-
-            <!-- <div class="rating-container">
-              <label for="rating-slider">
-                @if (rating!.pristine) {
-                  Your rating...
-                } @else {
-                  You're rating: {{ rating!.value }} out of 5
-                }
-              </label>
-              <mat-slider min="0" max="5" discrete>
-                <input
-                  id="rating-slider"
-                  matSliderThumb
-                  formControlName="rating"
-                />
-              </mat-slider>
-            </div> -->
+            <app-star-rating
+              (valueChanged)="updateRating($event)"
+            ></app-star-rating>
 
             <mat-form-field class="is-fullwidth">
               <mat-label>Notes</mat-label>
@@ -197,7 +182,11 @@ export class AddRoastFormComponent implements OnInit {
     return this.newRoast.get('rating');
   }
 
-  createRoast() {
+  updateRating(newRatingValue: number): void {
+    this.rating?.setValue(newRatingValue);
+  }
+
+  createRoast(): void {
     if (this.roast?.errors) {
       this.invalidRoast = true;
       return;

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { MatIcon } from '@angular/material/icon';
 
@@ -63,10 +63,12 @@ export class StarRatingComponent {
   @Input() rating = 0;
   @Input() readonly = false;
 
+  @Output() valueChanged = new EventEmitter<number>();
+
   setRating(value: number): void {
     if (this.readonly || this.rating === value) return;
 
     this.rating = value;
-    console.log('rating:', this.rating);
+    this.valueChanged.emit(this.rating);
   }
 }
