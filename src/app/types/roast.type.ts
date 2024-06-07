@@ -9,7 +9,7 @@ export interface Roast {
   processMethod?: string;
   roastedFor?: [ string ];
   tastingNotes?: [ string ];
-  rating?: string;
+  rating?: number;
   notes?: string;
 }
 

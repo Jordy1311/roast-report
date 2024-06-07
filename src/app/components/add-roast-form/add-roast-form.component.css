@@ -7,13 +7,6 @@ header h2 {
   width: 100%;
 }
 
-.composition-process-select-pair,
-.side-by-side {
-  display: flex;
-  align-items: space-between;
-  gap: 0 1rem;
-}
-
 .composition-process-select-pair mat-form-field {
   width: 100%;
 }

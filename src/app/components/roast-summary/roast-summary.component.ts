@@ -5,11 +5,12 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { Roast } from '../../types/roast.type';
 import { RoastService } from '../../services/roast.service';
+import { StarRatingComponent } from '../star-rating/star-rating.component';
 
 @Component({
   selector: 'app-roast-summary',
   standalone: true,
-  imports: [ MatButtonModule, MatIconModule ],
+  imports: [ MatButtonModule, MatIconModule, StarRatingComponent ],
   styleUrl: './roast-summary.component.css',
   template: `
     <article class="box">
@@ -28,15 +29,24 @@ import { RoastService } from '../../services/roast.service';
         <p>Roasted for: {{ roast.roastedFor!.join(', ') }}</p>
       }
 
-      <button
-        (click)="deleteRoast(roast._id)"
-        mat-button
-        color="warn"
-        aria-label="Delete coffee"
-      >
-        <span>Delete</span>
-        <mat-icon aria-hidden>delete</mat-icon>
-      </button>
+      <div class="side-by-side">
+        <button
+          (click)="deleteRoast(roast._id)"
+          mat-button
+          color="warn"
+          aria-label="Delete coffee"
+        >
+          <span>Delete</span>
+          <mat-icon aria-hidden>delete</mat-icon>
+        </button>
+  
+        @if (roast.rating) {
+          <app-star-rating
+            [rating]="roast.rating"
+            [readonly]="true"
+          ></app-star-rating>
+        }
+      </div>
     </article>
   `,
 })

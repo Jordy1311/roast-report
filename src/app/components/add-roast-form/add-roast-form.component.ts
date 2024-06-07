@@ -23,6 +23,13 @@ import { RoastService } from '../../services/roast.service';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
 // import { COUNTRIES } from '../../countries';
 
+/*
+  TODO:
+  - initial focus on the first input
+  - auto capitalise chip text content
+  - abstract some of the inputs into their own components
+*/
+
 @Component({
   selector: 'app-add-roast-form',
   standalone: true,
@@ -71,7 +78,7 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
               <mat-error>Please enter a roaster.</mat-error>
             </mat-form-field>
 
-            <div class="composition-process-select-pair">
+            <div class="side-by-side composition-process-select-pair">
               <mat-form-field>
                 <mat-label>Roast composition</mat-label>
                 <mat-select
