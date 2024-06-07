@@ -20,7 +20,16 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 @Component({
   selector: 'app-add-roast-form',
   standalone: true,
-  imports: [ MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule, MatSliderModule, ReactiveFormsModule, StarRatingComponent ],
+  imports: [
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatSelectModule,
+    MatSliderModule,
+    ReactiveFormsModule,
+    StarRatingComponent,
+  ],
   styleUrl: './add-roast-form.component.css',
   template: `
     <div class="modal is-active" open>
