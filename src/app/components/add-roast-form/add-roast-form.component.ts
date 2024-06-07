@@ -248,11 +248,6 @@ export class AddRoastFormComponent implements OnInit {
     });
   }
 
-  /* TOBE implemented
-    roastedFor - some sort of chips
-    tastingNotes - some sort of chips
-  */
-
   private get roast() {
     return this.newRoast.get('roast');
   }
