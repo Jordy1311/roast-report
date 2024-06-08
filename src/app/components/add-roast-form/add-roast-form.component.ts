@@ -182,20 +182,20 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 
     <mat-dialog-actions>
       <button
+        (click)="closeDialog()"
+        mat-stroked-button
+        color="primary"
+      >
+        Cancel
+      </button>
+
+      <button
         (click)="createRoast()"
         mat-flat-button
         color="primary"
       >
         <span>Add roast</span>
         <mat-icon aria-hidden>add_circle</mat-icon>
-      </button>
-
-      <button
-        (click)="closeDialog()"
-        mat-stroked-button
-        color="primary"
-      >
-        Cancel
       </button>
     </mat-dialog-actions>
   `,
@@ -236,7 +236,7 @@ export class AddRoastFormComponent implements OnInit {
     ),
   });
 
-  constructor(public dialogRef: MatDialogRef<AddRoastFormComponent>,) {}
+  constructor(public dialogRef: MatDialogRef<AddRoastFormComponent>) {}
 
   ngOnInit(): void {
     // clears errors on form change

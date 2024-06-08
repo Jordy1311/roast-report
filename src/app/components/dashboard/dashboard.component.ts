@@ -53,7 +53,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
       </div>
 
       <button
-        (click)="openDialog()"
+        (click)="openAddRoastDialog()"
         mat-flat-button
         color="primary"
         class="add-roast"
@@ -70,7 +70,6 @@ export class DashboardComponent implements OnInit {
   private roastService = inject(RoastService);
 
   usersRoasts = this.roastService.roastsSignal;
-  shouldShowAddRoastForm = false;
 
   constructor(public dialog: MatDialog) {}
 
@@ -88,7 +87,7 @@ export class DashboardComponent implements OnInit {
     this.authService.logout();
   }
 
-  openDialog(): void {
+  openAddRoastDialog(): void {
     this.dialog.open(AddRoastFormComponent);
   }
 }

@@ -1,11 +1,12 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Roast } from '../../types/roast.type';
-import { RoastService } from '../../services/roast.service';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
+import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confirmation.component';
 
 @Component({
   selector: 'app-roast-summary',
@@ -31,7 +32,7 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 
       <div class="side-by-side">
         <button
-          (click)="deleteRoast(roast._id)"
+          (click)="openDeleteRoastDialog(roast._id, roast.name)"
           mat-button
           color="warn"
           aria-label="Delete coffee"
@@ -51,11 +52,13 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
   `,
 })
 export class RoastSummaryComponent {
-  roastService = inject(RoastService);
+  constructor(public dialog: MatDialog) { }
 
   @Input() roast!: Roast;
 
-  deleteRoast(id: string): void {
-    this.roastService.deleteRoast(id);
+  openDeleteRoastDialog(id: string, name: string): void {
+    this.dialog.open(DeleteConfirmationComponent,
+      { data: { roastId: id, roastName: name } }
+    );
   }
 }
