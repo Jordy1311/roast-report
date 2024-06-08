@@ -1,8 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+html {
+  display: flex;
+  justify-content: center;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
 
+body {
+  width: 90vw;
+  max-width: 1200px;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+/* small screen and below */
+@media (max-width: 576px) {
+  body {
+    width: 95vw;
+  }
+}
+
+/* Util styles */
 .side-by-side {
   display: flex;
   align-items: center;

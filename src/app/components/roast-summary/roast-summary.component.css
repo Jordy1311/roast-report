@@ -1,10 +1,18 @@
 :host {
-  width: 95vw;
-  max-width: 500px;
-  margin-bottom: 1rem;
+  width: calc(50% - 2rem);
+  min-width: 450px;
 }
 
 header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+/* 1280px and smaller */
+@media (max-width: 1024px) {
+  :host {
+    width: 90vw;
+    max-width: 600px;
+  }
 }
