@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
 
 import { AuthService } from '../../services/auth.service';
 import { RoastService } from '../../services/roast.service';
@@ -28,7 +29,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
       </div>
     </header>
 
-    <!-- split out into it's own component -->
+    <!-- split out into it's own component / get rid of -->
     <div class="stats mx-auto level is-mobile">
       <div class="level-item has-text-centered">
         <div>
@@ -44,7 +45,6 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
       </div>
     </div>
 
-    <!-- split out into it's own component -->
     <main>
       <div class="roasts">
         @for (roast of usersRoasts(); track roast._id) {
@@ -52,12 +52,8 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
         }
       </div>
 
-      @if (shouldShowAddRoastForm) {
-        <app-add-roast-form (formClosed)="toggleAddRoast()"></app-add-roast-form>
-      }
-
       <button
-        (click)="toggleAddRoast()"
+        (click)="openDialog()"
         mat-flat-button
         color="primary"
         class="add-roast"
@@ -76,6 +72,8 @@ export class DashboardComponent implements OnInit {
   usersRoasts = this.roastService.roastsSignal;
   shouldShowAddRoastForm = false;
 
+  constructor(public dialog: MatDialog) {}
+
   ngOnInit(): void {
     this.roastService.getUsersRoasts();
   }
@@ -90,7 +88,7 @@ export class DashboardComponent implements OnInit {
     this.authService.logout();
   }
 
-  toggleAddRoast(): void {
-    this.shouldShowAddRoastForm = !this.shouldShowAddRoastForm;
+  openDialog(): void {
+    this.dialog.open(AddRoastFormComponent);
   }
 }

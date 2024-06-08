@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   FormControl,
@@ -10,6 +10,7 @@ import {
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipEditedEvent, MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -25,7 +26,6 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 
 /*
   TODO:
-  - initial focus on the first input
   - auto capitalise chip text content
   - abstract some of the inputs into their own components
 */
@@ -37,6 +37,9 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
     MatAutocompleteModule,
     MatButtonModule,
     MatChipsModule,
+    MatDialogActions,
+    MatDialogContent,
+    MatDialogTitle,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -47,173 +50,159 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
   ],
   styleUrl: './add-roast-form.component.css',
   template: `
-    <div class="modal is-active" open>
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <h2>Add a roast</h2>
-        </header>
+    <h2 mat-dialog-title>Add a roast</h2>
 
-        <section class="modal-card-body">
-          <form [formGroup]="newRoast">
-            <mat-form-field class="is-fullwidth">
-              <mat-label>Roast</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="roast"
-                aria-label="Roast name"
-              />
-              <mat-error>Please enter a roast name.</mat-error>
-            </mat-form-field>
+    <mat-dialog-content>
+      <form [formGroup]="newRoast">
+        <mat-form-field class="is-fullwidth">
+          <mat-label>Roast</mat-label>
+          <input
+            cdkFocusInitial
+            matInput
+            type="text"
+            formControlName="roast"
+            aria-label="Roast name"
+          />
+          <mat-error>Please enter a roast name.</mat-error>
+        </mat-form-field>
 
-            <mat-form-field class="is-fullwidth">
-              <mat-label>Roaster</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="roaster"
-                aria-label="The roaster"
-              />
-              <mat-error>Please enter a roaster.</mat-error>
-            </mat-form-field>
+        <mat-form-field class="is-fullwidth">
+          <mat-label>Roaster</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="roaster"
+            aria-label="The roaster"
+          />
+          <mat-error>Please enter a roaster.</mat-error>
+        </mat-form-field>
 
-            <div class="side-by-side composition-process-select-pair">
-              <mat-form-field>
-                <mat-label>Roast composition</mat-label>
-                <mat-select
-                  formControlName="composition"
-                  name="composition"
-                  aria-label="Select the composition of this roast"
-                >
-                  <mat-option selected value="">-</mat-option>
-                  <mat-option value="Single Origin">Single Origin</mat-option>
-                  <mat-option value="Blend">Blend</mat-option>
-                </mat-select>
-              </mat-form-field>
+        <div class="side-by-side">
+          <mat-form-field>
+            <mat-label>Roast composition</mat-label>
+            <mat-select
+              formControlName="composition"
+              name="composition"
+              aria-label="Select the composition of this roast"
+            >
+              <mat-option selected value="">-</mat-option>
+              <mat-option value="Single Origin">Single Origin</mat-option>
+              <mat-option value="Blend">Blend</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-              <mat-form-field>
-                <mat-label>Process method</mat-label>
-                <mat-select
-                  formControlName="processMethod"
-                  name="process-method"
-                  aria-label="Select how this roast was processed"
-                  >
-                  <mat-option selected value="">-</mat-option>
-                  <mat-option value="Washed">Washed</mat-option>
-                  <mat-option value="Natural">Natural</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <mat-form-field class="is-fullwidth">
-              <mat-label>Notes</mat-label>
-              <textarea
-                matInput
-                formControlName="notes"
-                placeholder="Your notes about this coffee..."
-                aria-label="Your notes about this coffee"
-              ></textarea>
-            </mat-form-field>
-
-            <div class="side-by-side">
-              <mat-form-field class="is-fullwidth">
-                <mat-label>Countries of origin</mat-label>
-                <mat-chip-grid
-                  #countriesChipGrid
-                  aria-label="Enter the countries of origin for the roast"
-                >
-                  @for (country of countriesOfOrigin!.value; track country) {
-                    <mat-chip-row
-                      (removed)="removeCountry(country)"
-                      [editable]="true"
-                      (edited)="editCountry(country, $event)"
-                      [aria-description]="'press enter to edit ' + country"
-                    >
-                      {{ country }}
-                      <button matChipRemove [attr.aria-label]="'remove ' + country">
-                        <mat-icon>cancel</mat-icon>
-                      </button>
-                    </mat-chip-row>
-                  }
-                  <input
-                    placeholder="New country..."
-                    [matChipInputFor]="countriesChipGrid"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="addCountry($event)"
-                  />
-                </mat-chip-grid>
-              </mat-form-field>
-
-              <mat-form-field class="is-fullwidth">
-                <mat-label>Tasting notes</mat-label>
-                <mat-chip-grid
-                  #tastingNotesChipGrid
-                  aria-label="Enter the tasting notes of the roast"
-                >
-                  @for (tastingNote of tastingNotes!.value; track tastingNote) {
-                    <mat-chip-row
-                      (removed)="removeTastingNote(tastingNote)"
-                      [editable]="true"
-                      (edited)="editTastingNote(tastingNote, $event)"
-                      [aria-description]="'press enter to edit ' + tastingNote"
-                    >
-                      {{ tastingNote }}
-                      <button matChipRemove [attr.aria-label]="'remove ' + tastingNote">
-                        <mat-icon>cancel</mat-icon>
-                      </button>
-                    </mat-chip-row>
-                  }
-                  <input
-                    placeholder="New tasting note..."
-                    [matChipInputFor]="tastingNotesChipGrid"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="addTastingNote($event)"
-                  />
-                </mat-chip-grid>
-              </mat-form-field>
-            </div>
-
-            <app-star-rating
-              (valueChanged)="updateRating($event)"
-            ></app-star-rating>
-          </form>
-        </section>
-
-
-        <footer class="modal-card-foot">
-          <div class="field is-grouped">
-            <div class="control">
-              <button
-                (click)="createRoast()"
-                mat-flat-button
-                color="primary"
+          <mat-form-field>
+            <mat-label>Process method</mat-label>
+            <mat-select
+              formControlName="processMethod"
+              name="process-method"
+              aria-label="Select how this roast was processed"
               >
-                <span>Add roast</span>
-                <mat-icon aria-hidden>add_circle</mat-icon>
-              </button>
-            </div>
-            <div class="control">
-              <button
-                (click)="formClosed.emit()"
-                mat-stroked-button
-                color="primary"
+              <mat-option selected value="">-</mat-option>
+              <mat-option value="Washed">Washed</mat-option>
+              <mat-option value="Natural">Natural</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field class="is-fullwidth">
+          <mat-label>Notes</mat-label>
+          <textarea
+            matInput
+            formControlName="notes"
+            placeholder="Your notes about this coffee..."
+            aria-label="Your notes about this coffee"
+          ></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="is-fullwidth">
+          <mat-label>Countries of origin</mat-label>
+          <mat-chip-grid
+            #countriesChipGrid
+            aria-label="Enter the countries of origin for the roast"
+          >
+            @for (country of countriesOfOrigin!.value; track country) {
+              <mat-chip-row
+                (removed)="removeCountry(country)"
+                [editable]="true"
+                (edited)="editCountry(country, $event)"
+                [aria-description]="'press enter to edit ' + country"
               >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </footer>
-      </div>
-    </div>
+                {{ country }}
+                <button matChipRemove [attr.aria-label]="'remove ' + country">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            }
+            <input
+              placeholder="New country..."
+              [matChipInputFor]="countriesChipGrid"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true"
+              (matChipInputTokenEnd)="addCountry($event)"
+            />
+          </mat-chip-grid>
+        </mat-form-field>
+
+        <mat-form-field class="is-fullwidth">
+          <mat-label>Tasting notes</mat-label>
+          <mat-chip-grid
+            #tastingNotesChipGrid
+            aria-label="Enter the tasting notes of the roast"
+          >
+            @for (tastingNote of tastingNotes!.value; track tastingNote) {
+              <mat-chip-row
+                (removed)="removeTastingNote(tastingNote)"
+                [editable]="true"
+                (edited)="editTastingNote(tastingNote, $event)"
+                [aria-description]="'press enter to edit ' + tastingNote"
+              >
+                {{ tastingNote }}
+                <button matChipRemove [attr.aria-label]="'remove ' + tastingNote">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            }
+            <input
+              placeholder="New tasting note..."
+              [matChipInputFor]="tastingNotesChipGrid"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="true"
+              (matChipInputTokenEnd)="addTastingNote($event)"
+            />
+          </mat-chip-grid>
+        </mat-form-field>
+
+        <app-star-rating
+          (valueChanged)="updateRating($event)"
+        ></app-star-rating>
+      </form>
+    </mat-dialog-content>
+
+
+    <mat-dialog-actions>
+      <button
+        (click)="createRoast()"
+        mat-flat-button
+        color="primary"
+      >
+        <span>Add roast</span>
+        <mat-icon aria-hidden>add_circle</mat-icon>
+      </button>
+
+      <button
+        (click)="closeDialog()"
+        mat-stroked-button
+        color="primary"
+      >
+        Cancel
+      </button>
+    </mat-dialog-actions>
   `,
 })
 export class AddRoastFormComponent implements OnInit {
   private roastService = inject(RoastService);
 
-  @Output() formClosed = new EventEmitter<void>();
   invalidRoast?: boolean;
   invalidRoaster?: boolean;
 
@@ -247,6 +236,8 @@ export class AddRoastFormComponent implements OnInit {
     ),
   });
 
+  constructor(public dialogRef: MatDialogRef<AddRoastFormComponent>,) {}
+
   ngOnInit(): void {
     // clears errors on form change
     this.roast?.valueChanges.subscribe(() => {
@@ -275,6 +266,10 @@ export class AddRoastFormComponent implements OnInit {
 
   public get rating() {
     return this.newRoast.get('rating');
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
   }
 
   updateRating(newRatingValue: number): void {
@@ -313,12 +308,12 @@ export class AddRoastFormComponent implements OnInit {
       };
 
       this.roastService.createRoast(newRoast)
-        .then(() => this.formClosed.emit())
+        .then(() => this.closeDialog())
         .catch(() => console.log('Form says there was error!'));
     }
   }
 
-  // methods relating to countryOfOrigin
+  // METHODS RELATING TO: countryOfOrigin
   addCountry(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
@@ -359,7 +354,7 @@ export class AddRoastFormComponent implements OnInit {
     }
   }
 
-  // methods relating to tastingNotes
+  // METHODS RELATING TO: tastingNotes
   addTastingNote(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
