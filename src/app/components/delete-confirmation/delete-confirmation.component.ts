@@ -16,6 +16,7 @@ import { RoastService } from '../../services/roast.service';
   selector: 'app-delete-confirmation',
   standalone: true,
   imports: [ MatDialogTitle, MatDialogContent, MatDialogActions, MatButtonModule, MatIconModule ],
+  styleUrl: './delete-confirmation.component.scss',
   template: `
     <h2 mat-dialog-title>Delete?</h2>
 
@@ -42,7 +43,6 @@ import { RoastService } from '../../services/roast.service';
       </button>
     </mat-dialog-actions>
   `,
-  styleUrl: './delete-confirmation.component.css'
 })
 export class DeleteConfirmationComponent {
   private roastService = inject(RoastService);

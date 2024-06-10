@@ -12,7 +12,7 @@ import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confi
   selector: 'app-roast-summary',
   standalone: true,
   imports: [ MatButtonModule, MatIconModule, StarRatingComponent ],
-  styleUrl: './roast-summary.component.css',
+  styleUrl: './roast-summary.component.scss',
   template: `
     <article class="box">
       <header>

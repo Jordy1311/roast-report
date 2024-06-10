@@ -18,7 +18,7 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [ ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule ],
-  styleUrl: './login.component.css',
+  styleUrl: './login.component.scss',
   template: `
     <div>
       <h1>Log in</h1>

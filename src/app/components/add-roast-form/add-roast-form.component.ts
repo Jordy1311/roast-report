@@ -48,7 +48,7 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
     ReactiveFormsModule,
     StarRatingComponent,
   ],
-  styleUrl: './add-roast-form.component.css',
+  styleUrl: './add-roast-form.component.scss',
   template: `
     <h2 mat-dialog-title>Add a roast</h2>
 

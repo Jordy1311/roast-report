@@ -13,7 +13,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
   selector: 'app-dashboard',
   standalone: true,
   imports: [ RoastSummaryComponent, AddRoastFormComponent, MatButtonModule, MatIconModule ],
-  styleUrl: './dashboard.component.css',
+  styleUrl: './dashboard.component.scss',
   template: `
     <header>
       <h1>Roast Report</h1>

@@ -6,6 +6,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'app-star-rating',
   standalone: true,
   imports: [ MatIcon ],
+  styleUrl: './star-rating.component.scss',
   template: `
     <div class="container" [class.readonly]="readonly">
       <mat-icon
@@ -57,7 +58,6 @@ import { MatIcon } from '@angular/material/icon';
       ></mat-icon>
     </div>
   `,
-  styleUrl: './star-rating.component.css'
 })
 export class StarRatingComponent {
   @Input() rating = 0;
