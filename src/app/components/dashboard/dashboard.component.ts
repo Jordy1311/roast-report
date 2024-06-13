@@ -29,8 +29,8 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
       </div>
     </header>
 
-    <!-- split out into it's own component / get rid of -->
-    <div class="stats mx-auto level is-mobile">
+    <!-- TODO: make this a thing again -->
+    <!-- <div class="stats mx-auto level is-mobile">
       <div class="level-item has-text-centered">
         <div>
           <p class="heading">Roasts</p>
@@ -43,7 +43,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
           <p class="title">{{ numberOfUniqueRoasters }}</p>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <main>
       <div class="roasts">
