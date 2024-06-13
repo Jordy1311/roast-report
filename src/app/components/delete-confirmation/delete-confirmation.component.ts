@@ -39,7 +39,12 @@ import { RoastService } from '../../services/roast.service';
         color="warn"
       >
         Delete
-        <mat-icon aria-hidden>delete</mat-icon>
+        <mat-icon
+          class="material-symbols-rounded"
+          aria-hidden
+        >
+          delete
+        </mat-icon>
       </button>
     </mat-dialog-actions>
   `,

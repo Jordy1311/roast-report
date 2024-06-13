@@ -10,52 +10,64 @@ import { MatIcon } from '@angular/material/icon';
   template: `
     <div class="container" [class.readonly]="readonly">
       <mat-icon
-        fontIcon="close"
+        class="material-symbols-rounded"
         (click)="setRating(0)"
         class="remove-rating"
         aria-hidden="false"
         aria-label="Choose to not specify a rating"
-      ></mat-icon>
+      >
+        close
+      </mat-icon>
 
       <mat-icon
-        fontIcon="star"
+        class="material-symbols-rounded"
         (click)="setRating(1)"
         [class.rated]="rating >= 1"
         aria-hidden="false"
         aria-label="One star out of five"
-      ></mat-icon>
+      >
+        star
+      </mat-icon>
 
       <mat-icon
-        fontIcon="star"
+        class="material-symbols-rounded"
         (click)="setRating(2)"
         [class.rated]="rating >= 2"
         aria-hidden="false"
         aria-label="Two stars out of five"
-      ></mat-icon>
+      >
+        star
+      </mat-icon>
 
       <mat-icon
-        fontIcon="star"
+        class="material-symbols-rounded"
         (click)="setRating(3)"
         [class.rated]="rating >= 3"
         aria-hidden="false"
         aria-label="Two stars out of five"
-      ></mat-icon>
+      >
+        star
+      </mat-icon>
 
       <mat-icon
-        fontIcon="star"
+        class="material-symbols-rounded"
         (click)="setRating(4)"
         [class.rated]="rating >= 4"
         aria-hidden="false"
         aria-label="Two stars out of five"
-      ></mat-icon>
+      >
+        star
+      </mat-icon>
 
       <mat-icon
-        fontIcon="star"
+        class="material-symbols-rounded"
         (click)="setRating(5)"
         [class.rated]="rating >= 5"
         aria-hidden="false"
         aria-label="Two stars out of five"
-      ></mat-icon>
+      >
+        star
+      </mat-icon>
     </div>
   `,
 })

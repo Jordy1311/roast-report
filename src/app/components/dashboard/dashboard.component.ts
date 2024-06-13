@@ -24,7 +24,12 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
           color="primary"
         >
           <span>Log out</span>
-          <mat-icon aria-hidden>logout</mat-icon>
+          <mat-icon
+            class="material-symbols-rounded"
+            aria-hidden
+          >
+            logout
+          </mat-icon>
         </button>
       </div>
     </header>
@@ -60,7 +65,12 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
         aria-label="Add coffee"
       >
         <span>Add</span>
-        <mat-icon aria-hidden>add_circle</mat-icon>
+        <mat-icon
+          class="material-symbols-rounded"
+          aria-hidden
+        >
+          add_circle
+        </mat-icon>
       </button>
     </main>
   `,
