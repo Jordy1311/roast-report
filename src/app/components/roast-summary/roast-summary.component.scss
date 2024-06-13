@@ -1,17 +1,16 @@
-:host {
+mat-card {
   width: calc(50% - 2rem);
   min-width: 450px;
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+mat-icon {
+  align-self: center;
+  margin-right: .5rem;
 }
 
-/* 1280px and smaller */
+// 1280px and smaller
 @media (max-width: 1024px) {
-  :host {
+  mat-card {
     width: 90vw;
     max-width: 600px;
   }

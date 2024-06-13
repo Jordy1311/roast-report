@@ -1,8 +1,10 @@
 import { Component, Input } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 import { Roast } from '../../types/roast.type';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
@@ -11,26 +13,51 @@ import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confi
 @Component({
   selector: 'app-roast-summary',
   standalone: true,
-  imports: [ MatButtonModule, MatIconModule, StarRatingComponent ],
+  imports: [
+    MatButtonModule,
+    MatCardModule,
+    MatChipsModule,
+    MatIconModule,
+    StarRatingComponent
+  ],
   styleUrl: './roast-summary.component.scss',
   template: `
-    <article class="box">
-      <header>
-        <h2 class="title is-4">{{ roast.name }}</h2>
-        <p class="subtitle is-5">{{ roast.roaster }}</p>
-      </header>
+    <mat-card>
+      <mat-card-header>
+        <div>
+          <mat-card-title>{{ roast.name }}</mat-card-title>
+          <mat-card-subtitle>{{ roast.roaster }}</mat-card-subtitle>
+        </div>
 
-      @if (roast.composition || roast.processMethod) {
-        <p>{{ [roast.processMethod, roast.composition].join(', ') }}<br></p>
-      }
-      @if (roast.tastingNotes) {
-        <p>Tastes like: {{ roast.tastingNotes!.join(', ') }}<br></p>
-      }
-      @if (roast.roastedFor) {
-        <p>Roasted for: {{ roast.roastedFor!.join(', ') }}</p>
-      }
+        <span class="spacer"></span>
 
-      <div class="side-by-side">
+        @if (roast.origin) {
+          <mat-icon
+            class="material-symbols-rounded"
+            aria-hidden="false"
+            aria-label="Example home icon"
+          >
+            map
+          </mat-icon>
+          <p>{{ roast.origin }}</p>
+        }
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (roast.composition || roast.processMethod) {
+          <p>{{ [roast.processMethod, roast.composition].join(', ') }}</p>
+        }
+
+        @if (roast.tastingNotes) {
+          <mat-chip-set aria-label="Tasting notes">
+            @for(tastingNote of roast.tastingNotes; track tastingNote) {
+              <mat-chip>{{ tastingNote }}</mat-chip>
+            }
+          </mat-chip-set>
+        }
+      </mat-card-content>
+
+      <mat-card-actions>
         <button
           (click)="openDeleteRoastDialog(roast._id, roast.name)"
           mat-button
@@ -38,17 +65,24 @@ import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confi
           aria-label="Delete coffee"
         >
           <span>Delete</span>
-          <mat-icon aria-hidden>delete</mat-icon>
+          <mat-icon
+            class="material-symbols-rounded"
+            aria-hidden
+          >
+            delete
+          </mat-icon>
         </button>
-  
+
+        <span class="spacer"></span>
+
         @if (roast.rating) {
           <app-star-rating
             [rating]="roast.rating"
             [readonly]="true"
           ></app-star-rating>
         }
-      </div>
-    </article>
+      </mat-card-actions>
+    </mat-card>
   `,
 })
 export class RoastSummaryComponent {
