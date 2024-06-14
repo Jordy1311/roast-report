@@ -195,7 +195,12 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
         color="primary"
       >
         <span>Add roast</span>
-        <mat-icon aria-hidden>add_circle</mat-icon>
+        <mat-icon
+          class="material-symbols-rounded"
+          aria-hidden
+        >
+          add_circle
+        </mat-icon>
       </button>
     </mat-dialog-actions>
   `,
