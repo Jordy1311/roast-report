@@ -44,8 +44,12 @@ import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confi
       </mat-card-header>
 
       <mat-card-content>
-        @if (roast.composition || roast.processMethod) {
-          <p>{{ [roast.processMethod, roast.composition].join(', ') }}</p>
+        @if (roast.composition && roast.processMethod) {
+          <p>{{ [roast.composition, roast.processMethod].join(', ') }}</p>
+        } @else if (roast.composition) {
+          <p>{{ roast.composition }}</p>
+        } @else if (roast.processMethod) {
+          <p>{{ roast.processMethod }}</p>
         }
 
         @if (roast.tastingNotes) {
