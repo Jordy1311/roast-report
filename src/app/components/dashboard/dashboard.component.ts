@@ -64,7 +64,7 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
         class="add-roast"
         aria-label="Add coffee"
       >
-        <span>Add</span>
+        <span>Add Roast</span>
         <mat-icon
           class="material-symbols-rounded"
           aria-hidden
