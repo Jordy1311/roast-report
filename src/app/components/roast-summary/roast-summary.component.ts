@@ -37,7 +37,7 @@ import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confi
             aria-hidden="false"
             aria-label="Example home icon"
           >
-            map
+            public
           </mat-icon>
           <p>{{ roast.origin.join(', ') }}</p>
         }
