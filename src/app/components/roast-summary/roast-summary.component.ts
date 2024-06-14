@@ -39,7 +39,7 @@ import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confi
           >
             map
           </mat-icon>
-          <p>{{ roast.origin }}</p>
+          <p>{{ roast.origin.join(', ') }}</p>
         }
       </mat-card-header>
 
