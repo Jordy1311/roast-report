@@ -56,9 +56,9 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
       <form [formGroup]="newRoast">
         <mat-stepper orientation="vertical" linear="true" #stepper>
           <mat-step [stepControl]="newRoast">
-            <ng-template matStepLabel>Basic info</ng-template>
+            <ng-template matStepLabel>Enter the basics</ng-template>
 
-            <mat-form-field class="is-fullwidth first">
+            <mat-form-field class="is-fullwidth first-in-step">
               <mat-label>Roast</mat-label>
               <input
                 cdkFocusInitial
@@ -81,13 +81,20 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
               <mat-error>Please enter a roaster.</mat-error>
             </mat-form-field>
 
-            <button mat-button matStepperNext>Next</button>
+            <button
+              [disabled]="newRoast.invalid"
+              class="step-next-btn"
+              mat-flat-button
+              matStepperNext
+            >
+              Next
+            </button>
           </mat-step>
 
           <mat-step [stepControl]="newRoast">
-            <ng-template matStepLabel>Nitty gritty</ng-template>
+            <ng-template matStepLabel>Enter the nitty gritty</ng-template>
 
-            <div class="side-by-side first">
+            <div class="side-by-side first-in-step">
               <mat-form-field>
                 <mat-label>Roast composition</mat-label>
                 <mat-select
@@ -186,6 +193,14 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
             <app-star-rating
               (valueChanged)="updateRating($event)"
             ></app-star-rating>
+
+            <button
+              class="step-previous-btn"
+              mat-stroked-button
+              matStepperPrevious
+            >
+              Previous
+            </button>
           </mat-step>
         </mat-stepper>
       </form>
@@ -202,6 +217,7 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 
       <button
         (click)="createRoast()"
+        [disabled]="newRoast.invalid"
         mat-flat-button
         color="primary"
       >
