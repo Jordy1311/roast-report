@@ -1,5 +1,5 @@
-mat-card {
-  width: calc(50% - 2rem);
+:host {
+  width: calc(50% - 2vw);
   min-width: 450px;
 }
 
@@ -8,9 +8,9 @@ mat-icon {
   margin-right: .5rem;
 }
 
-// 1280px and smaller
+// 1024px and smaller
 @media (max-width: 1024px) {
-  mat-card {
+  :host {
     width: 90vw;
     max-width: 600px;
   }

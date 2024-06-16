@@ -1,13 +1,9 @@
 header {
-  margin-top: 3rem;
+  margin: 3rem 0 2rem 0;
 
   display: flex;
   justify-content: space-between;
-}
-
-div.stats {
-  width: 95vw;
-  max-width: 450px;
+  align-items: center;
 }
 
 main {
@@ -25,8 +21,8 @@ div.roasts {
 
 button.add-roast {
   position: fixed;
-  bottom: 4rem;
-  right: 4rem;
+  bottom: 0rem;
+  right: 0;
 }
 
 /* 1024px and smaller */
@@ -34,10 +30,6 @@ button.add-roast {
   div.roasts {
     flex-direction: column;
     align-items: center;
-  }
-
-  button.add-roast {
-    right: 2rem;
   }
 }
 
