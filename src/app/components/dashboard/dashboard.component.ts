@@ -34,22 +34,6 @@ import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.componen
       </div>
     </header>
 
-    <!-- TODO: make this a thing again -->
-    <!-- <div class="stats mx-auto level is-mobile">
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Roasts</p>
-          <p class="title">{{ usersRoasts().length }}</p>
-        </div>
-      </div>
-      <div class="level-item has-text-centered">
-        <div>
-          <p class="heading">Roasters</p>
-          <p class="title">{{ numberOfUniqueRoasters }}</p>
-        </div>
-      </div>
-    </div> -->
-
     <main>
       <div class="roasts">
         @for (roast of usersRoasts(); track roast._id) {
@@ -85,12 +69,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.roastService.getUsersRoasts();
-  }
-
-  get numberOfUniqueRoasters(): number {
-    return new Set(
-      this.usersRoasts().map((roast) => roast.roaster)
-    ).size;
   }
 
   logout(): void {

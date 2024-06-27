@@ -25,7 +25,7 @@ button.add-roast {
   right: 0;
 }
 
-/* 1024px and smaller */
+/* applied to 1024px and smaller */
 @media (max-width: 1024px) {
   div.roasts {
     flex-direction: column;
@@ -33,7 +33,7 @@ button.add-roast {
   }
 }
 
-/* bigger than 1280px */
+/* applied to 1280px bigger than */
 @media (min-width: 1280px) {
   div.roasts {
     gap: 2rem; /* fixed gap */
