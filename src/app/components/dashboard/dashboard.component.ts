@@ -6,13 +6,18 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { AuthService } from '../../services/auth.service';
 import { RoastService } from '../../services/roast.service';
-import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
 import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.component';
+import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ RoastSummaryComponent, AddRoastFormComponent, MatButtonModule, MatIconModule ],
+  imports: [
+    AddRoastFormComponent,
+    RoastSummaryComponent,
+    MatButtonModule,
+    MatIconModule
+  ],
   styleUrl: './dashboard.component.scss',
   template: `
     <header>
