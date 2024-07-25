@@ -8,6 +8,7 @@ header {
 
 main {
   display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -20,8 +21,10 @@ div.roasts {
 }
 
 button.add-roast {
-  position: fixed;
-  bottom: 0rem;
+  align-self: flex-end;
+  margin-top: 2rem;
+  position: sticky;
+  bottom: 3rem;
   right: 0;
 }
 
