@@ -34,6 +34,18 @@ export class RoastService {
       .subscribe((roasts) => this.roastsSignal.set(roasts));
   }
 
+  updateRoast(roastId: string, updates: Partial<NewRoast>): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.patch<Roast>(`/api/v1/roasts/${roastId}`, updates).subscribe({
+        next: () => resolve(),
+        error: (err) => {
+          console.log(err);
+          reject();
+        },
+      });
+    });
+  }
+
   deleteRoast(id: string): void {
     this.http.delete(`/api/v1/roasts/${id}`)
       .subscribe(() => this.roastsSignal.update(
