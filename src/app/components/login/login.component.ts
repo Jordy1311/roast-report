@@ -17,7 +17,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule ],
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule],
   styleUrl: './login.component.scss',
   template: `
     <div>
@@ -75,16 +75,16 @@ export class LoginComponent implements OnInit {
 
   credentials = new FormGroup({
     email: new FormControl<string>('',
-      { validators: [ Validators.required, Validators.email ], nonNullable: true }
+      { validators: [Validators.required, Validators.email], nonNullable: true }
     ),
     password: new FormControl<string>('',
-      { validators: [ Validators.required ], nonNullable: true }
+      { validators: [Validators.required], nonNullable: true }
     ),
   });
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn) {
-      this.router.navigate([ '/' ]);
+      this.router.navigate(['/']);
     }
 
     // removes error states on any input update
@@ -111,7 +111,7 @@ export class LoginComponent implements OnInit {
         .subscribe({
           next: (response) => {
             this.authService.storeToken(response.accessToken);
-            this.router.navigate([ '/' ]);
+            this.router.navigate(['/']);
           },
           error: () => {
             this.invalidCredentialsSubmitted = true;
