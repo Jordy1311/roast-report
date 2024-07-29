@@ -1,16 +1,26 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
-import { MatChipEditedEvent, MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
-import { MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, } from '@angular/material/dialog';
+import {
+  MatChipEditedEvent,
+  MatChipInputEvent,
+  MatChipsModule,
+} from '@angular/material/chips';
+import {
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -22,6 +32,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 import { RoastService } from '../../services/roast.service';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
+import { Roast } from '../../types/roast.type';
 // import { COUNTRIES } from '../../countries';
 
 /*
@@ -31,7 +42,7 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 */
 
 @Component({
-  selector: 'app-add-roast-form',
+  selector: 'app-add-amend-roast-form',
   standalone: true,
   imports: [
     MatAutocompleteModule,
@@ -48,9 +59,9 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
     ReactiveFormsModule,
     StarRatingComponent,
   ],
-  styleUrl: './add-roast-form.component.scss',
+  styleUrl: './add-amend-roast-form.component.scss',
   template: `
-    <h2 mat-dialog-title>{{ "Add a roast" || roast }}</h2>
+    <h2 mat-dialog-title>{{ 'Add a roast' || roast }}</h2>
 
     <mat-dialog-content>
       <form [formGroup]="newRoast">
@@ -114,7 +125,7 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
                   formControlName="processMethod"
                   name="process-method"
                   aria-label="Select how this roast was processed"
-                  >
+                >
                   <mat-option selected value="">-</mat-option>
                   <mat-option value="Washed">Washed</mat-option>
                   <mat-option value="Natural">Natural</mat-option>
@@ -146,7 +157,10 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
                     [aria-description]="'press enter to edit ' + country"
                   >
                     {{ country }}
-                    <button matChipRemove [attr.aria-label]="'remove ' + country">
+                    <button
+                      matChipRemove
+                      [attr.aria-label]="'remove ' + country"
+                    >
                       <mat-icon>cancel</mat-icon>
                     </button>
                   </mat-chip-row>
@@ -175,7 +189,10 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
                     [aria-description]="'press enter to edit ' + tastingNote"
                   >
                     {{ tastingNote }}
-                    <button matChipRemove [attr.aria-label]="'remove ' + tastingNote">
+                    <button
+                      matChipRemove
+                      [attr.aria-label]="'remove ' + tastingNote"
+                    >
                       <mat-icon>cancel</mat-icon>
                     </button>
                   </mat-chip-row>
@@ -207,11 +224,7 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
     </mat-dialog-content>
 
     <mat-dialog-actions>
-      <button
-        (click)="closeDialog()"
-        mat-stroked-button
-        color="primary"
-      >
+      <button (click)="closeDialog()" mat-stroked-button color="primary">
         Cancel
       </button>
 
@@ -222,55 +235,53 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
         color="primary"
       >
         <span>Add</span>
-        <mat-icon
-          class="material-symbols-rounded"
-          aria-hidden
-        >
+        <mat-icon class="material-symbols-rounded" aria-hidden>
           add_circle
         </mat-icon>
       </button>
     </mat-dialog-actions>
   `,
 })
-export class AddRoastFormComponent implements OnInit {
+export class AddAmendRoastFormComponent implements OnInit {
   private roastService = inject(RoastService);
 
   invalidRoast?: boolean;
   invalidRoaster?: boolean;
 
-  readonly separatorKeysCodes = [ ENTER, COMMA ] as const;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
   announcer = inject(LiveAnnouncer);
 
   newRoast = new FormGroup({
-    roast: new FormControl<string>('',
-      { validators: [ Validators.required ], nonNullable: true }
-    ),
-    roaster: new FormControl<string>('',
-      { validators: [ Validators.required ], nonNullable: true }
-    ),
-    composition: new FormControl<'' | 'single origin' | 'blend'>('',
-      { nonNullable: true }
-    ),
-    countriesOfOrigin: new FormControl<string[]>([],
-      { nonNullable: true }
-    ),
-    tastingNotes: new FormControl<string[]>([],
-      { nonNullable: true }
-    ),
-    processMethod: new FormControl<'' | 'washed' | 'natural'>('',
-      { nonNullable: true }
-    ),
-    rating: new FormControl<number>(0,
-      { nonNullable: true }
-    ),
-    notes: new FormControl<string>('',
-      { nonNullable: true }
-    ),
+    roast: new FormControl<string>('', {
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+    roaster: new FormControl<string>('', {
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+    composition: new FormControl<'' | 'single origin' | 'blend'>('', {
+      nonNullable: true,
+    }),
+    countriesOfOrigin: new FormControl<string[]>([], { nonNullable: true }),
+    tastingNotes: new FormControl<string[]>([], { nonNullable: true }),
+    processMethod: new FormControl<'' | 'washed' | 'natural'>('', {
+      nonNullable: true,
+    }),
+    rating: new FormControl<number>(0, { nonNullable: true }),
+    notes: new FormControl<string>('', { nonNullable: true }),
   });
 
-  constructor(public dialogRef: MatDialogRef<AddRoastFormComponent>) {}
+  constructor(
+    public dialogRef: MatDialogRef<AddAmendRoastFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public roastToUpdate: Roast,
+  ) {}
 
   ngOnInit(): void {
+    if (this.roastToUpdate) {
+      console.log(this.roastToUpdate);
+    }
+
     // clears errors on form change
     this.roast?.valueChanges.subscribe(() => {
       this.invalidRoast = undefined;
@@ -339,7 +350,8 @@ export class AddRoastFormComponent implements OnInit {
         notes,
       };
 
-      this.roastService.createRoast(newRoast)
+      this.roastService
+        .createRoast(newRoast)
         .then(() => this.closeDialog())
         .catch(() => console.log('Form says there was error!'));
     }
@@ -392,7 +404,7 @@ export class AddRoastFormComponent implements OnInit {
 
     if (value) {
       const existingTastingNotes = this.tastingNotes!.value;
-      this.tastingNotes!.setValue([ ...existingTastingNotes, value ]);
+      this.tastingNotes!.setValue([...existingTastingNotes, value]);
     }
 
     // Clear the input value

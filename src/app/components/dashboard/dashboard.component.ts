@@ -6,33 +6,27 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { AuthService } from '../../services/auth.service';
 import { RoastService } from '../../services/roast.service';
-import { AddRoastFormComponent } from '../add-roast-form/add-roast-form.component';
+import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
+import { Roast } from '../../types/roast.type';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    AddRoastFormComponent,
+    AddAmendRoastFormComponent,
     RoastSummaryComponent,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
   styleUrl: './dashboard.component.scss',
   template: `
     <header>
       <h1>Roast Report</h1>
       <div>
-        <button
-          (click)="logout()"
-          mat-stroked-button
-          color="primary"
-        >
+        <button (click)="logout()" mat-stroked-button color="primary">
           <span>Log out</span>
-          <mat-icon
-            class="material-symbols-rounded"
-            aria-hidden
-          >
+          <mat-icon class="material-symbols-rounded" aria-hidden>
             logout
           </mat-icon>
         </button>
@@ -47,17 +41,14 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
       </div>
 
       <button
-        (click)="openAddRoastDialog()"
+        (click)="openAddAmendRoastDialog()"
         mat-flat-button
         color="primary"
         class="add-roast"
         aria-label="Add coffee"
       >
         <span>Add Roast</span>
-        <mat-icon
-          class="material-symbols-rounded"
-          aria-hidden
-        >
+        <mat-icon class="material-symbols-rounded" aria-hidden>
           add_circle
         </mat-icon>
       </button>
@@ -80,7 +71,11 @@ export class DashboardComponent implements OnInit {
     this.authService.logout();
   }
 
-  openAddRoastDialog(): void {
-    this.dialog.open(AddRoastFormComponent);
+  openAddAmendsRoastDialog(roastToUpdate?: Roast): void {
+    if (roastToUpdate) {
+      this.dialog.open(AddAmendRoastFormComponent, { data: roastToUpdate });
+    } else {
+      this.dialog.open(AddAmendRoastFormComponent);
+    }
   }
 }
