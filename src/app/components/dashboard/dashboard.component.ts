@@ -41,7 +41,7 @@ import { Roast } from '../../types/roast.type';
       </div>
 
       <button
-        (click)="openAddAmendRoastDialog()"
+        (click)="openAddRoastDialog()"
         mat-flat-button
         color="primary"
         class="add-roast"
@@ -71,11 +71,7 @@ export class DashboardComponent implements OnInit {
     this.authService.logout();
   }
 
-  openAddAmendRoastDialog(roastToUpdate?: Roast): void {
-    if (roastToUpdate) {
-      this.dialog.open(AddAmendRoastFormComponent, { data: roastToUpdate });
-    } else {
-      this.dialog.open(AddAmendRoastFormComponent);
-    }
+  openAddRoastDialog(): void {
+    this.dialog.open(AddAmendRoastFormComponent);
   }
 }
