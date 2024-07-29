@@ -8,7 +8,6 @@ import { AuthService } from '../../services/auth.service';
 import { RoastService } from '../../services/roast.service';
 import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
-import { Roast } from '../../types/roast.type';
 
 @Component({
   selector: 'app-dashboard',
