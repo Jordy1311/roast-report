@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Roast } from '../../types/roast.type';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
 import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confirmation.component';
+import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
 
 @Component({
   selector: 'app-roast-summary',
@@ -18,7 +19,7 @@ import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confi
     MatCardModule,
     MatChipsModule,
     MatIconModule,
-    StarRatingComponent
+    StarRatingComponent,
   ],
   styleUrl: './roast-summary.component.scss',
   template: `
@@ -54,7 +55,7 @@ import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confi
 
         @if (roast.tastingNotes) {
           <mat-chip-set aria-label="Tasting notes">
-            @for(tastingNote of roast.tastingNotes; track tastingNote) {
+            @for (tastingNote of roast.tastingNotes; track tastingNote) {
               <mat-chip>{{ tastingNote }}</mat-chip>
             }
           </mat-chip-set>
@@ -66,14 +67,21 @@ import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confi
           (click)="openDeleteRoastDialog(roast._id, roast.name)"
           mat-button
           color="warn"
-          aria-label="Delete coffee"
+          aria-label="Delete roast"
         >
           <span>Delete</span>
-          <mat-icon
-            class="material-symbols-rounded"
-            aria-hidden
-          >
+          <mat-icon class="material-symbols-rounded" aria-hidden>
             delete
+          </mat-icon>
+        </button>
+
+        <button
+          (click)="openAmendRoastDialog(roast)"
+          mat-icon-button
+          aria-label="Amend roast"
+        >
+          <mat-icon class="material-symbols-rounded" aria-hidden>
+            edit
           </mat-icon>
         </button>
 
@@ -90,13 +98,17 @@ import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confi
   `,
 })
 export class RoastSummaryComponent {
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) {}
 
   @Input() roast!: Roast;
 
+  openAmendRoastDialog(roast: Roast): void {
+    this.dialog.open(AddAmendRoastFormComponent, { data: roast });
+  }
+
   openDeleteRoastDialog(id: string, name: string): void {
-    this.dialog.open(DeleteConfirmationComponent,
-      { data: { roastId: id, roastName: name } }
-    );
+    this.dialog.open(DeleteConfirmationComponent, {
+      data: { roastId: id, roastName: name },
+    });
   }
 }
