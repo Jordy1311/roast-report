@@ -71,7 +71,7 @@ export class DashboardComponent implements OnInit {
     this.authService.logout();
   }
 
-  openAddAmendsRoastDialog(roastToUpdate?: Roast): void {
+  openAddAmendRoastDialog(roastToUpdate?: Roast): void {
     if (roastToUpdate) {
       this.dialog.open(AddAmendRoastFormComponent, { data: roastToUpdate });
     } else {
