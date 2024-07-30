@@ -5,8 +5,8 @@ export interface Roast {
   roaster: string;
 
   origin?: [ string ];
-  composition?: string;
-  processMethod?: string;
+  composition?: '' | 'single origin' | 'blend';
+  processMethod?: '' | 'washed' | 'natural';
   roastedFor?: [ string ];
   tastingNotes?: [ string ];
   rating?: number;
@@ -17,7 +17,7 @@ export interface NewRoast {
   name: string;
   roaster: string;
 
-  composition?: string;
-  processMethod?: string;
+  composition?: '' | 'single origin' | 'blend';
+  processMethod?: '' | 'washed' | 'natural';
   notes?: string;
 }
