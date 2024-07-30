@@ -274,12 +274,23 @@ export class AddAmendRoastFormComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddAmendRoastFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public roastToUpdate: Roast,
+    @Inject(MAT_DIALOG_DATA) public roastToUpdate: Partial<Roast>,
   ) {}
 
   ngOnInit(): void {
     if (this.roastToUpdate) {
-      console.log(this.roastToUpdate);
+      this.newRoast.setValue(
+        {
+          roast: this.roastToUpdate.name || '',
+          roaster: this.roastToUpdate.roaster || '',
+          composition: this.roastToUpdate.composition || '',
+          countriesOfOrigin: this.roastToUpdate.origin || [],
+          tastingNotes: this.roastToUpdate.tastingNotes || [],
+          processMethod: this.roastToUpdate.processMethod || '',
+          rating: this.roastToUpdate.rating || 0,
+          notes: this.roastToUpdate.notes || '',
+        }
+      )
     }
 
     // clears errors on form change
