@@ -64,6 +64,16 @@ import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-ro
 
       <mat-card-actions>
         <button
+          (click)="openAmendRoastDialog(roast)"
+          mat-icon-button
+          aria-label="Amend roast"
+        >
+          <mat-icon class="material-symbols-rounded" aria-hidden>
+            edit
+          </mat-icon>
+        </button>
+
+        <button
           (click)="openDeleteRoastDialog(roast._id, roast.name)"
           mat-button
           color="warn"
@@ -72,16 +82,6 @@ import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-ro
           <span>Delete</span>
           <mat-icon class="material-symbols-rounded" aria-hidden>
             delete
-          </mat-icon>
-        </button>
-
-        <button
-          (click)="openAmendRoastDialog(roast)"
-          mat-icon-button
-          aria-label="Amend roast"
-        >
-          <mat-icon class="material-symbols-rounded" aria-hidden>
-            edit
           </mat-icon>
         </button>
 
