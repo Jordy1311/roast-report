@@ -229,14 +229,14 @@ import { Roast } from '../../types/roast.type';
       </button>
 
       <button
-        (click)="createRoast()"
+        (click)="isAnUpdate ? updateRoast() : createRoast()"
         [disabled]="newRoast.invalid"
         mat-flat-button
         color="primary"
       >
-        <span>Add</span>
+        <span>{{ isAnUpdate ? 'Update' : 'Add' }}</span>
         <mat-icon class="material-symbols-rounded" aria-hidden>
-          add_circle
+          {{ isAnUpdate ? 'edit' : 'add_circle' }}
         </mat-icon>
       </button>
     </mat-dialog-actions>
@@ -278,7 +278,7 @@ export class AddAmendRoastFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.roastToUpdate) {
+    if (this.isAnUpdate) {
       this.newRoast.setValue(
         {
           roast: this.roastToUpdate.name || '',
@@ -300,6 +300,10 @@ export class AddAmendRoastFormComponent implements OnInit {
     this.roaster?.valueChanges.subscribe(() => {
       this.invalidRoaster = undefined;
     });
+  }
+
+  public get isAnUpdate(): boolean {
+    return !!this.roastToUpdate;
   }
 
   public get roast() {
@@ -366,6 +370,10 @@ export class AddAmendRoastFormComponent implements OnInit {
         .then(() => this.closeDialog())
         .catch(() => console.log('Form says there was error!'));
     }
+  }
+
+  updateRoast(): void {
+    console.log('updating roast')
   }
 
   // METHODS RELATING TO: countryOfOrigin
