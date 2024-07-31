@@ -275,7 +275,7 @@ export class AddAmendRoastFormComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddAmendRoastFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public roastToUpdate: Partial<Roast>,
+    @Inject(MAT_DIALOG_DATA) public roastToUpdate: Partial<Roast>
   ) {}
 
   ngOnInit(): void {
