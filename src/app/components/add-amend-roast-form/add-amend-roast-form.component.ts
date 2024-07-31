@@ -209,6 +209,7 @@ import { Roast } from '../../types/roast.type';
 
             <app-star-rating
               (valueChanged)="updateRating($event)"
+              [rating]="this.roastToUpdate.rating || 0"
             ></app-star-rating>
 
             <button
