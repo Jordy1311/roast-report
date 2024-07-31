@@ -64,9 +64,9 @@ import { Roast } from '../../types/roast.type';
     <h2 mat-dialog-title>{{ 'Add a roast' || roast }}</h2>
 
     <mat-dialog-content>
-      <form [formGroup]="newRoast">
+      <form [formGroup]="roastFormData">
         <mat-stepper orientation="vertical" linear="true" #stepper>
-          <mat-step [stepControl]="newRoast">
+          <mat-step [stepControl]="roastFormData">
             <ng-template matStepLabel>Enter the basics</ng-template>
 
             <mat-form-field class="is-fullwidth first-in-step">
@@ -93,7 +93,7 @@ import { Roast } from '../../types/roast.type';
             </mat-form-field>
 
             <button
-              [disabled]="newRoast.invalid"
+              [disabled]="roastFormData.invalid"
               class="step-next-btn"
               mat-flat-button
               matStepperNext
@@ -102,7 +102,7 @@ import { Roast } from '../../types/roast.type';
             </button>
           </mat-step>
 
-          <mat-step [stepControl]="newRoast">
+          <mat-step [stepControl]="roastFormData">
             <ng-template matStepLabel>Enter the nitty gritty</ng-template>
 
             <div class="side-by-side first-in-step">
@@ -230,7 +230,7 @@ import { Roast } from '../../types/roast.type';
 
       <button
         (click)="isAnUpdate ? updateRoast() : createRoast()"
-        [disabled]="newRoast.invalid"
+        [disabled]="roastFormData.invalid"
         mat-flat-button
         color="primary"
       >
@@ -251,7 +251,7 @@ export class AddAmendRoastFormComponent implements OnInit {
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   announcer = inject(LiveAnnouncer);
 
-  newRoast = new FormGroup({
+  roastFormData = new FormGroup({
     roast: new FormControl<string>('', {
       validators: [Validators.required],
       nonNullable: true,
@@ -279,18 +279,16 @@ export class AddAmendRoastFormComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isAnUpdate) {
-      this.newRoast.setValue(
-        {
-          roast: this.roastToUpdate.name || '',
-          roaster: this.roastToUpdate.roaster || '',
-          composition: this.roastToUpdate.composition || '',
-          countriesOfOrigin: this.roastToUpdate.origin || [],
-          tastingNotes: this.roastToUpdate.tastingNotes || [],
-          processMethod: this.roastToUpdate.processMethod || '',
-          rating: this.roastToUpdate.rating || 0,
-          notes: this.roastToUpdate.notes || '',
-        }
-      )
+      this.roastFormData.setValue({
+        roast: this.roastToUpdate.name || '',
+        roaster: this.roastToUpdate.roaster || '',
+        composition: this.roastToUpdate.composition || '',
+        countriesOfOrigin: this.roastToUpdate.origin || [],
+        tastingNotes: this.roastToUpdate.tastingNotes || [],
+        processMethod: this.roastToUpdate.processMethod || '',
+        rating: this.roastToUpdate.rating || 0,
+        notes: this.roastToUpdate.notes || '',
+      });
     }
 
     // clears errors on form change
@@ -307,23 +305,23 @@ export class AddAmendRoastFormComponent implements OnInit {
   }
 
   public get roast() {
-    return this.newRoast.get('roast');
+    return this.roastFormData.get('roast');
   }
 
   private get roaster() {
-    return this.newRoast.get('roaster');
+    return this.roastFormData.get('roaster');
   }
 
   public get countriesOfOrigin() {
-    return this.newRoast.get('countriesOfOrigin');
+    return this.roastFormData.get('countriesOfOrigin');
   }
 
   public get tastingNotes() {
-    return this.newRoast.get('tastingNotes');
+    return this.roastFormData.get('tastingNotes');
   }
 
   public get rating() {
-    return this.newRoast.get('rating');
+    return this.roastFormData.get('rating');
   }
 
   closeDialog(): void {
@@ -345,7 +343,7 @@ export class AddAmendRoastFormComponent implements OnInit {
       return;
     }
 
-    if (this.newRoast.valid) {
+    if (this.roastFormData.valid) {
       const {
         composition,
         countriesOfOrigin,
@@ -353,8 +351,8 @@ export class AddAmendRoastFormComponent implements OnInit {
         processMethod,
         rating,
         notes,
-      } = this.newRoast.value;
-      const newRoast = {
+      } = this.roastFormData.value;
+      const roastFormData = {
         name: this.roast!.value,
         roaster: this.roaster!.value,
         composition,
@@ -366,7 +364,7 @@ export class AddAmendRoastFormComponent implements OnInit {
       };
 
       this.roastService
-        .createRoast(newRoast)
+        .createRoast(roastFormData)
         .then(() => this.closeDialog())
         .catch(() => console.log('Form says there was error!'));
     }
