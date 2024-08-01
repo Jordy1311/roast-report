@@ -9,7 +9,7 @@ export interface Roast {
   composition?: '' | 'single origin' | 'blend';
   processMethod?: '' | 'washed' | 'natural';
   roastedFor?: string[];
-  tastingNotes?: [ string ];
+  tastingNotes?: string[];
   rating?: number;
   notes?: string;
 }

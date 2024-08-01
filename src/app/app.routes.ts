@@ -10,12 +10,12 @@ export const routes: Routes = [
     component: DashboardComponent,
     canActivate: [isLoggedInGuard],
     title: 'Roast Report',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'login',
     component: LoginComponent,
     title: 'Roast Report | Login',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
 ];

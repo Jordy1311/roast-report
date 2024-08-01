@@ -17,7 +17,13 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule],
+  imports: [
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+  ],
   styleUrl: './login.component.scss',
   template: `
     <div>
@@ -56,11 +62,7 @@ import { AuthService } from '../../services/auth.service';
           }
         </mat-form-field>
 
-        <button
-          (click)="login()"
-          mat-flat-button
-          color="primary"
-        >
+        <button (click)="login()" mat-flat-button color="primary">
           Log in
         </button>
       </form>
@@ -74,12 +76,14 @@ export class LoginComponent implements OnInit {
   invalidCredentialsSubmitted = false;
 
   credentials = new FormGroup({
-    email: new FormControl<string>('',
-      { validators: [Validators.required, Validators.email], nonNullable: true }
-    ),
-    password: new FormControl<string>('',
-      { validators: [Validators.required], nonNullable: true }
-    ),
+    email: new FormControl<string>('', {
+      validators: [Validators.required, Validators.email],
+      nonNullable: true,
+    }),
+    password: new FormControl<string>('', {
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
   });
 
   ngOnInit(): void {
@@ -107,7 +111,8 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     if (this.credentials.valid && this.email?.value && this.password?.value) {
-      this.authService.login(this.email!.value, this.password!.value)
+      this.authService
+        .login(this.email!.value, this.password!.value)
         .subscribe({
           next: (response) => {
             this.authService.storeToken(response.accessToken);
@@ -116,9 +121,11 @@ export class LoginComponent implements OnInit {
           error: () => {
             this.invalidCredentialsSubmitted = true;
             this.email!.setErrors({ invalid: 'Invalid credentials provided' });
-            this.password!.setErrors({ invalid: 'Invalid credentials provided' });
+            this.password!.setErrors({
+              invalid: 'Invalid credentials provided',
+            });
             return;
-          }
+          },
         });
     } else {
       this.invalidCredentialsSubmitted = true;

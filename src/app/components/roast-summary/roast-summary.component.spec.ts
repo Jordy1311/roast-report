@@ -8,10 +8,9 @@ describe('RoastSummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RoastSummaryComponent]
-    })
-    .compileComponents();
-    
+      imports: [RoastSummaryComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(RoastSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

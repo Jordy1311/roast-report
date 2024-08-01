@@ -3,19 +3,21 @@
 
 @include mat.core();
 
-$light-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: m3-theme.$primary,
-    tertiary: m3-theme.$tertiary,
-  ),
-  typography: (
-    brand-family: 'Poppins',
-    plain-family: 'Poppins',
-    medium-weight: 400,
-    regular-weight: 400,
-  ),
-));
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: m3-theme.$primary,
+      tertiary: m3-theme.$tertiary,
+    ),
+    typography: (
+      brand-family: 'Poppins',
+      plain-family: 'Poppins',
+      medium-weight: 400,
+      regular-weight: 400,
+    ),
+  )
+);
 
 // could conditionally have this on user browser preference in future?
 // $dark-theme: mat.define-theme((

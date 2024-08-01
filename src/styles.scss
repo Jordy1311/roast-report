@@ -3,7 +3,8 @@ html {
   justify-content: center;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -11,15 +12,15 @@ body {
   width: 90vw;
   max-width: 1200px;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 .material-symbols-rounded {
   font-variation-settings:
-  'FILL' 0,
-  'wght' 500,
-  'GRAD' 200,
-  'opsz' 48
+    'FILL' 0,
+    'wght' 500,
+    'GRAD' 200,
+    'opsz' 48;
 }
 
 /* small screen and below */

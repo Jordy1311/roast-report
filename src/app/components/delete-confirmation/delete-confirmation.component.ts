@@ -15,7 +15,13 @@ import { RoastService } from '../../services/roast.service';
 @Component({
   selector: 'app-delete-confirmation',
   standalone: true,
-  imports: [ MatDialogTitle, MatDialogContent, MatDialogActions, MatButtonModule, MatIconModule ],
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatButtonModule,
+    MatIconModule,
+  ],
   styleUrl: './delete-confirmation.component.scss',
   template: `
     <h2 mat-dialog-title>Delete?</h2>
@@ -25,24 +31,11 @@ import { RoastService } from '../../services/roast.service';
     </mat-dialog-content>
 
     <mat-dialog-actions>
-      <button
-        cdkFocusInitial
-        (click)="closeDialog()"
-        mat-button
-      >
-        No
-      </button>
+      <button cdkFocusInitial (click)="closeDialog()" mat-button>No</button>
 
-      <button
-        (click)="deleteRoast(data.roastId)"
-        mat-flat-button
-        color="warn"
-      >
+      <button (click)="deleteRoast(data.roastId)" mat-flat-button color="warn">
         Delete
-        <mat-icon
-          class="material-symbols-rounded"
-          aria-hidden
-        >
+        <mat-icon class="material-symbols-rounded" aria-hidden>
           delete
         </mat-icon>
       </button>
@@ -54,8 +47,8 @@ export class DeleteConfirmationComponent {
 
   constructor(
     public dialogRef: MatDialogRef<DeleteConfirmationComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { roastId: string, roastName: string },
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public data: { roastId: string; roastName: string }
+  ) {}
 
   closeDialog(): void {
     this.dialogRef.close();
