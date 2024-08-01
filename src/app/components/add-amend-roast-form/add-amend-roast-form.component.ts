@@ -408,7 +408,6 @@ export class AddAmendRoastFormComponent implements OnInit {
         .catch(() => console.log('Form says there was error!'));
     }
   }
-  }
 
   // METHODS RELATING TO: countryOfOrigin
   addCountry(event: MatChipInputEvent): void {
