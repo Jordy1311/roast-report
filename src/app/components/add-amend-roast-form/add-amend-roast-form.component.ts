@@ -275,7 +275,7 @@ export class AddAmendRoastFormComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddAmendRoastFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public roastToUpdate: Partial<Roast>
+    @Inject(MAT_DIALOG_DATA) public roastToUpdate: Roast
   ) {}
 
   ngOnInit(): void {
@@ -372,7 +372,42 @@ export class AddAmendRoastFormComponent implements OnInit {
   }
 
   updateRoast(): void {
-    console.log('updating roast')
+    if (this.roast?.errors) {
+      this.invalidRoast = true;
+      return;
+    }
+
+    if (this.roaster?.errors) {
+      this.invalidRoaster = true;
+      return;
+    }
+
+    if (this.roastFormData.valid) {
+      const {
+        composition,
+        countriesOfOrigin,
+        tastingNotes,
+        processMethod,
+        rating,
+        notes,
+      } = this.roastFormData.value;
+      const updateRoastFormData = {
+        name: this.roast!.value,
+        roaster: this.roaster!.value,
+        composition,
+        origin: countriesOfOrigin,
+        tastingNotes,
+        processMethod,
+        rating,
+        notes,
+      };
+
+      this.roastService
+        .updateRoast(this.roastToUpdate._id, updateRoastFormData)
+        .then(() => this.closeDialog())
+        .catch(() => console.log('Form says there was error!'));
+    }
+  }
   }
 
   // METHODS RELATING TO: countryOfOrigin
