@@ -32,7 +32,7 @@ import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-ro
 
         <span class="spacer"></span>
 
-        @if (roast.origin) {
+        @if (roast.origin?.length) {
           <mat-icon
             class="material-symbols-rounded"
             aria-hidden="false"
@@ -40,7 +40,7 @@ import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-ro
           >
             public
           </mat-icon>
-          <p>{{ roast.origin.join(', ') }}</p>
+          <p>{{ roast.origin!.join(', ') }}</p>
         }
       </mat-card-header>
 
