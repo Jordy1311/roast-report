@@ -32,7 +32,11 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 import { RoastService } from '../../services/roast.service';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
-import { Roast } from '../../types/roast.type';
+import {
+  Roast,
+  RoastCompositions,
+  RoastProcessMethods,
+} from '../../types/roast.type';
 // import { COUNTRIES } from '../../countries';
 
 /*
@@ -263,12 +267,12 @@ export class AddAmendRoastFormComponent implements OnInit {
       validators: [Validators.required],
       nonNullable: true,
     }),
-    composition: new FormControl<'' | 'single origin' | 'blend'>('', {
+    composition: new FormControl<RoastCompositions>('', {
       nonNullable: true,
     }),
     countriesOfOrigin: new FormControl<string[]>([], { nonNullable: true }),
     tastingNotes: new FormControl<string[]>([], { nonNullable: true }),
-    processMethod: new FormControl<'' | 'washed' | 'natural'>('', {
+    processMethod: new FormControl<RoastProcessMethods>('', {
       nonNullable: true,
     }),
     rating: new FormControl<number>(0, { nonNullable: true }),

@@ -1,3 +1,7 @@
+export type RoastCompositions = '' | 'Single Origin' | 'Blend';
+
+export type RoastProcessMethods = '' | 'Washed' | 'Natural' | 'Honey' | 'Anaerobic Natural';
+
 export interface Roast {
   _id: string;
   userId: string;
@@ -6,8 +10,8 @@ export interface Roast {
   roaster: string;
 
   origin?: string[];
-  composition?: '' | 'single origin' | 'blend';
-  processMethod?: '' | 'washed' | 'natural';
+  composition?: RoastCompositions;
+  processMethod?: RoastProcessMethods;
   roastedFor?: string[];
   tastingNotes?: string[];
   rating?: number;
@@ -19,8 +23,8 @@ export interface NewRoast {
   roaster: string;
 
   origin?: string[];
-  composition?: '' | 'single origin' | 'blend';
-  processMethod?: '' | 'washed' | 'natural';
+  composition?: RoastCompositions;
+  processMethod?: RoastProcessMethods;
   tastingNotes?: string[];
   rating?: number;
   notes?: string;
