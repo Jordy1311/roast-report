@@ -280,15 +280,17 @@ export class AddAmendRoastFormComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isAnUpdate) {
+      const temporaryRoastClone = structuredClone(this.roastToUpdate);
+
       this.roastFormData.setValue({
-        roast: this.roastToUpdate.name || '',
-        roaster: this.roastToUpdate.roaster || '',
-        composition: this.roastToUpdate.composition || '',
-        countriesOfOrigin: this.roastToUpdate.origin || [],
-        tastingNotes: this.roastToUpdate.tastingNotes || [],
-        processMethod: this.roastToUpdate.processMethod || '',
-        rating: this.roastToUpdate.rating || 0,
-        notes: this.roastToUpdate.notes || '',
+        roast: temporaryRoastClone.name || '',
+        roaster: temporaryRoastClone.roaster || '',
+        composition: temporaryRoastClone.composition || '',
+        countriesOfOrigin: temporaryRoastClone.origin || [],
+        tastingNotes: temporaryRoastClone.tastingNotes || [],
+        processMethod: temporaryRoastClone.processMethod || '',
+        rating: temporaryRoastClone.rating || 0,
+        notes: temporaryRoastClone.notes || '',
       });
     }
 
