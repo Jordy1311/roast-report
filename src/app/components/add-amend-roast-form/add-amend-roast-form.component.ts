@@ -133,6 +133,10 @@ import {
                   <mat-option selected value="">-</mat-option>
                   <mat-option value="Washed">Washed</mat-option>
                   <mat-option value="Natural">Natural</mat-option>
+                  <mat-option value="Honey">Honey</mat-option>
+                  <mat-option value="Anaerobic Natural"
+                    >Anaerobic Natural</mat-option
+                  >
                 </mat-select>
               </mat-form-field>
             </div>
