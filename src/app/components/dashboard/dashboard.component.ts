@@ -104,6 +104,13 @@ export class DashboardComponent implements OnInit {
             .toLowerCase()
             .includes(this.searchText().toLowerCase());
         }
+        if (Array.isArray(roastValue) && typeof roastValue[0] === 'string') {
+          return roastValue.some((arrayItem) => {
+            return arrayItem
+              .toLowerCase()
+              .includes(this.searchText().toLowerCase());
+          });
+        }
         return false;
       });
     });
