@@ -97,18 +97,20 @@ export class DashboardComponent implements OnInit {
 
   roasts: Signal<Roast[]> = computed(() => {
     const roasts = this.roastService.roastsSignal();
+    const searchTextLowerCased = this.searchText().toLowerCase();
+
     return roasts.filter((roast: Roast) => {
       return Object.values(roast).some((roastValue: Roast[keyof Roast]) => {
         if (typeof roastValue === 'string') {
           return roastValue
             .toLowerCase()
-            .includes(this.searchText().toLowerCase());
+            .includes(searchTextLowerCased);
         }
         if (Array.isArray(roastValue) && typeof roastValue[0] === 'string') {
           return roastValue.some((arrayItem) => {
             return arrayItem
               .toLowerCase()
-              .includes(this.searchText().toLowerCase());
+              .includes(searchTextLowerCased);
           });
         }
         return false;
