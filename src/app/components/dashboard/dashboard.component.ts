@@ -15,11 +15,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { AuthService } from '../../services/auth.service';
-import { RoastService } from '../../services/roast.service';
 import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
-import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
+import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
 import { Roast } from '../../types/roast.type';
+import { RoastService } from '../../services/roast.service';
+import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,7 +38,7 @@ import { Roast } from '../../types/roast.type';
     <header>
       <h1>Roast Report</h1>
       <div>
-        <button (click)="logout()" mat-stroked-button color="primary">
+        <button (click)="openLogoutDialog()" mat-stroked-button color="primary">
           <span>Log out</span>
           <mat-icon class="material-symbols-rounded" aria-hidden>
             logout
@@ -90,7 +90,6 @@ import { Roast } from '../../types/roast.type';
   `,
 })
 export class DashboardComponent implements OnInit {
-  private authService = inject(AuthService);
   private roastService = inject(RoastService);
 
   searchText: WritableSignal<string> = signal('');
@@ -102,15 +101,11 @@ export class DashboardComponent implements OnInit {
     return roasts.filter((roast: Roast) => {
       return Object.values(roast).some((roastValue: Roast[keyof Roast]) => {
         if (typeof roastValue === 'string') {
-          return roastValue
-            .toLowerCase()
-            .includes(searchTextLowerCased);
+          return roastValue.toLowerCase().includes(searchTextLowerCased);
         }
         if (Array.isArray(roastValue) && typeof roastValue[0] === 'string') {
           return roastValue.some((arrayItem) => {
-            return arrayItem
-              .toLowerCase()
-              .includes(searchTextLowerCased);
+            return arrayItem.toLowerCase().includes(searchTextLowerCased);
           });
         }
         return false;
@@ -124,8 +119,8 @@ export class DashboardComponent implements OnInit {
     this.roastService.getUsersRoasts();
   }
 
-  logout(): void {
-    this.authService.logout();
+  openLogoutDialog(): void {
+    this.dialog.open(LogoutConfirmationComponent);
   }
 
   searchTextUpdated(newText: string) {
