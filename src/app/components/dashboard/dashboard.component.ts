@@ -1,22 +1,37 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Signal,
+  WritableSignal,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 import { AuthService } from '../../services/auth.service';
 import { RoastService } from '../../services/roast.service';
 import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
+import { Roast } from '../../types/roast.type';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     AddAmendRoastFormComponent,
-    RoastSummaryComponent,
+    FormsModule,
     MatButtonModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
+    RoastSummaryComponent,
   ],
   styleUrl: './dashboard.component.scss',
   template: `
@@ -33,8 +48,28 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
     </header>
 
     <main>
+      <mat-form-field class="search-input">
+        <mat-label>Search roasts</mat-label>
+        <input
+          #searchInput
+          matInput
+          type="text"
+          (input)="searchTextUpdated(searchInput.value)"
+        />
+        @if (searchText()) {
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="searchText() === ''"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
       <div class="roasts">
-        @for (roast of usersRoasts(); track roast._id) {
+        @for (roast of roasts(); track roast._id) {
           <app-roast-summary [roast]="roast"></app-roast-summary>
         }
       </div>
@@ -58,7 +93,21 @@ export class DashboardComponent implements OnInit {
   private authService = inject(AuthService);
   private roastService = inject(RoastService);
 
-  usersRoasts = this.roastService.roastsSignal;
+  searchText: WritableSignal<string> = signal('');
+
+  roasts: Signal<Roast[]> = computed(() => {
+    const roasts = this.roastService.roastsSignal();
+    return roasts.filter((roast: Roast) => {
+      return Object.values(roast).some((roastValue: Roast[keyof Roast]) => {
+        if (typeof roastValue === 'string') {
+          return roastValue
+            .toLowerCase()
+            .includes(this.searchText().toLowerCase());
+        }
+        return false;
+      });
+    });
+  });
 
   constructor(public dialog: MatDialog) {}
 
@@ -68,6 +117,10 @@ export class DashboardComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  searchTextUpdated(newText: string) {
+    this.searchText.set(newText);
   }
 
   openAddRoastDialog(): void {
