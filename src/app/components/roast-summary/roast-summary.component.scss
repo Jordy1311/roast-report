@@ -1,9 +1,8 @@
 :host {
-  width: calc(50% - 2vw);
-  min-width: 450px;
+  width: calc(50% - 2.5vw); // minus gap from container
 }
 
-mat-icon {
+.globe-icon {
   align-self: center;
   margin-right: 0.5rem;
 }
@@ -11,7 +10,7 @@ mat-icon {
 // 1024px and smaller
 @media (max-width: 1024px) {
   :host {
-    width: 90vw;
-    max-width: 600px;
+    width: 100%;
+    max-width: 700px;
   }
 }

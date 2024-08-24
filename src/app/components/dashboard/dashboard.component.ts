@@ -68,7 +68,7 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
         }
       </mat-form-field>
 
-      <div class="roasts">
+      <div class="roasts-container">
         @for (roast of roasts(); track roast._id) {
           <app-roast-summary [roast]="roast"></app-roast-summary>
         }

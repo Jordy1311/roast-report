@@ -34,9 +34,8 @@ import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-ro
 
         @if (roast.origin?.length) {
           <mat-icon
-            class="material-symbols-rounded"
-            aria-hidden="false"
-            aria-label="Example home icon"
+            class="material-symbols-rounded globe-icon"
+            aria-hidden="true"
           >
             public
           </mat-icon>
