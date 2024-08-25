@@ -61,7 +61,7 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
             matSuffix
             mat-icon-button
             aria-label="Clear"
-            (click)="searchText() === ''"
+            (click)="clearSearchText(searchInput)"
           >
             <mat-icon>close</mat-icon>
           </button>
@@ -121,6 +121,11 @@ export class DashboardComponent implements OnInit {
 
   openLogoutDialog(): void {
     this.dialog.open(LogoutConfirmationComponent);
+  }
+
+  clearSearchText(searchInput: HTMLInputElement): void {
+    searchInput.value = '';
+    this.searchText.set('');
   }
 
   searchTextUpdated(newText: string) {
