@@ -37,14 +37,12 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
   template: `
     <header>
       <h1>Roast Report</h1>
-      <div>
-        <button (click)="openLogoutDialog()" mat-stroked-button color="primary">
-          <span>Log out</span>
-          <mat-icon class="material-symbols-rounded" aria-hidden>
-            logout
-          </mat-icon>
-        </button>
-      </div>
+      <button (click)="openLogoutDialog()" mat-stroked-button color="primary">
+        <span>Log out</span>
+        <mat-icon class="material-symbols-rounded" aria-hidden>
+          logout
+        </mat-icon>
+      </button>
     </header>
 
     <main>
