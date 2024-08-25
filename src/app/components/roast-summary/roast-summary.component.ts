@@ -33,13 +33,15 @@ import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-ro
         <span class="spacer"></span>
 
         @if (roast.origin?.length) {
-          <mat-icon
-            class="material-symbols-rounded globe-icon"
-            aria-hidden="true"
-          >
-            public
-          </mat-icon>
-          <p>{{ roast.origin!.join(', ') }}</p>
+          <div class="origin-details">
+            <mat-icon
+              class="material-symbols-rounded globe-icon"
+              aria-hidden="true"
+            >
+              public
+            </mat-icon>
+            <p>{{ roast.origin!.join(', ') }}</p>
+          </div>
         }
       </mat-card-header>
 

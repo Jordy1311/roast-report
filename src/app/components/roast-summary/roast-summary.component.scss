@@ -2,6 +2,11 @@
   width: calc(50% - 2.5vw); // minus gap from container
 }
 
+.origin-details {
+  display: flex;
+  flex-direction: row;
+}
+
 .globe-icon {
   align-self: center;
   margin-right: 0.5rem;
@@ -12,5 +17,21 @@
   :host {
     width: 100%;
     max-width: 700px;
+  }
+}
+
+// 450px and smaller
+@media (max-width: 450px) {
+  mat-card-header {
+    display: flex;
+    flex-direction: column;
+
+    .spacer {
+      display: none;
+    }
+
+    .origin-details p {
+      margin: 0.5rem 0;
+    }
   }
 }
