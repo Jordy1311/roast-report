@@ -11,3 +11,11 @@
 .step-previous-btn {
   margin-top: 0.5rem;
 }
+
+.mat-mdc-dialog-content {
+  // this slightly increases the max-height of the dialog content
+  // meaning there is less chance of needing the scroll bar
+  // but making any more than this leads to funkiness in short screen sizes
+  max-height: 70vh;
+}
+
