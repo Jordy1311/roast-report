@@ -58,11 +58,13 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
     <main>
       <mat-form-field class="search-input" appearance="outline">
         <mat-label>Search roasts</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
         <input
           #searchInput
           matInput
           type="text"
           (input)="searchTextUpdated(searchInput.value)"
+          (keyup.escape)="clearSearchText(searchInput)"
         />
         @if (searchText()) {
           <button
