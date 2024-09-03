@@ -1,7 +1,19 @@
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
 main {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+}
+
+.search-input {
+  margin-top: 1em;
+  width: 100%;
 }
 
 div.roasts-container {
@@ -23,8 +35,8 @@ button.add-roast {
 
 /* applied to 1024px and smaller */
 @media (max-width: 1024px) {
-  header {
-    margin: 2rem 0 1rem 0;
+  .search-input {
+    max-width: 700px;
   }
 
   div.roasts-container {

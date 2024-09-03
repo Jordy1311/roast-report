@@ -37,23 +37,25 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
   ],
   styleUrl: './dashboard.component.scss',
   template: `
-    <mat-toolbar>
-      <span>Roast Report</span>
+    <nav>
+      <mat-toolbar>
+        <span>Roast Report</span>
 
-      <span class="spacer"></span>
+        <span class="spacer"></span>
 
-      <button
-        (click)="openLogoutDialog()"
-        mat-icon-button
-        class="logout"
-        color="primary"
-        aria-label="Log out"
-      >
-        <mat-icon class="material-symbols-rounded">
-          logout
-        </mat-icon>
-      </button>
-    </mat-toolbar>
+        <button
+          (click)="openLogoutDialog()"
+          mat-icon-button
+          class="logout"
+          color="primary"
+          aria-label="Log out"
+        >
+          <mat-icon class="material-symbols-rounded">
+            logout
+          </mat-icon>
+        </button>
+      </mat-toolbar>
+    </nav>
 
     <main>
       <mat-form-field class="search-input" appearance="outline">
