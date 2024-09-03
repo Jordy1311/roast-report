@@ -79,7 +79,7 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
         class="add-roast"
         aria-label="Add coffee"
       >
-        <span>Add Roast</span>
+        <span>Add</span>
         <mat-icon class="material-symbols-rounded" aria-hidden>
           add_circle
         </mat-icon>
