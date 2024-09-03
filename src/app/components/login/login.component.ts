@@ -30,7 +30,7 @@ import { AuthService } from '../../services/auth.service';
       <h1>Log in</h1>
 
       <form [formGroup]="credentials">
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input
             matInput
@@ -45,7 +45,7 @@ import { AuthService } from '../../services/auth.service';
           }
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
           <input
             matInput

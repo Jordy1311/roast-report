@@ -56,7 +56,7 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
     </mat-toolbar>
 
     <main>
-      <mat-form-field class="search-input">
+      <mat-form-field class="search-input" appearance="outline">
         <mat-label>Search roasts</mat-label>
         <input
           #searchInput

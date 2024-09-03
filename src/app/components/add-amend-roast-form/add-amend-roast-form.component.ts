@@ -73,7 +73,7 @@ import {
           <mat-step [stepControl]="roastFormData">
             <ng-template matStepLabel>Enter the basics</ng-template>
 
-            <mat-form-field class="is-fullwidth first-in-step">
+            <mat-form-field class="is-fullwidth first-in-step" appearance="outline">
               <mat-label>Roast</mat-label>
               <input
                 cdkFocusInitial
@@ -85,7 +85,7 @@ import {
               <mat-error>Please enter a roast name.</mat-error>
             </mat-form-field>
 
-            <mat-form-field class="is-fullwidth">
+            <mat-form-field class="is-fullwidth" appearance="outline">
               <mat-label>Roaster</mat-label>
               <input
                 matInput
@@ -110,7 +110,7 @@ import {
             <ng-template matStepLabel>Enter the nitty gritty</ng-template>
 
             <div class="side-by-side first-in-step">
-              <mat-form-field>
+              <mat-form-field appearance="outline">
                 <mat-label>Roast composition</mat-label>
                 <mat-select
                   formControlName="composition"
@@ -123,7 +123,7 @@ import {
                 </mat-select>
               </mat-form-field>
 
-              <mat-form-field>
+              <mat-form-field appearance="outline">
                 <mat-label>Process method</mat-label>
                 <mat-select
                   formControlName="processMethod"
@@ -141,7 +141,7 @@ import {
               </mat-form-field>
             </div>
 
-            <mat-form-field class="is-fullwidth">
+            <mat-form-field class="is-fullwidth" appearance="outline">
               <mat-label>Notes</mat-label>
               <textarea
                 matInput
@@ -151,7 +151,7 @@ import {
               ></textarea>
             </mat-form-field>
 
-            <mat-form-field class="is-fullwidth">
+            <mat-form-field class="is-fullwidth" appearance="outline">
               <mat-label>Countries of origin</mat-label>
               <mat-chip-grid
                 #countriesChipGrid
@@ -183,7 +183,7 @@ import {
               </mat-chip-grid>
             </mat-form-field>
 
-            <mat-form-field class="is-fullwidth">
+            <mat-form-field class="is-fullwidth" appearance="outline">
               <mat-label>Tasting notes</mat-label>
               <mat-chip-grid
                 #tastingNotesChipGrid
