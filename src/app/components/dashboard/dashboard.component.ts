@@ -14,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
 import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
@@ -31,19 +32,28 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatToolbarModule,
     RoastSummaryComponent,
   ],
   styleUrl: './dashboard.component.scss',
   template: `
-    <header>
-      <h1>Roast Report</h1>
-      <button (click)="openLogoutDialog()" mat-stroked-button color="primary">
-        <span>Log out</span>
-        <mat-icon class="material-symbols-rounded" aria-hidden>
+    <mat-toolbar>
+      <span>Roast Report</span>
+
+      <span class="spacer"></span>
+
+      <button
+        (click)="openLogoutDialog()"
+        mat-icon-button
+        class="logout"
+        color="primary"
+        aria-label="Log out"
+      >
+        <mat-icon class="material-symbols-rounded">
           logout
         </mat-icon>
       </button>
-    </header>
+    </mat-toolbar>
 
     <main>
       <mat-form-field class="search-input">
