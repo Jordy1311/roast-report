@@ -14,10 +14,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
-import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
+import { HeaderNavigationComponent } from '../header-navigation/header-navigation.component';
 import { Roast } from '../../types/roast.type';
 import { RoastService } from '../../services/roast.service';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
@@ -28,34 +27,16 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
   imports: [
     AddAmendRoastFormComponent,
     FormsModule,
+    HeaderNavigationComponent,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatToolbarModule,
     RoastSummaryComponent,
   ],
   styleUrl: './dashboard.component.scss',
   template: `
-    <nav>
-      <mat-toolbar>
-        <span>Roast Report</span>
-
-        <span class="spacer"></span>
-
-        <button
-          (click)="openLogoutDialog()"
-          mat-icon-button
-          class="logout"
-          color="primary"
-          aria-label="Log out"
-        >
-          <mat-icon class="material-symbols-rounded">
-            logout
-          </mat-icon>
-        </button>
-      </mat-toolbar>
-    </nav>
+    <app-header-navigation></app-header-navigation>
 
     <main>
       <mat-form-field class="search-input" appearance="outline">
@@ -129,10 +110,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.roastService.getUsersRoasts();
-  }
-
-  openLogoutDialog(): void {
-    this.dialog.open(LogoutConfirmationComponent);
   }
 
   clearSearchText(searchInput: HTMLInputElement): void {
