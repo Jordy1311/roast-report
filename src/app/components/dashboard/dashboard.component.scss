@@ -5,9 +5,13 @@ main {
   align-items: center;
 }
 
-.search-input {
-  margin-top: 1em;
+.search-filter-group {
   width: 100%;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 div.roasts-container {
@@ -29,10 +33,6 @@ button.add-roast {
 
 /* applied to 1024px and smaller */
 @media (max-width: 1024px) {
-  .search-input {
-    max-width: 700px;
-  }
-
   div.roasts-container {
     flex-direction: column;
     align-items: center;

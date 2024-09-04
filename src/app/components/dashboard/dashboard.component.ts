@@ -11,14 +11,13 @@ import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 
 import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
 import { HeaderNavigationComponent } from '../header-navigation/header-navigation.component';
 import { Roast } from '../../types/roast.type';
 import { RoastService } from '../../services/roast.service';
+import { RoastSearchComponent } from '../roast-search/roast-search.component';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
 
 @Component({
@@ -29,9 +28,8 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
     FormsModule,
     HeaderNavigationComponent,
     MatButtonModule,
-    MatFormFieldModule,
     MatIconModule,
-    MatInputModule,
+    RoastSearchComponent,
     RoastSummaryComponent,
   ],
   styleUrl: './dashboard.component.scss',
@@ -39,27 +37,10 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
     <app-header-navigation></app-header-navigation>
 
     <main>
-      <mat-form-field class="search-input" appearance="outline">
-        <mat-label>Search roasts</mat-label>
-        <mat-icon matPrefix>search</mat-icon>
-        <input
-          #searchInput
-          matInput
-          type="text"
-          (input)="searchTextUpdated(searchInput.value)"
-          (keyup.escape)="clearSearchText(searchInput)"
-        />
-        @if (searchText()) {
-          <button
-            matSuffix
-            mat-icon-button
-            aria-label="Clear"
-            (click)="clearSearchText(searchInput)"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        }
-      </mat-form-field>
+      <div class="search-filter-group">
+        <app-roast-search (newValue)="updateSearchValue($event)"
+        ></app-roast-search>
+      </div>
 
       <div class="roasts-container">
         @for (roast of roasts(); track roast._id) {
@@ -112,13 +93,8 @@ export class DashboardComponent implements OnInit {
     this.roastService.getUsersRoasts();
   }
 
-  clearSearchText(searchInput: HTMLInputElement): void {
-    searchInput.value = '';
-    this.searchText.set('');
-  }
-
-  searchTextUpdated(newText: string) {
-    this.searchText.set(newText);
+  updateSearchValue(newValue: string): void {
+    this.searchText.set(newValue);
   }
 
   openAddRoastDialog(): void {
