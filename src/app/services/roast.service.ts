@@ -37,22 +37,22 @@ export class RoastService {
 
   updateRoast(roastId: string, updates: Partial<NewRoast>): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.http.patch<Roast>(`/api/v1/roasts/${roastId}`, updates).subscribe({
-        next: (updatedRoastObject) => {
-          this.roastsSignal.update((currentRoasts) => {
-            const indexOfUpdated = currentRoasts.findIndex(
-              (roast) => roast._id === updatedRoastObject._id
-            );
-            currentRoasts[indexOfUpdated] = updatedRoastObject;
-            return currentRoasts;
-          });
+      this.http
+        .patch<Roast>(`/api/v1/roasts/${roastId}`, updates)
+        .subscribe((updatedRoastObject) => {
+          const roasts = this.roastsSignal();
+          const indexOfUpdatedRoast = roasts.findIndex(
+            (roast) => roast._id === updatedRoastObject._id
+          );
+
+          roasts[indexOfUpdatedRoast] = updatedRoastObject;
+
+          this.roastsSignal.set([...roasts]);
+
+          // at this point calling the signal receives the correctly updated roasts
+          console.log(111, this.roastsSignal());
           resolve();
-        },
-        error: (err) => {
-          console.log(err);
-          reject();
-        },
-      });
+        });
     });
   }
 
