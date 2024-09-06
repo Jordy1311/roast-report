@@ -11,7 +11,10 @@ import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
 import { HeaderNavigationComponent } from '../header-navigation/header-navigation.component';
@@ -28,7 +31,10 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
     FormsModule,
     HeaderNavigationComponent,
     MatButtonModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
+    MatSelectModule,
     RoastSearchComponent,
     RoastSummaryComponent,
   ],
@@ -38,8 +44,28 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
 
     <main>
       <div class="search-filter-group">
-        <app-roast-search (newValue)="updateSearchValue($event)"
+        <app-roast-search
+          (newValue)="updateSearchValue($event)"
         ></app-roast-search>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Sort</mat-label>
+          <mat-select>
+            <mat-option (click)="changeSortValue()"></mat-option>
+
+            <mat-option value="Rating" (click)="changeSortValue('rating')">
+              Rating
+            </mat-option>
+
+            <mat-option value="Name" (click)="changeSortValue('name')">
+              Name
+            </mat-option>
+
+            <mat-option value="Roaster" (click)="changeSortValue('roaster')">
+              Roaster
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
       <div class="roasts-container">
@@ -95,6 +121,10 @@ export class DashboardComponent implements OnInit {
 
   updateSearchValue(newValue: string): void {
     this.searchText.set(newValue);
+  }
+
+  changeSortValue(sortingOn?: 'rating' | 'name' | 'roaster'): void {
+    console.log('changeSortValue', sortingOn);
   }
 
   openAddRoastDialog(): void {
