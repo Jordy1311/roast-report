@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import _ from 'lodash';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -93,12 +95,14 @@ export class DashboardComponent implements OnInit {
   private roastService = inject(RoastService);
 
   searchText: WritableSignal<string> = signal('');
+  sortValue: WritableSignal<string | undefined> = signal('');
 
   roasts: Signal<Roast[]> = computed(() => {
     const roasts = this.roastService.roastsSignal();
     const searchTextLowerCased = this.searchText().toLowerCase();
+    const sortValue = this.sortValue();
 
-    return roasts.filter((roast: Roast) => {
+    const filteredRoasts = roasts.filter((roast: Roast) => {
       return Object.values(roast).some((roastValue: Roast[keyof Roast]) => {
         if (typeof roastValue === 'string') {
           return roastValue.toLowerCase().includes(searchTextLowerCased);
@@ -111,6 +115,16 @@ export class DashboardComponent implements OnInit {
         return false;
       });
     });
+
+    if (sortValue === 'name' || sortValue === 'roaster') {
+      return _.sortBy(filteredRoasts, [(i: any) => i[sortValue]]);
+    }
+
+    if (sortValue === 'rating') {
+      return _.sortBy(filteredRoasts, [(i: any) => i[sortValue]]).reverse();
+    }
+
+    return filteredRoasts;
   });
 
   constructor(public dialog: MatDialog) {}
@@ -124,7 +138,7 @@ export class DashboardComponent implements OnInit {
   }
 
   changeSortValue(sortingOn?: 'rating' | 'name' | 'roaster'): void {
-    console.log('changeSortValue', sortingOn);
+    this.sortValue.set(sortingOn);
   }
 
   openAddRoastDialog(): void {
