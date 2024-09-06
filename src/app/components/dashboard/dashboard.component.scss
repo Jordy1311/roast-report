@@ -40,3 +40,15 @@ button.add-roast {
   }
 }
 
+@media (max-width: 450px) {
+  .search-filter-group {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+
+    app-roast-search, mat-form-field {
+      width: 100%;
+    }
+  }
+}
+
