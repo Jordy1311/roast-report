@@ -19,14 +19,16 @@ import { MatInputModule } from '@angular/material/input';
     <mat-form-field appearance="outline">
       <mat-label>Search roasts</mat-label>
       <mat-icon matPrefix>search</mat-icon>
+
       <input
         #searchInput
         matInput
         type="text"
-        (input)="emitValue(searchInput.value)"
-        (keyup.escape)="clearValue(searchInput)"
+        (change)="emitValue(searchInput.value)"
+        (keydown.escape)="clearValue(searchInput)"
       />
-      @if (currentValue) {
+
+      @if (currentValue && currentValue === searchInput.value) {
         <button
           matSuffix
           mat-icon-button
@@ -34,6 +36,17 @@ import { MatInputModule } from '@angular/material/input';
           (click)="clearValue(searchInput)"
         >
           <mat-icon>close</mat-icon>
+        </button>
+      }
+
+      @if (searchInput.value && currentValue !== searchInput.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Search"
+          (click)="emitValue(searchInput.value)"
+        >
+          <mat-icon matSuffix>keyboard_return</mat-icon>
         </button>
       }
     </mat-form-field>
