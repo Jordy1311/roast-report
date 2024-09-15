@@ -9,8 +9,6 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import _ from 'lodash';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,6 +22,8 @@ import { Roast } from '../../types/roast.type';
 import { RoastService } from '../../services/roast.service';
 import { RoastSearchComponent } from '../roast-search/roast-search.component';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
+
+type SortFields = 'name' | 'roaster' | 'rating';
 
 @Component({
   selector: 'app-dashboard',
@@ -53,17 +53,17 @@ import { RoastSummaryComponent } from '../roast-summary/roast-summary.component'
         <mat-form-field appearance="outline">
           <mat-label>Sort</mat-label>
           <mat-select>
-            <mat-option (click)="changeSortValue()"></mat-option>
+            <mat-option (click)="updateSortField('')"></mat-option>
 
-            <mat-option value="Rating" (click)="changeSortValue('rating')">
+            <mat-option value="Rating" (click)="updateSortField('rating')">
               Rating
             </mat-option>
 
-            <mat-option value="Name" (click)="changeSortValue('name')">
+            <mat-option value="Name" (click)="updateSortField('name')">
               Name
             </mat-option>
 
-            <mat-option value="Roaster" (click)="changeSortValue('roaster')">
+            <mat-option value="Roaster" (click)="updateSortField('roaster')">
               Roaster
             </mat-option>
           </mat-select>
@@ -95,36 +95,25 @@ export class DashboardComponent implements OnInit {
   private roastService = inject(RoastService);
 
   searchText: WritableSignal<string> = signal('');
-  sortValue: WritableSignal<string | undefined> = signal('');
+  sortField: WritableSignal<SortFields | ''> = signal('');
 
   roasts: Signal<Roast[]> = computed(() => {
+    // computed signal dependencies
     const roasts = this.roastService.roastsSignal();
     const searchTextLowerCased = this.searchText().toLowerCase();
-    const sortValue = this.sortValue();
+    const sortField = this.sortField();
 
-    const filteredRoasts = roasts.filter((roast: Roast) => {
-      return Object.values(roast).some((roastValue: Roast[keyof Roast]) => {
-        if (typeof roastValue === 'string') {
-          return roastValue.toLowerCase().includes(searchTextLowerCased);
-        }
-        if (Array.isArray(roastValue) && typeof roastValue[0] === 'string') {
-          return roastValue.some((arrayItem) => {
-            return arrayItem.toLowerCase().includes(searchTextLowerCased);
-          });
-        }
-        return false;
-      });
-    });
+    let filteredRoasts;
 
-    if (sortValue === 'name' || sortValue === 'roaster') {
-      return _.sortBy(filteredRoasts, [(i: any) => i[sortValue]]);
+    if (searchTextLowerCased) {
+      filteredRoasts = this.search(roasts, searchTextLowerCased);
     }
 
-    if (sortValue === 'rating') {
-      return _.sortBy(filteredRoasts, [(i: any) => i[sortValue]]).reverse();
+    if (sortField) {
+      filteredRoasts = this.sort(filteredRoasts || roasts, sortField);
     }
 
-    return filteredRoasts;
+    return filteredRoasts || roasts;
   });
 
   constructor(public dialog: MatDialog) {}
@@ -133,15 +122,56 @@ export class DashboardComponent implements OnInit {
     this.roastService.getUsersRoasts();
   }
 
+  openAddRoastDialog(): void {
+    this.dialog.open(AddAmendRoastFormComponent);
+  }
+
   updateSearchValue(newValue: string): void {
     this.searchText.set(newValue);
   }
 
-  changeSortValue(sortingOn?: 'rating' | 'name' | 'roaster'): void {
-    this.sortValue.set(sortingOn);
+  updateSortField(newSortField: SortFields | ''): void {
+    this.sortField.set(newSortField);
   }
 
-  openAddRoastDialog(): void {
-    this.dialog.open(AddAmendRoastFormComponent);
+  search(roasts: Roast[], searchTerm: string): Roast[] {
+    return roasts.filter((roast: Roast) => {
+      return Object
+        .values(roast) // an array of one roast's values
+        .some((roastValue: Roast[keyof Roast]) => {
+          if (typeof roastValue === 'string') {
+            return roastValue.toLowerCase().includes(searchTerm);
+          }
+
+          if (Array.isArray(roastValue) && roastValue[0]) {
+            return roastValue.some((arrayItem) => {
+              return arrayItem.toLowerCase().includes(searchTerm);
+            });
+          }
+
+          return false;
+        });
+    });
+  }
+
+  sort(roasts: Roast[], fieldToSort: SortFields): Roast[] {
+    if (fieldToSort === 'name' || fieldToSort === 'roaster') {
+      return roasts.sort((a: Roast, b: Roast) =>
+        a[fieldToSort].localeCompare(b[fieldToSort])
+      );
+    }
+
+    if (fieldToSort === 'rating') {
+      return roasts.sort((a: Roast, b: Roast) => {
+        if (a.rating && b.rating) return b.rating - a.rating;
+
+        if (a.rating) return -1;
+        if (b.rating) return 1;
+
+        return 1;
+      });
+    }
+
+    return roasts;
   }
 }
