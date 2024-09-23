@@ -1,11 +1,11 @@
 {
   "/api/": {
-    "target": "http://localhost:3000",
+    "target": "https://roast-report-api.onrender.com",
     "secure": false,
     "pathRewrite": {
       "^/api": ""
     },
-    "changeOrigin": false,
+    "changeOrigin": true,
     "logLevel": "debug"
   }
 }
