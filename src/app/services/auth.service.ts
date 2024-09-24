@@ -17,7 +17,7 @@ export class AuthService {
 
   login(email: string, password: string): Observable<{ accessToken: string }> {
     return this.http
-      .post<{ accessToken: string }>(`${API_URL}/api/v1/login`, { email, password })
+      .post<{ accessToken: string }>(`${API_URL}/v1/login`, { email, password })
       .pipe(catchError(this.handleError));
   }
 
