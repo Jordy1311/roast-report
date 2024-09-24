@@ -2,6 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 
+import { API_URL } from '../variables';
+
 export const accessTokenAddress = 'access_token';
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,7 @@ export class AuthService {
 
   login(email: string, password: string): Observable<{ accessToken: string }> {
     return this.http
-      .post<{ accessToken: string }>('/api/v1/login', { email, password })
+      .post<{ accessToken: string }>(`${API_URL}/api/v1/login`, { email, password })
       .pipe(catchError(this.handleError));
   }
 

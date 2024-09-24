@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 
 import { Roast, NewRoast } from '../types/roast.type';
+import { API_URL } from '../variables';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class RoastService {
 
   createRoast(newRoast: NewRoast): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.http.post<Roast>('/api/v1/roasts', newRoast).subscribe({
+      this.http.post<Roast>(`${API_URL}/api/v1/roasts`, newRoast).subscribe({
         next: (newRoastObject) => {
           this.roastsSignal.update((currentRoasts) => [
             ...currentRoasts,
@@ -31,14 +32,14 @@ export class RoastService {
 
   getUsersRoasts(): void {
     this.http
-      .get<Roast[]>('/api/v1/roasts')
+      .get<Roast[]>(`${API_URL}/api/v1/roasts`)
       .subscribe((roasts) => this.roastsSignal.set(roasts));
   }
 
   updateRoast(roastId: string, updates: Partial<NewRoast>): Promise<void> {
     return new Promise((resolve, reject) => {
       this.http
-        .patch<Roast>(`/api/v1/roasts/${roastId}`, updates)
+        .patch<Roast>(`${API_URL}/api/v1/roasts/${roastId}`, updates)
         .subscribe((updatedRoastObject) => {
           const roasts = this.roastsSignal();
           const indexOfUpdatedRoast = roasts.findIndex(
@@ -58,7 +59,7 @@ export class RoastService {
 
   deleteRoast(id: string): void {
     this.http
-      .delete(`/api/v1/roasts/${id}`)
+      .delete(`${API_URL}/api/v1/roasts/${id}`)
       .subscribe(() =>
         this.roastsSignal.update((currentRoasts) =>
           currentRoasts.filter((roast) => roast._id !== id)
