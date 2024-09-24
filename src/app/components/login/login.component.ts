@@ -62,7 +62,7 @@ import { AuthService } from '../../services/auth.service';
           }
         </mat-form-field>
 
-        <button (click)="login()" mat-flat-button color="primary">
+        <button (click)="login()" mat-flat-button type="button" color="primary">
           Log in
         </button>
       </form>
