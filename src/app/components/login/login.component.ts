@@ -26,7 +26,7 @@ import { AuthService } from '../../services/auth.service';
   ],
   styleUrl: './login.component.scss',
   template: `
-    <div>
+    <main>
       <h1>Log in</h1>
 
       <form [formGroup]="credentials">
@@ -66,7 +66,7 @@ import { AuthService } from '../../services/auth.service';
           Log in
         </button>
       </form>
-    </div>
+    </main>
   `,
 })
 export class LoginComponent implements OnInit {
