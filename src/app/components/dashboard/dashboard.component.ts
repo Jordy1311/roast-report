@@ -77,7 +77,7 @@ type SortFields = 'name' | 'roaster' | 'rating';
       </div>
 
       <button
-        (click)="openAddRoastDialog()"
+        (click)="openAddRoastDialog($event)"
         mat-flat-button
         color="primary"
         class="add-roast"
@@ -122,7 +122,8 @@ export class DashboardComponent implements OnInit {
     this.roastService.getUsersRoasts();
   }
 
-  openAddRoastDialog(): void {
+  openAddRoastDialog(event: Event): void {
+    event.preventDefault();
     this.dialog.open(AddAmendRoastFormComponent);
   }
 
