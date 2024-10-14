@@ -157,13 +157,13 @@ export class DashboardComponent implements OnInit {
 
   sort(roasts: Roast[], fieldToSort: SortFields): Roast[] {
     if (fieldToSort === 'name' || fieldToSort === 'roaster') {
-      return roasts.sort((a: Roast, b: Roast) =>
+      return roasts.toSorted((a: Roast, b: Roast) =>
         a[fieldToSort].localeCompare(b[fieldToSort])
       );
     }
 
     if (fieldToSort === 'rating') {
-      return roasts.sort((a: Roast, b: Roast) => {
+      return roasts.toSorted((a: Roast, b: Roast) => {
         if (a.rating && b.rating) return b.rating - a.rating;
 
         if (a.rating) return -1;
