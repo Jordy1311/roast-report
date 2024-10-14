@@ -4,6 +4,7 @@ import { isLoggedInGuard } from './guards/is-logged-in.guard';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { RegisterComponent } from './components/register/register.component';
 
 export const routes: Routes = [
   {
@@ -11,6 +12,12 @@ export const routes: Routes = [
     component: DashboardComponent,
     canActivate: [isLoggedInGuard],
     title: 'Roast Report',
+    pathMatch: 'full',
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    title: 'Roast Report | Register',
     pathMatch: 'full',
   },
   {
