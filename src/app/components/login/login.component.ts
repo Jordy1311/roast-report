@@ -2,7 +2,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   FormControl,
-  FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -27,43 +26,35 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login.component.scss',
   template: `
     <main>
-      <h1>Log in</h1>
+      <h1>Roast Report</h1>
 
-      <form [formGroup]="credentials">
+      <form>
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input
             matInput
             id="email"
             type="email"
-            formControlName="email"
+            [formControl]="emailControl"
             autocomplete="email"
             placeholder="you@example.com"
           />
-          @if (!invalidCredentialsSubmitted) {
+          @if (!invalidEmailSubmitted) {
             <mat-error>Please check your email.</mat-error>
           }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            id="password"
-            type="password"
-            formControlName="password"
-            autocomplete="current-password"
-          />
-
-          @if (invalidCredentialsSubmitted) {
-            <mat-error>Please check your email & password.</mat-error>
-          } @else {
-            <mat-error>Please check your password.</mat-error>
+          @if (validEmailSubmitted) {
+            <mat-hint>Please check your email and follow the log in link 😊</mat-hint>
           }
         </mat-form-field>
 
-        <button (click)="login()" mat-flat-button color="primary">
-          Log in
+        <button
+          mat-flat-button
+          type="button"
+          color="primary"
+          [disabled]="validEmailSubmitted"
+          (click)="requestLogin()"
+        >
+          Register / Log in
         </button>
       </form>
     </main>
@@ -73,17 +64,12 @@ export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  invalidCredentialsSubmitted = false;
+  invalidEmailSubmitted = false;
+  validEmailSubmitted = false;
 
-  credentials = new FormGroup({
-    email: new FormControl<string>('', {
-      validators: [Validators.required, Validators.email],
-      nonNullable: true,
-    }),
-    password: new FormControl<string>('', {
-      validators: [Validators.required],
-      nonNullable: true,
-    }),
+  emailControl = new FormControl<string>('', {
+    validators: [Validators.required, Validators.email],
+    nonNullable: true,
   });
 
   ngOnInit(): void {
@@ -92,43 +78,32 @@ export class LoginComponent implements OnInit {
     }
 
     // removes error states on any input update
-    this.credentials.valueChanges.subscribe(() => {
-      if (this.invalidCredentialsSubmitted) {
-        this.invalidCredentialsSubmitted = false;
-        this.email!.setErrors(null);
-        this.password!.setErrors(null);
+    this.emailControl.valueChanges.subscribe(() => {
+      if (this.invalidEmailSubmitted) {
+        this.invalidEmailSubmitted = false;
+        this.emailControl.setErrors(null);
       }
     });
   }
 
-  private get email() {
-    return this.credentials.get('email');
-  }
-
-  private get password() {
-    return this.credentials.get('password');
-  }
-
-  login(): void {
-    if (this.credentials.valid && this.email?.value && this.password?.value) {
+  requestLogin(): void {
+    if (this.emailControl.valid && this.emailControl.value) {
       this.authService
-        .login(this.email!.value, this.password!.value)
+        .requestLogin(this.emailControl.value)
         .subscribe({
-          next: (response) => {
-            this.authService.storeToken(response.accessToken);
-            this.router.navigate(['/']);
+          next: () => {
+            this.validEmailSubmitted = true;
+            this.emailControl.disable()
+            return;
           },
           error: () => {
-            this.invalidCredentialsSubmitted = true;
-            this.email!.setErrors({ invalid: 'Invalid credentials provided' });
-            this.password!.setErrors({
-              invalid: 'Invalid credentials provided',
-            });
+            this.invalidEmailSubmitted = true;
+            this.emailControl.setErrors({ invalid: 'Invalid credentials provided' });
             return;
           },
         });
     } else {
-      this.invalidCredentialsSubmitted = true;
+      this.invalidEmailSubmitted = true;
     }
   }
 }

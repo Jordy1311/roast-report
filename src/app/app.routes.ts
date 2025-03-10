@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 
 import { isLoggedInGuard } from './guards/is-logged-in.guard';
-import { LoginComponent } from './components/login/login.component';
+import { ConfirmLoginComponent } from './components/confirm-login/confirm-login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { RegisterComponent } from './components/register/register.component';
 
 export const routes: Routes = [
   {
@@ -15,15 +15,15 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'register',
-    component: RegisterComponent,
-    title: 'Roast Report | Register',
-    pathMatch: 'full',
-  },
-  {
     path: 'login',
     component: LoginComponent,
     title: 'Roast Report | Login',
+    pathMatch: 'full',
+  },
+  {
+    path: 'confirm-login/:confirmationCode',
+    component: ConfirmLoginComponent,
+    title: 'Roast Report | Confirm Login',
     pathMatch: 'full',
   },
   {

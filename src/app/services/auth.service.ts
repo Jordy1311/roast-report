@@ -11,13 +11,19 @@ export const accessTokenAddress = 'access_token';
 export class AuthService {
   private http = inject(HttpClient);
 
+  requestLogin(email: string) {
+    return this.http
+      .post(`${API_URL}/v1/login`, { email })
+      .pipe(catchError(this.handleError));
+  }
+
   storeToken(accessToken: string): void {
     localStorage.setItem(accessTokenAddress, accessToken);
   }
 
-  login(email: string, password: string): Observable<{ accessToken: string }> {
+  confirmLogin(confirmationCode: string): Observable<{ accessToken: string }> {
     return this.http
-      .post<{ accessToken: string }>(`${API_URL}/v1/login`, { email, password })
+      .post<{ accessToken: string }>(`${API_URL}/v1/login/confirm/${confirmationCode}`, {})
       .pipe(catchError(this.handleError));
   }
 
@@ -40,15 +46,10 @@ export class AuthService {
       console.error('An error occurred:', error.error.message);
     } else {
       // The backend returned an unsuccessful response code.
-      console.error(
-        `Backend returned code ${error.status}, body was: ${error.error}`
-      );
+      console.error(`Backend returned code ${error.status}, body was: ${error.error}`);
     }
     return throwError(
-      () =>
-        new Error(
-          'Login failed. Please check your credentials or try again later.'
-        )
+      () => new Error('Login failed. Please check your credentials or try again later.')
     );
   }
 }

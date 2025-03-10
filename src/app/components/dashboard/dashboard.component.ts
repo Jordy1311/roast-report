@@ -29,7 +29,6 @@ type SortFields = 'name' | 'roaster' | 'rating';
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    AddAmendRoastFormComponent,
     FormsModule,
     HeaderNavigationComponent,
     MatButtonModule,
