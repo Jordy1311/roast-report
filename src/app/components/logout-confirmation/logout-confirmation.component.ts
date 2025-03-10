@@ -8,7 +8,6 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-logout-confirmation',
-  standalone: true,
   imports: [
     MatDialogTitle,
     MatDialogContent,

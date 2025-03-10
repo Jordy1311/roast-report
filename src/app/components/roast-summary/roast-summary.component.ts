@@ -13,7 +13,6 @@ import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-ro
 
 @Component({
   selector: 'app-roast-summary',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatCardModule,

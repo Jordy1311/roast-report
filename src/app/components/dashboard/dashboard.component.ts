@@ -27,7 +27,6 @@ type SortFields = 'name' | 'roaster' | 'rating';
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
   imports: [
     FormsModule,
     HeaderNavigationComponent,

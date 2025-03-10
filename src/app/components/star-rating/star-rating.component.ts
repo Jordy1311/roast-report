@@ -5,8 +5,10 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-star-rating',
-  standalone: true,
-  imports: [MatIcon, MatButtonModule],
+  imports: [
+    MatIcon,
+    MatButtonModule
+  ],
   styleUrl: './star-rating.component.scss',
   template: `
     <div class="container" [class.readonly]="readonly">

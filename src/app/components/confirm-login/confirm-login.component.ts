@@ -5,7 +5,6 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-confirm-login',
-  standalone: true,
   imports: [],
   styleUrl: './confirm-login.component.scss',
   template: `

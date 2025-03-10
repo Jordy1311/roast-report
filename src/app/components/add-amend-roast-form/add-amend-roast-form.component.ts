@@ -47,7 +47,6 @@ import {
 
 @Component({
   selector: 'app-add-amend-roast-form',
-  standalone: true,
   imports: [
     MatAutocompleteModule,
     MatButtonModule,
@@ -65,7 +64,7 @@ import {
   ],
   styleUrl: './add-amend-roast-form.component.scss',
   template: `
-    <h2 mat-dialog-title>{{ 'Add a roast' || roast }}</h2>
+    <h2 mat-dialog-title>{{ roast!.value ? 'Editing ' + roast!.value : 'Add a roast' }}</h2>
 
     <mat-dialog-content>
       <form [formGroup]="roastFormData">

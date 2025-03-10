@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-roast-search',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatFormFieldModule,

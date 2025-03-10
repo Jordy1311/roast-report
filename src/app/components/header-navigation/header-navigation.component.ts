@@ -9,8 +9,11 @@ import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confi
 
 @Component({
   selector: 'app-header-navigation',
-  standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatToolbarModule],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule
+  ],
   styleUrl: './header-navigation.component.scss',
   template: `
     <nav>

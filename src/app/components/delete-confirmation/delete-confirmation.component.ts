@@ -14,7 +14,6 @@ import { RoastService } from '../../services/roast.service';
 
 @Component({
   selector: 'app-delete-confirmation',
-  standalone: true,
   imports: [
     MatDialogTitle,
     MatDialogContent,
