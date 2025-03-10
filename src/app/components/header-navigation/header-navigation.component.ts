@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -35,7 +35,7 @@ import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confi
   `,
 })
 export class HeaderNavigationComponent {
-  constructor(public dialog: MatDialog) {}
+  private dialog = inject(MatDialog);
 
   openLogoutDialog(): void {
     this.dialog.open(LogoutConfirmationComponent);

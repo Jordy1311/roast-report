@@ -91,6 +91,7 @@ type SortFields = 'name' | 'roaster' | 'rating';
 })
 export class DashboardComponent implements OnInit {
   private roastService = inject(RoastService);
+  private dialog = inject(MatDialog);
 
   searchText: WritableSignal<string> = signal('');
   sortField: WritableSignal<SortFields | ''> = signal('');
@@ -113,8 +114,6 @@ export class DashboardComponent implements OnInit {
 
     return filteredRoasts || roasts;
   });
-
-  constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.roastService.getUsersRoasts();

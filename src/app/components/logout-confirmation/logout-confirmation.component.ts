@@ -37,8 +37,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LogoutConfirmationComponent {
   private authService = inject(AuthService);
-
-  constructor(public dialogRef: MatDialogRef<LogoutConfirmationComponent>) {}
+  private dialogRef = inject(MatDialogRef<LogoutConfirmationComponent>);
 
   closeDialog(): void {
     this.dialogRef.close();

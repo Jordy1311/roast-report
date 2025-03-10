@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   FormControl,
@@ -254,6 +254,8 @@ import {
 })
 export class AddAmendRoastFormComponent implements OnInit {
   private roastService = inject(RoastService);
+  private dialogRef = inject(MatDialogRef<AddAmendRoastFormComponent>);
+  protected roastToUpdate: Roast = inject(MAT_DIALOG_DATA);
 
   invalidRoast?: boolean;
   invalidRoaster?: boolean;
@@ -281,11 +283,6 @@ export class AddAmendRoastFormComponent implements OnInit {
     rating: new FormControl<number>(0, { nonNullable: true }),
     notes: new FormControl<string>('', { nonNullable: true }),
   });
-
-  constructor(
-    public dialogRef: MatDialogRef<AddAmendRoastFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public roastToUpdate: Roast
-  ) {}
 
   ngOnInit(): void {
     if (this.isAnUpdate) {

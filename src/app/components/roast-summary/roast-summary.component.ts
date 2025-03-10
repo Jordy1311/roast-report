@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -98,7 +98,7 @@ import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-ro
   `,
 })
 export class RoastSummaryComponent {
-  constructor(public dialog: MatDialog) {}
+  private dialog = inject(MatDialog);
 
   @Input() roast!: Roast;
 

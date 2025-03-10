@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -43,11 +43,8 @@ import { RoastService } from '../../services/roast.service';
 })
 export class DeleteConfirmationComponent {
   private roastService = inject(RoastService);
-
-  constructor(
-    public dialogRef: MatDialogRef<DeleteConfirmationComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { roastId: string; roastName: string }
-  ) {}
+  private dialogRef = inject(MatDialogRef<DeleteConfirmationComponent>);
+  protected data: { roastId: string; roastName: string } = inject(MAT_DIALOG_DATA);
 
   closeDialog(): void {
     this.dialogRef.close();
