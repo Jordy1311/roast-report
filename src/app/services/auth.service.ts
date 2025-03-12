@@ -5,6 +5,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { API_URL } from '../variables';
 
 export const accessTokenAddress = 'access_token';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,7 +15,7 @@ export class AuthService {
   requestLogin(email: string) {
     return this.http
       .post(`${API_URL}/v1/login`, { email })
-      .pipe(catchError(this.handleError));
+      .pipe(catchError((error) => this.handleError(error)));
   }
 
   storeToken(accessToken: string): void {
@@ -23,8 +24,10 @@ export class AuthService {
 
   confirmLogin(confirmationCode: string): Observable<{ accessToken: string }> {
     return this.http
-      .post<{ accessToken: string }>(`${API_URL}/v1/login/confirm/${confirmationCode}`, {})
-      .pipe(catchError(this.handleError));
+      .post<{ accessToken: string; }>(
+        `${API_URL}/v1/login/confirm/${confirmationCode}`, {}
+      )
+      .pipe(catchError((error) => this.handleError(error)));
   }
 
   logout(): void {
@@ -46,7 +49,7 @@ export class AuthService {
       console.error('An error occurred:', error.error.message);
     } else {
       // The backend returned an unsuccessful response code.
-      console.error(`Backend returned code ${error.status}, body was: ${error.error}`);
+      console.error(`Backend returned status code ${error.status}, body was: `, error.error);
     }
     return throwError(
       () => new Error('Login failed. Please check your credentials or try again later.')

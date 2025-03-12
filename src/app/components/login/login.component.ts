@@ -27,7 +27,7 @@ import { AuthService } from '../../services/auth.service';
     <main>
       <h1>Roast Report</h1>
 
-      <form>
+      <form (keydown.enter)="requestLogin()">
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input
@@ -38,11 +38,17 @@ import { AuthService } from '../../services/auth.service';
             autocomplete="email"
             placeholder="you@example.com"
           />
-          @if (!invalidEmailSubmitted) {
-            <mat-error>Please check your email.</mat-error>
+          @if (emailControl.hasError('email') && !emailControl.hasError('required')) {
+            <mat-error>Please double check your email is correct.</mat-error>
           }
-          @if (validEmailSubmitted) {
-            <mat-hint>Please check your email and follow the log in link 😊</mat-hint>
+          @else if (emailControl.hasError('required')) {
+            <mat-error>Please enter your email.</mat-error>
+          }
+          @else if (displayCheckYourEmail) {
+            <mat-hint>Please check your emails and click the link to log in.</mat-hint>
+          }
+          @else if (displaySomethingWentWrong) {
+            <mat-hint>Something went wrong, please refresh and try again.</mat-hint>
           }
         </mat-form-field>
 
@@ -50,10 +56,14 @@ import { AuthService } from '../../services/auth.service';
           mat-flat-button
           type="button"
           color="primary"
-          [disabled]="validEmailSubmitted"
+          [disabled]="disableButton"
           (click)="requestLogin()"
         >
-          Register / Log in
+          @if (displaySendingEmailButtonText) {
+            Sending email...
+          } @else {
+            Register / Log in
+          }
         </button>
       </form>
     </main>
@@ -63,8 +73,10 @@ export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  invalidEmailSubmitted = false;
-  validEmailSubmitted = false;
+  disableButton = false;
+  displaySendingEmailButtonText = false
+  displayCheckYourEmail = false;
+  displaySomethingWentWrong = false;
 
   emailControl = new FormControl<string>('', {
     validators: [Validators.required, Validators.email],
@@ -75,34 +87,30 @@ export class LoginComponent implements OnInit {
     if (this.authService.isLoggedIn) {
       this.router.navigate(['/']);
     }
-
-    // removes error states on any input update
-    this.emailControl.valueChanges.subscribe(() => {
-      if (this.invalidEmailSubmitted) {
-        this.invalidEmailSubmitted = false;
-        this.emailControl.setErrors(null);
-      }
-    });
   }
 
   requestLogin(): void {
-    if (this.emailControl.valid && this.emailControl.value) {
-      this.authService
-        .requestLogin(this.emailControl.value)
-        .subscribe({
-          next: () => {
-            this.validEmailSubmitted = true;
-            this.emailControl.disable()
-            return;
-          },
-          error: () => {
-            this.invalidEmailSubmitted = true;
-            this.emailControl.setErrors({ invalid: 'Invalid credentials provided' });
-            return;
-          },
-        });
-    } else {
-      this.invalidEmailSubmitted = true;
+    if (!this.emailControl.valid || !this.emailControl.value) {
+      return;
     }
+
+    this.emailControl.disable();
+    this.disableButton = true;
+    this.displaySendingEmailButtonText = true;
+
+    this.authService
+      .requestLogin(this.emailControl.value)
+      .subscribe({
+        next: () => {
+          this.displaySendingEmailButtonText = false;
+          this.displayCheckYourEmail = true;
+          return;
+        },
+        error: () => {
+          this.displaySendingEmailButtonText = false;
+          this.displaySomethingWentWrong = true;
+          return;
+        },
+      });
   }
 }
