@@ -51,7 +51,7 @@ import { AuthService } from '../../services/auth.service';
             <mat-hint>Something went wrong, please refresh and try again.</mat-hint>
           }
           @else if (displayServerWakingUpHint) {
-            <mat-hint>Our server falls asleep sometimes, please wait...</mat-hint>
+            <mat-hint>Our server goes to sleep sometimes, please wait...</mat-hint>
           }
         </mat-form-field>
 
@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log('Running 1205');
+    console.log('Running 1240');
 
     if (this.authService.isLoggedIn) {
       this.router.navigate(['/']);
@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
       if (!this.displayCheckYourEmailHint) {
         this.displayServerWakingUpHint = true;
       }
-    }, 2000);
+    }, 3000);
 
     this.emailControl.disable();
     this.disableButton = true;
