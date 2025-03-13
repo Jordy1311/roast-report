@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
       if (!this.displayCheckYourEmailHint) {
         this.displayServerWakingUpHint = true;
       }
-    }, 3000);
+    }, 2500);
 
     this.emailControl.disable();
     this.disableButton = true;
