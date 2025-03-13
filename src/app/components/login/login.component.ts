@@ -51,7 +51,7 @@ import { AuthService } from '../../services/auth.service';
             <mat-hint>Something went wrong, please refresh and try again.</mat-hint>
           }
           @else if (displayServerWakingUpHint) {
-            <mat-hint>Please wait, our server is waking up...</mat-hint>
+            <mat-hint>Our server falls asleep sometimes, please wait...</mat-hint>
           }
         </mat-form-field>
 
@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log('Running 956');
+    console.log('Running 1010');
 
     if (this.authService.isLoggedIn) {
       this.router.navigate(['/']);
