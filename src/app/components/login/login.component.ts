@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log('Running 906');
+    console.log('Running 908');
 
     if (this.authService.isLoggedIn) {
       this.router.navigate(['/']);
@@ -114,11 +114,17 @@ export class LoginComponent implements OnInit {
       .requestLogin(this.emailControl.value)
       .subscribe({
         next: () => {
+          if (this.displayServerWakingUpHint) {
+            this.displayServerWakingUpHint = false;
+          }
           this.displaySendingEmailButtonText = false;
           this.displayCheckYourEmailHint = true;
           return;
         },
         error: () => {
+          if (this.displayServerWakingUpHint) {
+            this.displayServerWakingUpHint = false;
+          }
           this.displaySendingEmailButtonText = false;
           this.displaySomethingWentWrongHint = true;
           return;
