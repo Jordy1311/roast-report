@@ -3,7 +3,7 @@
     "default": "roast-report-abc123"
   },
   "hosting": {
-    "public": "dist/browser",
+    "public": "dist",
     "rewrites": [
       {
         "source": "**",
