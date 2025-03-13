@@ -44,11 +44,14 @@ import { AuthService } from '../../services/auth.service';
           @else if (emailControl.hasError('required')) {
             <mat-error>Please enter your email.</mat-error>
           }
-          @else if (displayCheckYourEmail) {
+          @else if (displayCheckYourEmailHint) {
             <mat-hint>Please check your emails and click the link to log in.</mat-hint>
           }
-          @else if (displaySomethingWentWrong) {
+          @else if (displaySomethingWentWrongHint) {
             <mat-hint>Something went wrong, please refresh and try again.</mat-hint>
+          }
+          @else if (displayServerWakingUpHint) {
+            <mat-hint>Please wait, our server is waking up.</mat-hint>
           }
         </mat-form-field>
 
@@ -75,8 +78,9 @@ export class LoginComponent implements OnInit {
 
   disableButton = false;
   displaySendingEmailButtonText = false
-  displayCheckYourEmail = false;
-  displaySomethingWentWrong = false;
+  displayCheckYourEmailHint = false;
+  displaySomethingWentWrongHint = false;
+  displayServerWakingUpHint = false;
 
   emailControl = new FormControl<string>('', {
     validators: [Validators.required, Validators.email],
@@ -84,7 +88,7 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log('Running latest 840');
+    console.log('Running 906');
 
     if (this.authService.isLoggedIn) {
       this.router.navigate(['/']);
@@ -96,6 +100,12 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    setTimeout(() => {
+      if (!this.displayCheckYourEmailHint) {
+        this.displayServerWakingUpHint = true;
+      }
+    }, 2000);
+
     this.emailControl.disable();
     this.disableButton = true;
     this.displaySendingEmailButtonText = true;
@@ -105,12 +115,12 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: () => {
           this.displaySendingEmailButtonText = false;
-          this.displayCheckYourEmail = true;
+          this.displayCheckYourEmailHint = true;
           return;
         },
         error: () => {
           this.displaySendingEmailButtonText = false;
-          this.displaySomethingWentWrong = true;
+          this.displaySomethingWentWrongHint = true;
           return;
         },
       });
