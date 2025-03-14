@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log('Running 142');
+    console.log('Running 150');
 
     if (this.authService.isLoggedIn) {
       this.router.navigate(['/']);
