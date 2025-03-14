@@ -1,14 +1,5 @@
 {
   "projects": {
     "default": "roast-report-abc123"
-  },
-  "hosting": {
-    "public": "dist",
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
   }
 }
