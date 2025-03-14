@@ -1,15 +1,14 @@
 html {
+  height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
-}
-
-html,
-body {
-  height: 100%;
+  align-items: center;
 }
 
 body {
-  width: 90vw;
+  width: 95%;
+  height: 98%;
   max-width: 1200px;
   margin: 0;
 }
@@ -45,10 +44,6 @@ body {
 
 /* small screen and below */
 @media (max-width: 576px) {
-  body {
-    width: 90vw;
-  }
-
   .side-by-side {
     display: block;
 

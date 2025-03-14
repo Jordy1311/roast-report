@@ -25,7 +25,14 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login.component.scss',
   template: `
     <main>
-      <h1>Roast Report</h1>
+      <div class="header">
+        <h1 class="header-title">Roast Report</h1>
+        <h1 class="header-icon" aria-hidden="true">
+          <mat-icon [inline]="true" class="material-symbols-rounded">
+            coffee_maker
+          </mat-icon>
+        </h1>
+      </div>
 
       <form (keydown.enter)="requestLogin()">
         <mat-form-field appearance="outline">
@@ -38,6 +45,10 @@ import { AuthService } from '../../services/auth.service';
             autocomplete="email"
             placeholder="you@example.com"
           />
+          <mat-icon class="material-symbols-rounded" matSuffix>
+            alternate_email
+          </mat-icon>
+
           @if (emailControl.hasError('email') && !emailControl.hasError('required')) {
             <mat-error>Please double check your email is correct.</mat-error>
           }
@@ -45,7 +56,7 @@ import { AuthService } from '../../services/auth.service';
             <mat-error>Please enter your email.</mat-error>
           }
           @else if (displayCheckYourEmailHint) {
-            <mat-hint>Please check your emails and click the link to log in.</mat-hint>
+            <mat-hint>Please check your emails and follow the link.</mat-hint>
           }
           @else if (displaySomethingWentWrongHint) {
             <mat-hint>Something went wrong, please refresh and try again.</mat-hint>
@@ -65,7 +76,7 @@ import { AuthService } from '../../services/auth.service';
           @if (displaySendingEmailButtonText) {
             Sending email...
           } @else {
-            Register / Log in
+            Continue
           }
         </button>
       </form>
@@ -88,8 +99,6 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log('Running 150');
-
     if (this.authService.isLoggedIn) {
       this.router.navigate(['/']);
     }
