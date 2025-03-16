@@ -48,6 +48,7 @@ type SortFields = 'name' | 'roaster' | 'rating';
           (newValue)="updateSearchValue($event)"
         ></app-roast-search>
 
+        <!-- sort dropdown -->
         <mat-form-field appearance="outline">
           <mat-label>Sort</mat-label>
           <mat-select>

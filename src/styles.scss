@@ -1,9 +1,8 @@
 html {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: auto;
+  width: auto;
+  display: grid;
+  place-items: center;
 }
 
 body {
