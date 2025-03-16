@@ -31,7 +31,7 @@ import { AuthService } from '../../services/auth.service';
           src="/assets/drip-coffee.svg"
           height="72"
           width="72"
-          aria-hidden="true"
+          alt="Drip coffee icon"
           />
       </div>
 
