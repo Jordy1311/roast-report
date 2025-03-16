@@ -27,11 +27,12 @@ import { AuthService } from '../../services/auth.service';
     <main>
       <div class="header">
         <h1 class="header-title">Roast Report</h1>
-        <h1 class="header-icon" aria-hidden="true">
-          <mat-icon [inline]="true" class="material-symbols-rounded">
-            coffee_maker
-          </mat-icon>
-        </h1>
+        <img
+          src="/assets/drip-coffee.svg"
+          height="72"
+          width="72"
+          aria-hidden="true"
+          />
       </div>
 
       <form (keydown.enter)="requestLogin()">
