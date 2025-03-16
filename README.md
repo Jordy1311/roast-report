@@ -1,27 +1,22 @@
 # RoastReport
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.2.
+I love coffee ...maybe too much. I've had a lot of different roasts, from different roasters, brewed with different equipment, following different recipies. I needed a thing to keep track of all that and being a developer I made the non-sensical decision to make a whole app dedicated to this issue.
 
-## Development server
+This is a coffee roast tracking app. At the moment it only keeps track of the different roasts you've had by different roasters but I'm planning on expanding it to also keep track of recipies you've followed to brew each roast.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+The goal?
+- Have a place to come back and find those amazing roasts you've had in the past
+- Have a record of how exactly you brewed those roasts
 
-## Code scaffolding
+## Building and running yourself
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+It is deployed and you should be able to find a link under the short description on the right but if you did want to run it yourself to have a look or something, here are some steps:
 
-## Build
+1. Clone the repo
+2. Run `yarn` to install packages
+3. Run `npx ng serve` which will build, serve and watch for changes
+4. Navigate to `http://localhost:4200/`
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+There is a variables file which has the backend url. You could pull and run the backend as well but you'd need even more env vars and set up so just leave it pointing at my deployed api.
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+If you were really really interested in this, reach out to me 😊
