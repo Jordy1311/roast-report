@@ -60,7 +60,7 @@ import { AuthService } from '../../services/auth.service';
             <mat-hint>Please check your emails and follow the link.</mat-hint>
           }
           @else if (displaySomethingWentWrongHint) {
-            <mat-hint>Something went wrong, please refresh and try again.</mat-hint>
+            <mat-hint>An error occurred, please refresh and try again.</mat-hint>
           }
           @else if (displayServerWakingUpHint) {
             <mat-hint>Our server sleeps sometimes, please wait...</mat-hint>
@@ -114,7 +114,7 @@ export class LoginComponent implements OnInit {
       if (!this.displayCheckYourEmailHint) {
         this.displayServerWakingUpHint = true;
       }
-    }, 2500);
+    }, 3000);
 
     this.emailControl.disable();
     this.disableButton = true;
