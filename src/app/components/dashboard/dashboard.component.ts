@@ -14,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 
 import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
@@ -34,6 +35,7 @@ type SortFields = 'name' | 'roaster' | 'rating';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
     RoastSearchComponent,
     RoastSummaryComponent,
@@ -73,6 +75,10 @@ type SortFields = 'name' | 'roaster' | 'rating';
         @for (roast of roasts(); track roast._id) {
           <app-roast-summary [roast]="roast"></app-roast-summary>
         }
+        @if (!roasts().length) {
+          <mat-spinner [diameter]="32"></mat-spinner>
+        }
+
       </div>
 
       <button
