@@ -16,6 +16,9 @@ export interface Roast {
   tastingNotes?: string[];
   rating?: number;
   notes?: string;
+
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface NewRoast {

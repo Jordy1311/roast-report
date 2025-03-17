@@ -14,9 +14,9 @@
     flex-direction: column;
     align-items: center;
 
-    .search-filter-group {
+    .search-sort-group {
       width: 100%;
-      margin-top: 1em;
+      margin-top: 0.5em;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -56,10 +56,17 @@
     }
 
     button.add-roast {
+      align-self: center;
       margin-top: 2rem;
       position: sticky;
-      bottom: 2rem;
-      right: 0;
+      bottom: 5rem;
+      right: 1rem;
+
+      /* applied to 1024px and smaller */
+      @media (max-width: 1024px) {
+        align-self: flex-end;
+        bottom: 2rem;
+      }
     }
   }
 }

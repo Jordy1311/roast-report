@@ -8,6 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import moment from 'moment';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,7 +26,7 @@ import { RoastService } from '../../services/roast.service';
 import { RoastSearchComponent } from '../roast-search/roast-search.component';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
 
-type SortFields = 'name' | 'roaster' | 'rating';
+type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
 
 @Component({
   selector: 'app-dashboard',
@@ -47,7 +48,7 @@ type SortFields = 'name' | 'roaster' | 'rating';
     <app-header-navigation></app-header-navigation>
 
     <main>
-      <div class="search-filter-group">
+      <div class="search-sort-group">
         <app-roast-search
           (newValue)="updateSearchValue($event)"
         ></app-roast-search>
@@ -57,15 +58,18 @@ type SortFields = 'name' | 'roaster' | 'rating';
           <mat-label>Sort</mat-label>
           <mat-select>
             <mat-option (click)="updateSortField('')"></mat-option>
-
             <mat-option value="Rating" (click)="updateSortField('rating')">
               Rating
             </mat-option>
-
+            <mat-option value="Newest to oldest" (click)="updateSortField('dateAdded')">
+              Newest to oldest
+            </mat-option>
+            <mat-option value="Recently updated" (click)="updateSortField('dateUpdated')">
+              Recently updated
+            </mat-option>
             <mat-option value="Name" (click)="updateSortField('name')">
               Name
             </mat-option>
-
             <mat-option value="Roaster" (click)="updateSortField('roaster')">
               Roaster
             </mat-option>
@@ -73,35 +77,34 @@ type SortFields = 'name' | 'roaster' | 'rating';
         </mat-form-field>
       </div>
 
-      <div class="roasts-container">
-        @for (roast of roasts(); track roast._id) {
-          <app-roast-summary [roast]="roast"></app-roast-summary>
-        }
-        @if (!roasts().length) {
-          <mat-spinner [diameter]="32"></mat-spinner>
-        }
-
-      </div>
-
       <mat-paginator
         (page)="handleChangePageEvent($event)"
-        [length]="roastService.roastsSignal().length"
+        [length]="roastsWithSearchSort().length"
         [pageSize]="pageSize()"
         [pageIndex]="pageIndex()"
         [hidePageSize]="isMobileDevice()"
         [pageSizeOptions]="[5,10,25,50]"
         aria-label="Select page"
-        >
+      >
       </mat-paginator>
+
+      <div class="roasts-container">
+        @for (roast of roastsSlicedByPaginator(); track roast._id) {
+          <app-roast-summary [roast]="roast"></app-roast-summary>
+        }
+        @if (!roastsWithSearchSort().length) {
+          <mat-spinner [diameter]="32"></mat-spinner>
+        }
+
+      </div>
 
       <button
         (click)="openAddRoastDialog($event)"
-        mat-flat-button
-        color="primary"
+        mat-fab extended
         class="add-roast"
         aria-label="Add coffee"
       >
-        <span>Add</span>
+        <span>{{ isMobileDevice() ? 'Add' : 'Add a coffee' }}</span>
         <mat-icon class="material-symbols-rounded" aria-hidden>
           add_circle
         </mat-icon>
@@ -110,24 +113,22 @@ type SortFields = 'name' | 'roaster' | 'rating';
   `,
 })
 export class DashboardComponent implements OnInit {
-  protected roastService = inject(RoastService);
+  private roastService = inject(RoastService);
   private dialog = inject(MatDialog);
 
   searchText: WritableSignal<string> = signal('');
   sortField: WritableSignal<SortFields | ''> = signal('');
 
   pageIndex = signal(0);
-  pageSize = signal(5);
+  pageSize = signal(10);
 
-  isMobileDevice(): boolean {
-    return window.innerWidth <= 480;
-  }
-
-  roasts: Signal<Roast[]> = computed(() => {
+  roastsWithSearchSort: Signal<Roast[]> = computed(() => {
     // computed signal dependencies
-    const roasts = this.roastService.roastsSignal();
+    const roasts = this.roastService.roastsSignal()
     const searchTextLowerCased = this.searchText().toLowerCase();
     const sortField = this.sortField();
+
+    console.log({ roasts });
 
     let filteredRoasts;
 
@@ -139,10 +140,19 @@ export class DashboardComponent implements OnInit {
       filteredRoasts = this.sort(filteredRoasts || roasts, sortField);
     }
 
-    const startIndex = this.pageIndex() * this.pageSize();
-    const endIndex = startIndex + this.pageSize();
+    return (filteredRoasts || roasts);
+  });
 
-    return (filteredRoasts || roasts).slice(startIndex, endIndex);
+  roastsSlicedByPaginator: Signal<Roast[]> = computed(() => {
+    // computed signal dependencies
+    const roastsWithSearchSort = this.roastsWithSearchSort();
+    const pageIndex = this.pageIndex();
+    const pageSize = this.pageSize();
+
+    const startIndex = pageIndex * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    return roastsWithSearchSort.slice(startIndex, endIndex);
   });
 
   ngOnInit(): void {
@@ -156,6 +166,7 @@ export class DashboardComponent implements OnInit {
 
   updateSearchValue(newValue: string): void {
     this.searchText.set(newValue);
+    this.pageIndex.set(0);
   }
 
   updateSortField(newSortField: SortFields | ''): void {
@@ -166,7 +177,7 @@ export class DashboardComponent implements OnInit {
   search(roasts: Roast[], searchTerm: string): Roast[] {
     return roasts.filter((roast: Roast) => {
       return Object
-        .values(roast) // an array of one roast's values
+        .values(roast) // one roast's values
         .some((roastValue: Roast[keyof Roast]) => {
           if (typeof roastValue === 'string') {
             return roastValue.toLowerCase().includes(searchTerm);
@@ -184,28 +195,44 @@ export class DashboardComponent implements OnInit {
   }
 
   sort(roasts: Roast[], fieldToSort: SortFields): Roast[] {
-    if (fieldToSort === 'name' || fieldToSort === 'roaster') {
-      return roasts.toSorted((a: Roast, b: Roast) =>
-        a[fieldToSort].localeCompare(b[fieldToSort])
-      );
+    switch (fieldToSort) {
+      case 'rating':
+        return roasts.toSorted((a: Roast, b: Roast) => {
+          if (a.rating && b.rating) return b.rating - a.rating;
+          if (a.rating) return -1;
+          if (b.rating) return 1;
+          return 1;
+        });
+
+      case 'dateAdded':
+        return roasts.toSorted((a: Roast, b: Roast) => {
+          if (moment(a.createdAt).isBefore(moment(b.createdAt))) return -1;
+          return 1;
+        });
+
+      case 'dateUpdated':
+        return roasts.toSorted((a: Roast, b: Roast) => {
+          if (moment(a.updatedAt).isBefore(moment(b.updatedAt))) return -1;
+          return 1;
+        });
+
+      case 'name':
+      case 'roaster':
+        return roasts.toSorted((a: Roast, b: Roast) =>
+          a[ fieldToSort ].localeCompare(b[ fieldToSort ])
+        );
+
+      default:
+        return roasts;
     }
-
-    if (fieldToSort === 'rating') {
-      return roasts.toSorted((a: Roast, b: Roast) => {
-        if (a.rating && b.rating) return b.rating - a.rating;
-
-        if (a.rating) return -1;
-        if (b.rating) return 1;
-
-        return 1;
-      });
-    }
-
-    return roasts;
   }
 
   handleChangePageEvent(event: PageEvent) {
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
+  }
+
+  isMobileDevice(): boolean {
+    return window.innerWidth <= 480;
   }
 }
