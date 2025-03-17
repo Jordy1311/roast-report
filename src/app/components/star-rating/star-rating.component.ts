@@ -12,19 +12,6 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './star-rating.component.scss',
   template: `
     <div class="container" [class.readonly]="readonly">
-      @if (!readonly) {
-        <button
-          mat-icon-button
-          (click)="setRating(0)"
-          [disabled]="readonly"
-          aria-label="Choose to not specify a rating"
-        >
-          <mat-icon class="material-symbols-rounded" aria-hidden="true">
-            cancel
-          </mat-icon>
-        </button>
-      }
-
       <button
         mat-icon-button
         (click)="setRating(1)"
@@ -99,6 +86,21 @@ import { MatIcon } from '@angular/material/icon';
           star
         </mat-icon>
       </button>
+
+      <br/>
+
+      @if (!readonly) {
+        <button
+          mat-icon-button
+          (click)="setRating(0)"
+          [disabled]="readonly"
+          aria-label="Choose to not specify a rating"
+        >
+          <mat-icon class="material-symbols-rounded" aria-hidden="true">
+            cancel
+          </mat-icon>
+        </button>
+      }
     </div>
   `,
 })
