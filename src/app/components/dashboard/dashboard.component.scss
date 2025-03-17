@@ -51,8 +51,11 @@
       }
     }
 
-    button.add-roast {
+    mat-paginator {
       align-self: flex-end;
+    }
+
+    button.add-roast {
       margin-top: 2rem;
       position: sticky;
       bottom: 2rem;

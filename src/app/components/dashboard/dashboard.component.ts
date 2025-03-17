@@ -14,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 
@@ -35,6 +36,7 @@ type SortFields = 'name' | 'roaster' | 'rating';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatPaginatorModule,
     MatProgressSpinnerModule,
     MatSelectModule,
     RoastSearchComponent,
@@ -81,6 +83,16 @@ type SortFields = 'name' | 'roaster' | 'rating';
 
       </div>
 
+      <mat-paginator
+        (page)="handleChangePageEvent($event)"
+        [length]="roastService.roastsSignal().length"
+        [pageSize]="pageSize()"
+        [pageIndex]="pageIndex()"
+        [hidePageSize]="true"
+        aria-label="Select page"
+        >
+      </mat-paginator>
+
       <button
         (click)="openAddRoastDialog($event)"
         mat-flat-button
@@ -97,11 +109,14 @@ type SortFields = 'name' | 'roaster' | 'rating';
   `,
 })
 export class DashboardComponent implements OnInit {
-  private roastService = inject(RoastService);
+  protected roastService = inject(RoastService);
   private dialog = inject(MatDialog);
 
   searchText: WritableSignal<string> = signal('');
   sortField: WritableSignal<SortFields | ''> = signal('');
+
+  pageIndex = signal(0);
+  pageSize = signal(2);
 
   roasts: Signal<Roast[]> = computed(() => {
     // computed signal dependencies
@@ -119,7 +134,10 @@ export class DashboardComponent implements OnInit {
       filteredRoasts = this.sort(filteredRoasts || roasts, sortField);
     }
 
-    return filteredRoasts || roasts;
+    const startIndex = this.pageIndex() * this.pageSize();
+    const endIndex = startIndex + this.pageSize();
+
+    return (filteredRoasts || roasts).slice(startIndex, endIndex);
   });
 
   ngOnInit(): void {
@@ -137,6 +155,7 @@ export class DashboardComponent implements OnInit {
 
   updateSortField(newSortField: SortFields | ''): void {
     this.sortField.set(newSortField);
+    this.pageIndex.set(0);
   }
 
   search(roasts: Roast[], searchTerm: string): Roast[] {
@@ -178,5 +197,10 @@ export class DashboardComponent implements OnInit {
     }
 
     return roasts;
+  }
+
+  handleChangePageEvent(event: PageEvent) {
+    this.pageIndex.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
   }
 }
