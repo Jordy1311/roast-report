@@ -92,7 +92,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
         @for (roast of roastsSlicedByPaginator(); track roast._id) {
           <app-roast-summary [roast]="roast"></app-roast-summary>
         }
-        @if (!roastsWithSearchSort().length) {
+        @if (!roastService.roastsSignal().length) {
           <mat-spinner [diameter]="32"></mat-spinner>
         }
 
@@ -113,7 +113,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
   `,
 })
 export class DashboardComponent implements OnInit {
-  private roastService = inject(RoastService);
+  protected roastService = inject(RoastService);
   private dialog = inject(MatDialog);
 
   searchText: WritableSignal<string> = signal('');
