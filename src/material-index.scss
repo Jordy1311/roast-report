@@ -1,38 +1,16 @@
 @use '@angular/material' as mat;
-@use './m3-theme.scss';
-
-@include mat.elevation-classes();
-@include mat.app-background();
-
-$light-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: light,
-      primary: m3-theme.$primary,
-      tertiary: m3-theme.$tertiary,
-    ),
-    typography: (
-      brand-family: 'Helvetica',
-      plain-family: 'Helvetica',
-      bold-weight: 700,
-      medium-weight: 500,
-      regular-weight: 400,
-    ),
-  )
-);
-
-// could conditionally have this on user browser preference in future?
-// $dark-theme: mat.define-theme((
-//   color: (
-//     theme-type: dark,
-//     primary: m3-theme.$primary,
-//     tertiary: m3-theme.$tertiary,
-//   ),
-// ));
+@use './theme-colors' as colors;
 
 html {
-  @include mat.all-component-themes($light-theme);
-  @include mat.color-variants-backwards-compatibility($light-theme);
-  @include mat.typography-hierarchy($light-theme, $back-compat: true);
+  color-scheme: light dark;
+  @include mat.theme((
+    color: colors.$primary-palette,
+    typography: Helvetica,
+    density: 0
+  ));
 }
 
+body {
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+}
