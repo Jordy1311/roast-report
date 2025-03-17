@@ -88,7 +88,8 @@ type SortFields = 'name' | 'roaster' | 'rating';
         [length]="roastService.roastsSignal().length"
         [pageSize]="pageSize()"
         [pageIndex]="pageIndex()"
-        [hidePageSize]="true"
+        [hidePageSize]="isMobileDevice()"
+        [pageSizeOptions]="[5,10,25,50]"
         aria-label="Select page"
         >
       </mat-paginator>
@@ -116,7 +117,11 @@ export class DashboardComponent implements OnInit {
   sortField: WritableSignal<SortFields | ''> = signal('');
 
   pageIndex = signal(0);
-  pageSize = signal(2);
+  pageSize = signal(5);
+
+  isMobileDevice(): boolean {
+    return window.innerWidth <= 480;
+  }
 
   roasts: Signal<Roast[]> = computed(() => {
     // computed signal dependencies
