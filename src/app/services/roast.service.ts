@@ -48,10 +48,8 @@ export class RoastService {
 
           roasts[indexOfUpdatedRoast] = updatedRoastObject;
 
-          this.roastsSignal.set([...roasts]);
+          this.roastsSignal.set([ ...roasts ]);
 
-          // at this point calling the signal receives the correctly updated roasts
-          console.log(111, this.roastsSignal());
           resolve();
         });
     });

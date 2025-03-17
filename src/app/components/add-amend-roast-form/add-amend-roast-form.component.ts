@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-
+import { AsyncPipe } from '@angular/common';
+import { map, Observable, startWith } from 'rxjs';
 import {
   FormControl,
   FormGroup,
@@ -30,14 +31,14 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
-import { RoastService } from '../../services/roast.service';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
+import { RoastService } from '../../services/roast.service';
 import {
   Roast,
   RoastCompositions,
   RoastProcessMethods,
 } from '../../types/roast.type';
-// import { COUNTRIES } from '../../countries';
+import { NZROASTERS } from '../../data';
 
 /*
   TODO:
@@ -48,6 +49,7 @@ import {
 @Component({
   selector: 'app-add-amend-roast-form',
   imports: [
+    AsyncPipe,
     MatAutocompleteModule,
     MatButtonModule,
     MatChipsModule,
@@ -91,7 +93,14 @@ import {
                 type="text"
                 formControlName="roaster"
                 aria-label="The roaster"
+                [matAutocomplete]="roasterAuto"
               />
+              <mat-autocomplete #roasterAuto="matAutocomplete">
+                @for (roaster of filteredNzRoasts | async; track roaster) {
+                  <mat-option [value]="roaster">{{roaster}}</mat-option>
+                }
+              </mat-autocomplete>
+
               <mat-error>Please enter a roaster.</mat-error>
             </mat-form-field>
 
@@ -260,6 +269,9 @@ export class AddAmendRoastFormComponent implements OnInit {
   invalidRoast?: boolean;
   invalidRoaster?: boolean;
 
+  nzRoasters = NZROASTERS;
+  filteredNzRoasts!: Observable<string[]>; // initialised in ngOnInit
+
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   announcer = inject(LiveAnnouncer);
 
@@ -299,6 +311,11 @@ export class AddAmendRoastFormComponent implements OnInit {
         notes: temporaryRoastClone.notes || '',
       });
     }
+
+    this.filteredNzRoasts = this.roaster!.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterAutoComplete(value || '')),
+    );
 
     // clears errors on form change
     this.roast?.valueChanges.subscribe(() => {
@@ -415,6 +432,16 @@ export class AddAmendRoastFormComponent implements OnInit {
         .then(() => this.closeDialog())
         .catch(() => console.log('Form says there was error!'));
     }
+  }
+
+  _filterAutoComplete(value: string): string[] {
+    const filterValue = value.toLocaleLowerCase();
+
+    const filtered = this.nzRoasters.filter((roaster) => {
+      return roaster.toLowerCase().includes(filterValue);
+    });
+
+    return filtered;
   }
 
   // METHODS RELATING TO: countryOfOrigin

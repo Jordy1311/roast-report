@@ -128,8 +128,6 @@ export class DashboardComponent implements OnInit {
     const searchTextLowerCased = this.searchText().toLowerCase();
     const sortField = this.sortField();
 
-    console.log({ roasts });
-
     let filteredRoasts;
 
     if (searchTextLowerCased) {
