@@ -19,6 +19,12 @@ import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confi
     <nav>
       <mat-toolbar>
         <span>Roast Report</span>
+        <img
+          src="/assets/drip-coffee.svg"
+          height="32"
+          width="32"
+          alt="Drip coffee icon"
+          />
 
         <span class="spacer"></span>
 

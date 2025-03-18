@@ -2,5 +2,13 @@ nav {
   position: sticky;
   top: 0;
   z-index: 10;
+
+  img {
+    margin-left: 16px;
+
+    @media (prefers-color-scheme: dark) {
+      filter: invert(1);
+    }
+  }
 }
 
