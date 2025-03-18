@@ -50,6 +50,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
       state(
         'show',
         style({
+          display: 'inline-flex',
           opacity: 1,
           transform: 'translateY(0)',
         }),
@@ -57,6 +58,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
       state(
         'hide',
         style({
+          display: 'none',
           opacity: 0,
           transform: 'translateY(100%)',
         }),
@@ -180,10 +182,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.roastService.getUsersRoasts();
-
-    if (this.isDesktopDevice()) {
-      this.setupScrollListener();
-    }
+    this.setupScrollListener();
   }
 
   setupScrollListener(): void {
@@ -269,9 +268,5 @@ export class DashboardComponent implements OnInit {
 
   isMobileDevice(): boolean {
     return window.innerWidth <= 480;
-  }
-
-  isDesktopDevice(): boolean {
-    return window.innerWidth >= 1024;
   }
 }
