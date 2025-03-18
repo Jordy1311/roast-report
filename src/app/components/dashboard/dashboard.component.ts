@@ -7,6 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { FormsModule } from '@angular/forms';
 import moment from 'moment';
 
@@ -44,6 +45,26 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
     RoastSummaryComponent,
   ],
   styleUrl: './dashboard.component.scss',
+  animations: [
+    trigger('showHide', [
+      state(
+        'show',
+        style({
+          opacity: 1,
+          transform: 'translateY(0)',
+        }),
+      ),
+      state(
+        'hide',
+        style({
+          opacity: 0,
+          transform: 'translateY(100%)',
+        }),
+      ),
+      transition('show => hide', [animate('200ms')]),
+      transition('hide => show', [animate('100ms')]),
+    ]),
+  ],
   template: `
     <app-header-navigation></app-header-navigation>
 
@@ -102,6 +123,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
         (click)="openAddRoastDialog($event)"
         mat-fab extended
         class="add-roast"
+        [@showHide]="isAddButtonHidden ? 'hide' : 'show'"
         aria-label="Add coffee"
       >
         <span>{{ isMobileDevice() ? 'Add' : 'Add a coffee' }}</span>
@@ -121,6 +143,9 @@ export class DashboardComponent implements OnInit {
 
   pageIndex = signal(0);
   pageSize = signal(10);
+
+  isAddButtonHidden = false;
+  lastScrollTop = 0;
 
   roastsWithSearchSort: Signal<Roast[]> = computed(() => {
     // computed signal dependencies
@@ -155,6 +180,18 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.roastService.getUsersRoasts();
+
+    if (this.isDesktopDevice()) {
+      this.setupScrollListener();
+    }
+  }
+
+  setupScrollListener(): void {
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      this.isAddButtonHidden = scrollTop > this.lastScrollTop;
+      this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
   }
 
   openAddRoastDialog(event: Event): void {
@@ -232,5 +269,9 @@ export class DashboardComponent implements OnInit {
 
   isMobileDevice(): boolean {
     return window.innerWidth <= 480;
+  }
+
+  isDesktopDevice(): boolean {
+    return window.innerWidth >= 1024;
   }
 }

@@ -208,7 +208,6 @@ export const COUNTRIES = [
 
 export const NZROASTERS = [
   "Allpress Espresso",
-  "Supreme Coffee",
   "Peoples Coffee",
   "Flight Coffee",
   "Havana Coffee Works",
