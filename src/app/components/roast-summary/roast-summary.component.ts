@@ -22,7 +22,7 @@ import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-ro
   ],
   styleUrl: './roast-summary.component.scss',
   template: `
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-header>
         <div>
           <mat-card-title>{{ roast.name }}</mat-card-title>

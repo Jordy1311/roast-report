@@ -58,15 +58,14 @@
 
     button.add-roast {
       align-self: center;
-      margin-top: 2rem;
-      position: sticky;
+      position: fixed;
       bottom: 5rem;
-      right: 1rem;
 
       /* applied to 1024px and smaller */
       @media (max-width: 1024px) {
         align-self: flex-end;
         bottom: 2rem;
+        right: 2rem;
       }
     }
   }

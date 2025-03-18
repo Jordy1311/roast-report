@@ -80,6 +80,12 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
         <mat-form-field appearance="outline">
           <mat-label>Sort</mat-label>
           <mat-select>
+            <mat-option value="Name" (click)="updateSortField('name')">
+              Name
+            </mat-option>
+            <mat-option value="Roaster" (click)="updateSortField('roaster')">
+              Roaster
+            </mat-option>
             <mat-option (click)="updateSortField('')"></mat-option>
             <mat-option value="Rating" (click)="updateSortField('rating')">
               Rating
@@ -89,12 +95,6 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
             </mat-option>
             <mat-option value="Recently updated" (click)="updateSortField('dateUpdated')">
               Recently updated
-            </mat-option>
-            <mat-option value="Name" (click)="updateSortField('name')">
-              Name
-            </mat-option>
-            <mat-option value="Roaster" (click)="updateSortField('roaster')">
-              Roaster
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -106,7 +106,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
         [pageSize]="pageSize()"
         [pageIndex]="pageIndex()"
         [hidePageSize]="isMobileDevice()"
-        [pageSizeOptions]="[5,10,25,50]"
+        [pageSizeOptions]="[6,10,24,50]"
         aria-label="Select page"
       >
       </mat-paginator>
@@ -140,16 +140,16 @@ export class DashboardComponent implements OnInit {
   protected roastService = inject(RoastService);
   private dialog = inject(MatDialog);
 
-  searchText: WritableSignal<string> = signal('');
-  sortField: WritableSignal<SortFields | ''> = signal('');
+  private searchText: WritableSignal<string> = signal('');
+  private sortField: WritableSignal<SortFields | ''> = signal('');
 
-  pageIndex = signal(0);
-  pageSize = signal(10);
+  protected pageIndex = signal(0);
+  protected pageSize = signal(10);
 
-  isAddButtonHidden = false;
-  lastScrollTop = 0;
+  protected isAddButtonHidden = false;
+  private lastScrollTop = 0;
 
-  roastsWithSearchSort: Signal<Roast[]> = computed(() => {
+  protected roastsWithSearchSort: Signal<Roast[]> = computed(() => {
     // computed signal dependencies
     const roasts = this.roastService.roastsSignal()
     const searchTextLowerCased = this.searchText().toLowerCase();
@@ -168,7 +168,7 @@ export class DashboardComponent implements OnInit {
     return (filteredRoasts || roasts);
   });
 
-  roastsSlicedByPaginator: Signal<Roast[]> = computed(() => {
+  protected roastsSlicedByPaginator: Signal<Roast[]> = computed(() => {
     // computed signal dependencies
     const roastsWithSearchSort = this.roastsWithSearchSort();
     const pageIndex = this.pageIndex();
@@ -185,7 +185,7 @@ export class DashboardComponent implements OnInit {
     this.setupScrollListener();
   }
 
-  setupScrollListener(): void {
+  private setupScrollListener(): void {
     window.addEventListener('scroll', () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       this.isAddButtonHidden = scrollTop > this.lastScrollTop;
@@ -193,22 +193,22 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  openAddRoastDialog(event: Event): void {
+  protected openAddRoastDialog(event: Event): void {
     event.preventDefault();
     this.dialog.open(AddAmendRoastFormComponent);
   }
 
-  updateSearchValue(newValue: string): void {
+  protected updateSearchValue(newValue: string): void {
     this.searchText.set(newValue);
     this.pageIndex.set(0);
   }
 
-  updateSortField(newSortField: SortFields | ''): void {
+  protected updateSortField(newSortField: SortFields | ''): void {
     this.sortField.set(newSortField);
     this.pageIndex.set(0);
   }
 
-  search(roasts: Roast[], searchTerm: string): Roast[] {
+  private search(roasts: Roast[], searchTerm: string): Roast[] {
     return roasts.filter((roast: Roast) => {
       return Object
         .values(roast) // one roast's values
@@ -228,8 +228,14 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  sort(roasts: Roast[], fieldToSort: SortFields): Roast[] {
+  private sort(roasts: Roast[], fieldToSort: SortFields): Roast[] {
     switch (fieldToSort) {
+      case 'name':
+      case 'roaster':
+        return roasts.toSorted((a: Roast, b: Roast) =>
+          a[fieldToSort].localeCompare(b[fieldToSort])
+        );
+
       case 'rating':
         return roasts.toSorted((a: Roast, b: Roast) => {
           if (a.rating && b.rating) return b.rating - a.rating;
@@ -250,23 +256,17 @@ export class DashboardComponent implements OnInit {
           return 1;
         });
 
-      case 'name':
-      case 'roaster':
-        return roasts.toSorted((a: Roast, b: Roast) =>
-          a[ fieldToSort ].localeCompare(b[ fieldToSort ])
-        );
-
       default:
         return roasts;
     }
   }
 
-  handleChangePageEvent(event: PageEvent) {
+  protected handleChangePageEvent(event: PageEvent) {
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
   }
 
-  isMobileDevice(): boolean {
+  protected isMobileDevice(): boolean {
     return window.innerWidth <= 480;
   }
 }
