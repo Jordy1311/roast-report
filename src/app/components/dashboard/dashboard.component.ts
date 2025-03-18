@@ -80,18 +80,18 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
         <mat-form-field appearance="outline">
           <mat-label>Sort</mat-label>
           <mat-select>
+            <mat-option (click)="updateSortField('')"></mat-option>
             <mat-option value="Name" (click)="updateSortField('name')">
               Name
             </mat-option>
             <mat-option value="Roaster" (click)="updateSortField('roaster')">
               Roaster
             </mat-option>
-            <mat-option (click)="updateSortField('')"></mat-option>
             <mat-option value="Rating" (click)="updateSortField('rating')">
               Rating
             </mat-option>
             <mat-option value="Newest to oldest" (click)="updateSortField('dateAdded')">
-              Newest to oldest
+              Oldest to newest
             </mat-option>
             <mat-option value="Recently updated" (click)="updateSortField('dateUpdated')">
               Recently updated
@@ -252,8 +252,8 @@ export class DashboardComponent implements OnInit {
 
       case 'dateUpdated':
         return roasts.toSorted((a: Roast, b: Roast) => {
-          if (moment(a.updatedAt).isBefore(moment(b.updatedAt))) return -1;
-          return 1;
+          if (moment(a.updatedAt).isBefore(moment(b.updatedAt))) return 1;
+          return -1;
         });
 
       default:
