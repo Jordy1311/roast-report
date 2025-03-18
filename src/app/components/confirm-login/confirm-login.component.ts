@@ -1,5 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -11,12 +12,14 @@ import { AuthService } from '../../services/auth.service';
     <p>logging you in...</p>
   `,
 })
-export class ConfirmLoginComponent implements OnInit {
+export class ConfirmLoginComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(AuthService);
 
-  confirmationCode: string | null = null;
+  private confirmationCode: string | null = null;
+
+  private authServiceConfirmSubscription?: Subscription;
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn) {
@@ -31,7 +34,7 @@ export class ConfirmLoginComponent implements OnInit {
       return;
     }
 
-    this.authService
+    this.authServiceConfirmSubscription = this.authService
       .confirmLogin(this.confirmationCode)
       .subscribe({
         next: ({ accessToken }) => {
@@ -43,5 +46,9 @@ export class ConfirmLoginComponent implements OnInit {
           return;
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    this.authServiceConfirmSubscription?.unsubscribe();
   }
 }

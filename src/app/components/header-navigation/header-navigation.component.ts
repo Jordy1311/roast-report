@@ -24,6 +24,7 @@ import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confi
           height="32"
           width="32"
           alt="Drip coffee icon"
+          loading="lazy"
           />
 
         <span class="spacer"></span>

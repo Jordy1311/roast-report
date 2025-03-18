@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   FormControl,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,6 +33,7 @@ import { AuthService } from '../../services/auth.service';
           height="72"
           width="72"
           alt="Drip coffee icon"
+          loading="lazy"
           />
       </div>
 
@@ -84,17 +86,19 @@ import { AuthService } from '../../services/auth.service';
     </main>
   `,
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  disableButton = false;
-  displaySendingEmailButtonText = false
-  displayCheckYourEmailHint = false;
-  displaySomethingWentWrongHint = false;
-  displayServerWakingUpHint = false;
+  protected disableButton = false;
+  protected displaySendingEmailButtonText = false
+  protected displayCheckYourEmailHint = false;
+  protected displaySomethingWentWrongHint = false;
+  protected displayServerWakingUpHint = false;
 
-  emailControl = new FormControl<string>('', {
+  private authServiceLoginSubscription?: Subscription;
+
+  protected emailControl = new FormControl<string>('', {
     validators: [Validators.required, Validators.email],
     nonNullable: true,
   });
@@ -105,7 +109,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  requestLogin(): void {
+  protected requestLogin(): void {
     if (!this.emailControl.valid || !this.emailControl.value) {
       return;
     }
@@ -120,7 +124,7 @@ export class LoginComponent implements OnInit {
     this.disableButton = true;
     this.displaySendingEmailButtonText = true;
 
-    this.authService
+    this.authServiceLoginSubscription = this.authService
       .requestLogin(this.emailControl.value)
       .subscribe({
         next: () => {
@@ -140,5 +144,9 @@ export class LoginComponent implements OnInit {
           return;
         },
       });
+  }
+
+  ngOnDestroy(): void {
+    this.authServiceLoginSubscription?.unsubscribe();
   }
 }

@@ -1,9 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { isLoggedInGuard } from './guards/is-logged-in.guard';
-
 import { LoginComponent } from './components/login/login.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   {
@@ -29,7 +27,8 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    component: PageNotFoundComponent,
+    loadComponent: () => import('./components/page-not-found/page-not-found.component')
+      .then(m => m.PageNotFoundComponent),
     title: 'Roast Report | Not Found',
   },
 ];

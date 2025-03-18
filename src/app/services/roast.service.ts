@@ -10,9 +10,9 @@ import { API_URL } from '../variables';
 export class RoastService {
   private http = inject(HttpClient);
 
-  roastsSignal = signal<Roast[]>([]);
+  public roastsSignal = signal<Roast[]>([]);
 
-  createRoast(newRoast: NewRoast): Promise<void> {
+  public createRoast(newRoast: NewRoast): Promise<void> {
     return new Promise((resolve, reject) => {
       this.http.post<Roast>(`${API_URL}/v1/roasts`, newRoast).subscribe({
         next: (newRoastObject) => {
@@ -30,13 +30,13 @@ export class RoastService {
     });
   }
 
-  getUsersRoasts(): void {
+  public getUsersRoasts(): void {
     this.http
       .get<Roast[]>(`${API_URL}/v1/roasts`)
       .subscribe((roasts) => this.roastsSignal.set(roasts));
   }
 
-  updateRoast(roastId: string, updates: Partial<NewRoast>): Promise<void> {
+  public updateRoast(roastId: string, updates: Partial<NewRoast>): Promise<void> {
     return new Promise((resolve, reject) => {
       this.http
         .patch<Roast>(`${API_URL}/v1/roasts/${roastId}`, updates)
@@ -55,7 +55,7 @@ export class RoastService {
     });
   }
 
-  deleteRoast(id: string): void {
+  public deleteRoast(id: string): void {
     this.http
       .delete(`${API_URL}/v1/roasts/${id}`)
       .subscribe(() =>

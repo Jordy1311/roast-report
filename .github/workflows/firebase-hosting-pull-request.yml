@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '20.17.0'
           cache: 'yarn'
-      - run: (yarn && npx ng build)
+      - run: (yarn && npx ng build --configuration production)
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

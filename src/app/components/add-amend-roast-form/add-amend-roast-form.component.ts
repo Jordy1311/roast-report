@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { map, Observable, startWith } from 'rxjs';
+import { map, Observable, startWith, Subscription } from 'rxjs';
 import {
   FormControl,
   FormGroup,
@@ -266,16 +266,19 @@ export class AddAmendRoastFormComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<AddAmendRoastFormComponent>);
   protected roastToUpdate: Roast = inject(MAT_DIALOG_DATA);
 
-  invalidRoast?: boolean;
-  invalidRoaster?: boolean;
+  private invalidRoast?: boolean;
+  private invalidRoaster?: boolean;
 
-  nzRoasters = NZROASTERS;
-  filteredNzRoasts!: Observable<string[]>; // initialised in ngOnInit
+  readonly nzRoasters = NZROASTERS;
+  protected filteredNzRoasts!: Observable<string[]>; // initialised in ngOnInit
 
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  announcer = inject(LiveAnnouncer);
+  private announcer = inject(LiveAnnouncer);
 
-  roastFormData = new FormGroup({
+  private roastChangeSubscription!: Subscription;
+  private roasterChangeSubscription!: Subscription;
+
+  protected roastFormData = new FormGroup({
     roast: new FormControl<string>('', {
       validators: [Validators.required],
       nonNullable: true,
@@ -318,19 +321,24 @@ export class AddAmendRoastFormComponent implements OnInit {
     );
 
     // clears errors on form change
-    this.roast?.valueChanges.subscribe(() => {
-      this.invalidRoast = undefined;
-    });
-    this.roaster?.valueChanges.subscribe(() => {
-      this.invalidRoaster = undefined;
-    });
+    this.roastChangeSubscription = this.roast!.valueChanges.subscribe(
+      () => this.invalidRoast = undefined
+    );
+    this.roasterChangeSubscription = this.roaster!.valueChanges.subscribe(
+      () => this.invalidRoaster = undefined
+    );
   }
 
-  public get isAnUpdate(): boolean {
+  ngOnDestroy(): void {
+    this.roastChangeSubscription.unsubscribe();
+    this.roasterChangeSubscription.unsubscribe();
+  }
+
+  protected get isAnUpdate(): boolean {
     return !!this.roastToUpdate;
   }
 
-  public get roast() {
+  protected get roast() {
     return this.roastFormData.get('roast');
   }
 
@@ -338,27 +346,27 @@ export class AddAmendRoastFormComponent implements OnInit {
     return this.roastFormData.get('roaster');
   }
 
-  public get countriesOfOrigin() {
+  protected get countriesOfOrigin() {
     return this.roastFormData.get('countriesOfOrigin');
   }
 
-  public get tastingNotes() {
+  protected get tastingNotes() {
     return this.roastFormData.get('tastingNotes');
   }
 
-  public get rating() {
+  private get rating() {
     return this.roastFormData.get('rating');
   }
 
-  closeDialog(): void {
+  protected closeDialog(): void {
     this.dialogRef.close();
   }
 
-  updateRating(newRatingValue: number): void {
+  protected updateRating(newRatingValue: number): void {
     this.rating?.setValue(newRatingValue);
   }
 
-  createRoast(): void {
+  protected createRoast(): void {
     if (this.roast?.errors) {
       this.invalidRoast = true;
       return;
@@ -396,7 +404,7 @@ export class AddAmendRoastFormComponent implements OnInit {
     }
   }
 
-  updateRoast(): void {
+  protected updateRoast(): void {
     if (this.roast?.errors) {
       this.invalidRoast = true;
       return;
@@ -434,7 +442,7 @@ export class AddAmendRoastFormComponent implements OnInit {
     }
   }
 
-  _filterAutoComplete(value: string): string[] {
+  private _filterAutoComplete(value: string): string[] {
     const filterValue = value.toLocaleLowerCase();
 
     const filtered = this.nzRoasters.filter((roaster) => {
@@ -445,7 +453,7 @@ export class AddAmendRoastFormComponent implements OnInit {
   }
 
   // METHODS RELATING TO: countryOfOrigin
-  addCountry(event: MatChipInputEvent): void {
+  protected addCountry(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
     if (value) {
@@ -456,7 +464,7 @@ export class AddAmendRoastFormComponent implements OnInit {
     // Clear the input value
     event.chipInput!.clear();
   }
-  removeCountry(country: string): void {
+  protected removeCountry(country: string): void {
     const index = this.countriesOfOrigin!.value.indexOf(country);
 
     if (index >= 0) {
@@ -467,7 +475,7 @@ export class AddAmendRoastFormComponent implements OnInit {
       this.announcer.announce(`Removed ${country}`);
     }
   }
-  editCountry(country: string, event: MatChipEditedEvent) {
+  protected editCountry(country: string, event: MatChipEditedEvent) {
     const value = event.value.trim();
 
     // Remove country if it no longer has a name
@@ -486,7 +494,7 @@ export class AddAmendRoastFormComponent implements OnInit {
   }
 
   // METHODS RELATING TO: tastingNotes
-  addTastingNote(event: MatChipInputEvent): void {
+  protected addTastingNote(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
     if (value) {
@@ -497,7 +505,7 @@ export class AddAmendRoastFormComponent implements OnInit {
     // Clear the input value
     event.chipInput!.clear();
   }
-  removeTastingNote(tastingNote: string): void {
+  protected removeTastingNote(tastingNote: string): void {
     const index = this.tastingNotes!.value.indexOf(tastingNote);
 
     if (index >= 0) {
@@ -508,7 +516,7 @@ export class AddAmendRoastFormComponent implements OnInit {
       this.announcer.announce(`Removed ${tastingNote}`);
     }
   }
-  editTastingNote(tastingNote: string, event: MatChipEditedEvent) {
+  protected editTastingNote(tastingNote: string, event: MatChipEditedEvent) {
     const value = event.value.trim();
 
     // Remove tastingNote if it no longer has a name
