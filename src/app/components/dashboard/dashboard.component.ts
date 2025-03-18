@@ -73,7 +73,8 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
     <main>
       <div class="search-sort-group">
         <app-roast-search
-          (newValue)="updateSearchValue($event)"
+          (newValue)="updateSearchField($event)"
+          [value]="searchField"
         ></app-roast-search>
 
         <!-- sort dropdown -->
@@ -89,16 +90,20 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
         </mat-form-field>
       </div>
 
-      <mat-paginator
-        (page)="handleChangePageEvent($event)"
-        [length]="roastsWithSearchSort().length"
-        [pageSize]="pageSize()"
-        [pageIndex]="pageIndex()"
-        [hidePageSize]="isMobileDevice()"
-        [pageSizeOptions]="[6,10,24,50]"
-        aria-label="Select page"
-      >
-      </mat-paginator>
+      <div class="clear-and-paginator">
+        <button mat-button (click)="clearFilters()">Clear filters</button>
+
+        <mat-paginator
+          (page)="handleChangePageEvent($event)"
+          [length]="roastsWithSearchSort().length"
+          [pageSize]="pageSize()"
+          [pageIndex]="pageIndex()"
+          [hidePageSize]="isMobileDevice()"
+          [pageSizeOptions]="[6,10,24,50]"
+          aria-label="Select page"
+        >
+        </mat-paginator>
+      </div>
 
       <div class="roasts-container">
         @for (roast of roastsSlicedByPaginator(); track roast._id) {
@@ -139,7 +144,9 @@ export class DashboardComponent implements OnInit {
   ];
   protected sortField: SortFields | '' = '';
   private sortFieldSignal: WritableSignal<SortFields | ''> = signal('');
-  private searchText: WritableSignal<string> = signal('');
+
+  protected searchField: string = '';
+  private searchTextSignal: WritableSignal<string> = signal('');
 
   protected pageIndex = signal(0);
   protected pageSize = signal(10);
@@ -150,7 +157,7 @@ export class DashboardComponent implements OnInit {
   protected roastsWithSearchSort: Signal<Roast[]> = computed(() => {
     // computed signal dependencies
     const roasts = this.roastService.roastsSignal()
-    const searchTextLowerCased = this.searchText().toLowerCase();
+    const searchTextLowerCased = this.searchTextSignal().toLowerCase();
     const sortFieldSignalValue = this.sortFieldSignal();
 
     let filteredRoasts;
@@ -188,6 +195,12 @@ export class DashboardComponent implements OnInit {
       this.updateSortField(false);
     }
 
+    const storedSearchField = localStorage.getItem('searchField');
+    if (storedSearchField) {
+      // false because we have just retreived from localStorage
+      this.updateSearchField(storedSearchField, false);
+    }
+
     this.setupScrollListener();
   }
 
@@ -204,9 +217,18 @@ export class DashboardComponent implements OnInit {
     this.dialog.open(AddAmendRoastFormComponent);
   }
 
-  protected updateSearchValue(newValue: string): void {
-    this.searchText.set(newValue);
+  protected updateSearchField(newValue: string, saveToLocalStorage = true): void {
+    this.searchTextSignal.set(newValue);
+    this.searchField = newValue;
     this.pageIndex.set(0);
+
+    if (!saveToLocalStorage) return;
+
+    if (newValue !== '') {
+      localStorage.setItem('searchField', newValue);
+    } else {
+      localStorage.removeItem('searchField');
+    }
   }
 
   protected updateSortField(saveToLocalStorage = true): void {
@@ -273,6 +295,15 @@ export class DashboardComponent implements OnInit {
       default:
         return roasts;
     }
+  }
+
+  protected clearFilters(): void  {
+    this.sortFieldSignal.set('');
+    this.sortField = '';
+    this.searchTextSignal.set('');
+    this.searchField = '';
+    localStorage.removeItem('sortField');
+    localStorage.removeItem('searchField');
   }
 
   protected handleChangePageEvent(event: PageEvent) {

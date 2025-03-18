@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -22,20 +22,19 @@ import { MatInputModule } from '@angular/material/input';
       <mat-icon matPrefix>search</mat-icon>
 
       <input
-        #searchInput
         matInput
         type="text"
-        [(ngModel)]="currentValue"
-        (ngModelChange)="emitValue()"
-        (keydown.escape)="clearValue()"
+        [(ngModel)]="value"
+        (ngModelChange)="newValue.emit(value)"
+        (keydown.escape)="newValue.emit('')"
       />
 
-      @if (currentValue && currentValue === searchInput.value) {
+      @if (value) {
         <button
           matSuffix
           mat-icon-button
           aria-label="Clear"
-          (click)="clearValue()"
+          (click)="newValue.emit('')"
         >
           <mat-icon>close</mat-icon>
         </button>
@@ -43,33 +42,7 @@ import { MatInputModule } from '@angular/material/input';
     </mat-form-field>
   `,
 })
-export class RoastSearchComponent implements OnInit {
+export class RoastSearchComponent {
+  @Input() value: string = '';
   @Output() newValue = new EventEmitter<string>();
-
-  protected currentValue: string | '' = '';
-
-  ngOnInit(): void {
-    const storedSearchField = localStorage.getItem('searchField');
-    if (storedSearchField) {
-      this.currentValue = storedSearchField;
-      // false because we have just retreived from localStorage
-      this.emitValue(false);
-    }
-  }
-
-  protected emitValue(saveToLocalStorage = true): void {
-    this.newValue.emit(this.currentValue);
-
-    if (saveToLocalStorage) {
-      localStorage.setItem('searchField', this.currentValue);
-    }
-  }
-
-  protected clearValue(): void {
-    this.currentValue = '';
-
-    localStorage.removeItem('searchField');
-
-    this.newValue.emit(this.currentValue);
-  }
 }
