@@ -27,7 +27,7 @@ import { RoastService } from '../../services/roast.service';
 import { RoastSearchComponent } from '../roast-search/roast-search.component';
 import { RoastSummaryComponent } from '../roast-summary/roast-summary.component';
 
-type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
+type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUpdated';
 
 @Component({
   selector: 'app-dashboard',
@@ -90,11 +90,11 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
             <mat-option value="Rating" (click)="updateSortField('rating')">
               Rating
             </mat-option>
-            <mat-option value="Newest to oldest" (click)="updateSortField('dateAdded')">
-              Oldest to newest
-            </mat-option>
-            <mat-option value="Recently updated" (click)="updateSortField('dateUpdated')">
+            <mat-option value="Recently updated" (click)="updateSortField('recentlyUpdated')">
               Recently updated
+            </mat-option>
+            <mat-option value="Newest to oldest" (click)="updateSortField('oldestToNewest')">
+              Oldest to newest
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -244,16 +244,16 @@ export class DashboardComponent implements OnInit {
           return 1;
         });
 
-      case 'dateAdded':
-        return roasts.toSorted((a: Roast, b: Roast) => {
-          if (moment(a.createdAt).isBefore(moment(b.createdAt))) return -1;
-          return 1;
-        });
-
-      case 'dateUpdated':
+      case 'recentlyUpdated':
         return roasts.toSorted((a: Roast, b: Roast) => {
           if (moment(a.updatedAt).isBefore(moment(b.updatedAt))) return 1;
           return -1;
+        });
+
+      case 'oldestToNewest':
+        return roasts.toSorted((a: Roast, b: Roast) => {
+          if (moment(a.createdAt).isBefore(moment(b.createdAt))) return -1;
+          return 1;
         });
 
       default:
