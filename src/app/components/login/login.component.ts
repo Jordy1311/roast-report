@@ -65,7 +65,7 @@ import { AuthService } from '../../services/auth.service';
             <mat-hint>An error occurred, please refresh and try again.</mat-hint>
           }
           @else if (displayServerWakingUpHint) {
-            <mat-hint>Our server sleeps sometimes, please wait...</mat-hint>
+            <mat-hint>Waking up server, please wait...</mat-hint>
           }
         </mat-form-field>
 
