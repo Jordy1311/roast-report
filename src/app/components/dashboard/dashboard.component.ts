@@ -63,8 +63,8 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'dateAdded' | 'dateUpdated';
           transform: 'translateY(100%)',
         }),
       ),
-      transition('show => hide', [animate('200ms')]),
-      transition('hide => show', [animate('100ms')]),
+      transition('show => hide', [animate('200ms ease-in')]),
+      transition('hide => show', [animate('100ms ease-out')]),
     ]),
   ],
   template: `
