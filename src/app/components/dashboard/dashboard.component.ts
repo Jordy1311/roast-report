@@ -79,23 +79,12 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
         <!-- sort dropdown -->
         <mat-form-field appearance="outline">
           <mat-label>Sort</mat-label>
-          <mat-select>
-            <mat-option (click)="updateSortField('')"></mat-option>
-            <mat-option value="Name" (click)="updateSortField('name')">
-              Name
-            </mat-option>
-            <mat-option value="Roaster" (click)="updateSortField('roaster')">
-              Roaster
-            </mat-option>
-            <mat-option value="Rating" (click)="updateSortField('rating')">
-              Rating
-            </mat-option>
-            <mat-option value="Recently updated" (click)="updateSortField('recentlyUpdated')">
-              Recently updated
-            </mat-option>
-            <mat-option value="Newest to oldest" (click)="updateSortField('oldestToNewest')">
-              Oldest to newest
-            </mat-option>
+          <mat-select [(ngModel)]="sortField" (selectionChange)="updateSortField()">
+            @for (sortField of sortFields; track sortField) {
+              <mat-option [value]="sortField.value">
+                {{ sortField.viewValue }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
       </div>
@@ -140,8 +129,17 @@ export class DashboardComponent implements OnInit {
   protected roastService = inject(RoastService);
   private dialog = inject(MatDialog);
 
+  readonly sortFields: { value: SortFields | '', viewValue: string }[] = [
+    { value: '', viewValue: '' },
+    { value: 'name', viewValue: 'Name' },
+    { value: 'roaster', viewValue: 'Roaster' },
+    { value: 'rating', viewValue: 'Rating' },
+    { value: 'oldestToNewest', viewValue: 'Oldest to newest' },
+    { value: 'recentlyUpdated', viewValue: 'Recently updated' }
+  ];
+  protected sortField: SortFields | '' = '';
+  private sortFieldSignal: WritableSignal<SortFields | ''> = signal('');
   private searchText: WritableSignal<string> = signal('');
-  private sortField: WritableSignal<SortFields | ''> = signal('');
 
   protected pageIndex = signal(0);
   protected pageSize = signal(10);
@@ -153,7 +151,7 @@ export class DashboardComponent implements OnInit {
     // computed signal dependencies
     const roasts = this.roastService.roastsSignal()
     const searchTextLowerCased = this.searchText().toLowerCase();
-    const sortField = this.sortField();
+    const sortFieldSignalValue = this.sortFieldSignal();
 
     let filteredRoasts;
 
@@ -161,8 +159,8 @@ export class DashboardComponent implements OnInit {
       filteredRoasts = this.search(roasts, searchTextLowerCased);
     }
 
-    if (sortField) {
-      filteredRoasts = this.sort(filteredRoasts || roasts, sortField);
+    if (sortFieldSignalValue) {
+      filteredRoasts = this.sort(filteredRoasts || roasts, sortFieldSignalValue);
     }
 
     return (filteredRoasts || roasts);
@@ -182,6 +180,13 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.roastService.getUsersRoasts();
+
+    const storedSortField = localStorage.getItem('sortField') as SortFields | '';
+    if (storedSortField) {
+      this.sortField = storedSortField;
+      this.updateSortField(true);
+    }
+
     this.setupScrollListener();
   }
 
@@ -203,9 +208,17 @@ export class DashboardComponent implements OnInit {
     this.pageIndex.set(0);
   }
 
-  protected updateSortField(newSortField: SortFields | ''): void {
-    this.sortField.set(newSortField);
+  protected updateSortField(skipLocalStorageSave = false): void {
+    this.sortFieldSignal.set(this.sortField);
     this.pageIndex.set(0);
+
+    if (skipLocalStorageSave) return;
+
+    if (this.sortField !== '') {
+      localStorage.setItem('sortField', this.sortField);
+    } else {
+      localStorage.removeItem('sortField');
+    }
   }
 
   private search(roasts: Roast[], searchTerm: string): Roast[] {
