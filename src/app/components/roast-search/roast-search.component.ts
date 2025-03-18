@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-roast-search',
   imports: [
+    FormsModule,
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
@@ -23,8 +25,9 @@ import { MatInputModule } from '@angular/material/input';
         #searchInput
         matInput
         type="text"
-        (change)="emitValue(searchInput.value)"
-        (keydown.escape)="clearValue(searchInput)"
+        [(ngModel)]="currentValue"
+        (ngModelChange)="emitValue()"
+        (keydown.escape)="clearValue()"
       />
 
       @if (currentValue && currentValue === searchInput.value) {
@@ -32,40 +35,41 @@ import { MatInputModule } from '@angular/material/input';
           matSuffix
           mat-icon-button
           aria-label="Clear"
-          (click)="clearValue(searchInput)"
+          (click)="clearValue()"
         >
           <mat-icon>close</mat-icon>
-        </button>
-      }
-
-      @if (searchInput.value && currentValue !== searchInput.value) {
-        <button
-          matSuffix
-          mat-icon-button
-          aria-label="Search"
-          (click)="emitValue(searchInput.value)"
-        >
-          <mat-icon matSuffix>keyboard_return</mat-icon>
         </button>
       }
     </mat-form-field>
   `,
 })
-export class RoastSearchComponent {
+export class RoastSearchComponent implements OnInit {
   @Output() newValue = new EventEmitter<string>();
 
-  currentValue: string | undefined = undefined;
+  protected currentValue: string | '' = '';
 
-  emitValue(newValue: string): void {
-    this.currentValue = newValue;
-
-    this.newValue.emit(newValue);
+  ngOnInit(): void {
+    const storedSearchField = localStorage.getItem('searchField');
+    if (storedSearchField) {
+      this.currentValue = storedSearchField;
+      // false because we have just retreived from localStorage
+      this.emitValue(false);
+    }
   }
 
-  clearValue(searchInput: HTMLInputElement): void {
+  protected emitValue(saveToLocalStorage = true): void {
+    this.newValue.emit(this.currentValue);
+
+    if (saveToLocalStorage) {
+      localStorage.setItem('searchField', this.currentValue);
+    }
+  }
+
+  protected clearValue(): void {
     this.currentValue = '';
 
-    searchInput.value = '';
-    this.newValue.emit('');
+    localStorage.removeItem('searchField');
+
+    this.newValue.emit(this.currentValue);
   }
 }

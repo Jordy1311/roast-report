@@ -184,7 +184,8 @@ export class DashboardComponent implements OnInit {
     const storedSortField = localStorage.getItem('sortField') as SortFields | '';
     if (storedSortField) {
       this.sortField = storedSortField;
-      this.updateSortField(true);
+      // false because we have just retreived from localStorage
+      this.updateSortField(false);
     }
 
     this.setupScrollListener();
@@ -208,11 +209,11 @@ export class DashboardComponent implements OnInit {
     this.pageIndex.set(0);
   }
 
-  protected updateSortField(skipLocalStorageSave = false): void {
+  protected updateSortField(saveToLocalStorage = true): void {
     this.sortFieldSignal.set(this.sortField);
     this.pageIndex.set(0);
 
-    if (skipLocalStorageSave) return;
+    if (!saveToLocalStorage) return;
 
     if (this.sortField !== '') {
       localStorage.setItem('sortField', this.sortField);
