@@ -70,9 +70,9 @@ import { NZROASTERS } from '../../data';
 
     <mat-dialog-content>
       <form [formGroup]="roastFormData">
-        <mat-stepper orientation="vertical" linear="true" #stepper>
+        <mat-stepper orientation="horizontal" linear="true" #stepper>
           <mat-step [stepControl]="roastFormData">
-            <ng-template matStepLabel>Enter the basics</ng-template>
+            <ng-template matStepLabel>Basics</ng-template>
 
             <mat-form-field class="is-fullwidth first-in-step" appearance="outline">
               <mat-label>Roast</mat-label>
@@ -115,7 +115,7 @@ import { NZROASTERS } from '../../data';
           </mat-step>
 
           <mat-step [stepControl]="roastFormData">
-            <ng-template matStepLabel>Enter the nitty gritty</ng-template>
+            <ng-template matStepLabel>More details</ng-template>
 
             <div class="side-by-side first-in-step">
               <mat-form-field appearance="outline">
