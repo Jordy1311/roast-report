@@ -124,7 +124,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
         (click)="openAddRoastDialog($event)"
         mat-fab extended
         class="add-roast"
-        [@showHide]="isAddButtonHidden ? 'hide' : 'show'"
+        [@showHide]="isAddButtonHidden || roastService.requestingRoasts() ? 'hide' : 'show'"
         aria-label="Add coffee"
       >
         <span>{{ isMobileDevice() ? 'Add' : 'Add a coffee' }}</span>
@@ -141,7 +141,7 @@ export class DashboardComponent implements OnInit {
   private snackBar = inject(MatSnackBar)
 
   readonly SnackBarOptions: MatSnackBarConfig = {
-    verticalPosition: 'top',
+    verticalPosition: 'bottom',
     horizontalPosition: 'center',
   }
 
@@ -209,7 +209,7 @@ export class DashboardComponent implements OnInit {
     // if we have been waiting for the request for some time
     // show the user some feedback
     setTimeout(() => {
-      if (this. roastService.requestingRoasts()) {
+      if (this.roastService.requestingRoasts()) {
         this.snackBar.open(
           'Waking up server, please wait...',
           'Sweet!',

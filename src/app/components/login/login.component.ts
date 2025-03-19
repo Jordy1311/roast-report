@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
 
   readonly SnackBarOptions: MatSnackBarConfig = {
-    verticalPosition: 'top',
+    verticalPosition: 'bottom',
     horizontalPosition: 'center',
   }
 
