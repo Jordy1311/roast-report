@@ -146,7 +146,7 @@ export class DashboardComponent implements OnInit {
   }
 
   readonly sortFields: { value: SortFields | '', viewValue: string }[] = [
-    { value: '', viewValue: '' },
+    { value: '', viewValue: '-' },
     { value: 'name', viewValue: 'Name' },
     { value: 'roaster', viewValue: 'Roaster' },
     { value: 'rating', viewValue: 'Rating' },
