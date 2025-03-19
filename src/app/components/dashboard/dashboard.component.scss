@@ -45,6 +45,10 @@
       // top/bottom left/right
       gap: 1rem 2.5vw; // responsive gap
 
+      mat-spinner {
+        margin-top: 2rem;
+      }
+
       /* applied to 1024px and smaller */
       @media (max-width: 1024px) {
         flex-direction: column;
