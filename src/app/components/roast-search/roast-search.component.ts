@@ -18,7 +18,7 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './roast-search.component.scss',
   template: `
     <mat-form-field appearance="outline">
-      <mat-label>Search roasts</mat-label>
+      <mat-label>Search</mat-label>
       <mat-icon matPrefix>search</mat-icon>
 
       <input
