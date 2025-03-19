@@ -11,6 +11,7 @@ export class RoastService {
   private http = inject(HttpClient);
 
   public roastsSignal = signal<Roast[]>([]);
+  public requestingRoasts = signal<boolean>(false);
 
   public createRoast(newRoast: NewRoast): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -31,9 +32,14 @@ export class RoastService {
   }
 
   public getUsersRoasts(): void {
+    this.requestingRoasts.set(true);
+
     this.http
       .get<Roast[]>(`${API_URL}/v1/roasts`)
-      .subscribe((roasts) => this.roastsSignal.set(roasts));
+      .subscribe((roasts) => {
+        this.requestingRoasts.set(false);
+        return this.roastsSignal.set(roasts);
+      });
   }
 
   public updateRoast(roastId: string, updates: Partial<NewRoast>): Promise<void> {

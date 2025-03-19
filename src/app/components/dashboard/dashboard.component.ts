@@ -19,6 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
 import { HeaderNavigationComponent } from '../header-navigation/header-navigation.component';
@@ -113,7 +114,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
         @for (roast of roastsSlicedByPaginator(); track roast._id) {
           <app-roast-summary [roast]="roast"></app-roast-summary>
         }
-        @if (!roastService.roastsSignal().length) {
+        @if (roastService.requestingRoasts()) {
           <mat-spinner [diameter]="32"></mat-spinner>
         }
 
@@ -137,6 +138,12 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
 export class DashboardComponent implements OnInit {
   protected roastService = inject(RoastService);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar)
+
+  readonly SnackBarOptions: MatSnackBarConfig = {
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+  }
 
   readonly sortFields: { value: SortFields | '', viewValue: string }[] = [
     { value: '', viewValue: '' },
@@ -198,6 +205,18 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.roastService.getUsersRoasts();
+
+    // if we have been waiting for the request for some time
+    // show the user some feedback
+    setTimeout(() => {
+      if (this. roastService.requestingRoasts()) {
+        this.snackBar.open(
+          'Waking up server, please wait...',
+          'Sweet!',
+          this.SnackBarOptions
+        );
+      }
+    }, 3000);
 
     const storedSortField = localStorage.getItem('sortField') as SortFields | '';
     if (storedSortField) {
