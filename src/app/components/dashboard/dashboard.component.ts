@@ -91,7 +91,11 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
       </div>
 
       <div class="clear-and-paginator">
-        <button mat-button (click)="clearFilters()">Clear filters</button>
+        <button
+          mat-button
+          [disabled]="disableClearFilters()"
+          (click)="clearFilters()"
+        >Clear filters</button>
 
         <mat-paginator
           (page)="handleChangePageEvent($event)"
@@ -183,6 +187,13 @@ export class DashboardComponent implements OnInit {
     const endIndex = startIndex + pageSize;
 
     return roastsWithSearchSort.slice(startIndex, endIndex);
+  });
+
+  protected disableClearFilters: Signal<boolean> = computed(() => {
+    // computed signal dependencies
+    const sortField = this.sortFieldSignal();
+    const searchField = this.searchTextSignal();
+    return !sortField && !searchField;
   });
 
   ngOnInit(): void {
