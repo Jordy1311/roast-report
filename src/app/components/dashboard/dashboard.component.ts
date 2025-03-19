@@ -103,7 +103,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
           [length]="roastsWithSearchSort().length"
           [pageSize]="pageSize()"
           [pageIndex]="pageIndex()"
-          [hidePageSize]="isMobileDevice()"
+          [hidePageSize]="isTabletDevice()"
           [pageSizeOptions]="[6,10,24,50]"
           aria-label="Select page"
         >
@@ -341,6 +341,9 @@ export class DashboardComponent implements OnInit {
   }
 
   protected isMobileDevice(): boolean {
-    return window.innerWidth <= 480;
+    return window.innerWidth <= 500;
+  }
+  protected isTabletDevice(): boolean {
+    return window.innerWidth <= 700;
   }
 }
