@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -58,15 +59,6 @@ import { AuthService } from '../../services/auth.service';
           @else if (emailControl.hasError('required')) {
             <mat-error>Please enter your email.</mat-error>
           }
-          @else if (displayCheckYourEmailHint) {
-            <mat-hint>Please check your emails and follow the link.</mat-hint>
-          }
-          @else if (displaySomethingWentWrongHint) {
-            <mat-hint>An error occurred, please refresh and try again.</mat-hint>
-          }
-          @else if (displayServerWakingUpHint) {
-            <mat-hint>Waking up server, please wait...</mat-hint>
-          }
         </mat-form-field>
 
         <button
@@ -89,12 +81,16 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
+
+  readonly SnackBarOptions: MatSnackBarConfig = {
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+  }
 
   protected disableButton = false;
   protected displaySendingEmailButtonText = false
-  protected displayCheckYourEmailHint = false;
-  protected displaySomethingWentWrongHint = false;
-  protected displayServerWakingUpHint = false;
+  protected isServerSleeping = false;
 
   private authServiceLoginSubscription?: Subscription;
 
@@ -109,14 +105,27 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngOnDestroy(): void {
+    this.authServiceLoginSubscription?.unsubscribe();
+  }
+
   protected requestLogin(): void {
     if (!this.emailControl.valid || !this.emailControl.value) {
       return;
     }
 
+    // assume so until we hear otherwise
+    this.isServerSleeping = true;
+
+    // if we dont hear back in time provide feedback to user
+    // we're waiting for the server to wake up
     setTimeout(() => {
-      if (!this.displayCheckYourEmailHint) {
-        this.displayServerWakingUpHint = true;
+      if (this.isServerSleeping) {
+        this.snackBar.open(
+          'Waking up server, please wait...',
+          'Sweet!',
+          this.SnackBarOptions
+        );
       }
     }, 3000);
 
@@ -128,25 +137,27 @@ export class LoginComponent implements OnInit, OnDestroy {
       .requestLogin(this.emailControl.value)
       .subscribe({
         next: () => {
-          if (this.displayServerWakingUpHint) {
-            this.displayServerWakingUpHint = false;
-          }
           this.displaySendingEmailButtonText = false;
-          this.displayCheckYourEmailHint = true;
+          this.isServerSleeping = false;
+
+          this.snackBar.open(
+            'We\'ve emailed your login link!',
+            'Sweet!',
+            this.SnackBarOptions
+          );
           return;
         },
         error: () => {
-          if (this.displayServerWakingUpHint) {
-            this.displayServerWakingUpHint = false;
-          }
           this.displaySendingEmailButtonText = false;
-          this.displaySomethingWentWrongHint = true;
+          this.isServerSleeping = false;
+
+          this.snackBar.open(
+            'An error occurred, please refresh and try again.',
+            undefined,
+            this.SnackBarOptions
+          );
           return;
         },
       });
-  }
-
-  ngOnDestroy(): void {
-    this.authServiceLoginSubscription?.unsubscribe();
   }
 }
