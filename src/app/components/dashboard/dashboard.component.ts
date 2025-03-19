@@ -117,7 +117,6 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
         @if (roastService.requestingRoasts()) {
           <mat-spinner [diameter]="32"></mat-spinner>
         }
-
       </div>
 
       <button

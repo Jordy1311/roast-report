@@ -10,6 +10,7 @@
   main {
     align-self: center;
     width: 95%;
+    margin-bottom: 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -36,9 +37,19 @@
       }
     }
 
+    .clear-and-paginator {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      button {
+        margin-left: 8px;
+      }
+    }
+
     div.roasts-container {
       width: 100%;
-      padding-bottom: 4rem;
       display: flex;
       justify-content: space-between;
       flex-flow: row wrap;
@@ -53,17 +64,6 @@
       @media (max-width: 1024px) {
         flex-direction: column;
         align-items: center;
-      }
-    }
-
-    .clear-and-paginator {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      button {
-        margin-left: 8px;
       }
     }
 
