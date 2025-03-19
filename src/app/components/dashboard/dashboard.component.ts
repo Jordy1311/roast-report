@@ -64,8 +64,8 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
           transform: 'translateY(100%)',
         }),
       ),
-      transition('show => hide', [animate('200ms ease-in')]),
-      transition('hide => show', [animate('100ms ease-out')]),
+      transition('show => hide', [animate('250ms ease-in')]),
+      transition('hide => show', [animate('150ms ease-out')]),
     ]),
   ],
   template: `
