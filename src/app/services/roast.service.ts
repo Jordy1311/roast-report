@@ -32,7 +32,7 @@ export class RoastService {
     });
   }
 
-  public getUsersRoasts(timeoutId: NodeJS.Timeout): void {
+  public getUsersRoasts(timeoutId?: string): void {
     this.requestingRoasts.set(true);
 
     this.http
