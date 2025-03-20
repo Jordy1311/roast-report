@@ -86,7 +86,7 @@ import { NZROASTERS } from '../../data';
               <mat-error>Please enter a roast name.</mat-error>
             </mat-form-field>
 
-            <mat-form-field class="is-fullwidth" appearance="outline">
+            <mat-form-field class="is-fullwidth roaster-input last-in-step" appearance="outline">
               <mat-label>Roaster</mat-label>
               <input
                 matInput
@@ -224,6 +224,7 @@ import { NZROASTERS } from '../../data';
             </mat-form-field>
 
             <app-star-rating
+              class="last-in-step"
               (valueChanged)="updateRating($event)"
               [rating]="
                 roastToUpdate && roastToUpdate.rating ? roastToUpdate.rating : 0
@@ -266,17 +267,11 @@ export class AddAmendRoastFormComponent implements OnInit {
   private dialogRef = inject(MatDialogRef<AddAmendRoastFormComponent>);
   protected roastToUpdate: Roast = inject(MAT_DIALOG_DATA);
 
-  private invalidRoast?: boolean;
-  private invalidRoaster?: boolean;
-
-  readonly nzRoasters = NZROASTERS;
+  private roasters = NZROASTERS;
   protected filteredNzRoasts!: Observable<string[]>; // initialised in ngOnInit
 
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   private announcer = inject(LiveAnnouncer);
-
-  private roastChangeSubscription!: Subscription;
-  private roasterChangeSubscription!: Subscription;
 
   protected roastFormData = new FormGroup({
     roast: new FormControl<string>('', {
@@ -300,6 +295,14 @@ export class AddAmendRoastFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.roastService.getDistinctRoasters().subscribe(
+      (distinctRoasters) => {
+        this.roasters = Array.from(
+          new Set([...this.roasters, ...distinctRoasters])
+        );
+      }
+    );
+
     if (this.isAnUpdate) {
       const temporaryRoastClone = structuredClone(this.roastToUpdate);
 
@@ -319,19 +322,6 @@ export class AddAmendRoastFormComponent implements OnInit {
       startWith(''),
       map((value) => this._filterAutoComplete(value || '')),
     );
-
-    // clears errors on form change
-    this.roastChangeSubscription = this.roast!.valueChanges.subscribe(
-      () => this.invalidRoast = undefined
-    );
-    this.roasterChangeSubscription = this.roaster!.valueChanges.subscribe(
-      () => this.invalidRoaster = undefined
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.roastChangeSubscription.unsubscribe();
-    this.roasterChangeSubscription.unsubscribe();
   }
 
   protected get isAnUpdate(): boolean {
@@ -368,12 +358,10 @@ export class AddAmendRoastFormComponent implements OnInit {
 
   protected createRoast(): void {
     if (this.roast?.errors) {
-      this.invalidRoast = true;
       return;
     }
 
     if (this.roaster?.errors) {
-      this.invalidRoaster = true;
       return;
     }
 
@@ -406,12 +394,10 @@ export class AddAmendRoastFormComponent implements OnInit {
 
   protected updateRoast(): void {
     if (this.roast?.errors) {
-      this.invalidRoast = true;
       return;
     }
 
     if (this.roaster?.errors) {
-      this.invalidRoaster = true;
       return;
     }
 
@@ -445,7 +431,7 @@ export class AddAmendRoastFormComponent implements OnInit {
   private _filterAutoComplete(value: string): string[] {
     const filterValue = value.toLocaleLowerCase();
 
-    const filtered = this.nzRoasters.filter((roaster) => {
+    const filtered = this.roasters.filter((roaster) => {
       return roaster.toLowerCase().includes(filterValue);
     });
 

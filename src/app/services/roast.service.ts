@@ -3,6 +3,7 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { Roast, NewRoast } from '../types/roast.type';
 import { API_URL } from '../variables';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -69,5 +70,9 @@ export class RoastService {
           currentRoasts.filter((roast) => roast._id !== id)
         )
       );
+  }
+
+  public getDistinctRoasters(): Observable<string[]> {
+    return this.http.get<string[]>(`${API_URL}/v1/roasts/roasters`);
   }
 }
