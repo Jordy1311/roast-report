@@ -90,7 +90,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   protected disableButton = false;
   protected displaySendingEmailButtonText = false
-  protected isServerSleeping = false;
 
   private authServiceLoginSubscription?: Subscription;
 
@@ -114,19 +113,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // assume so until we hear otherwise
-    this.isServerSleeping = true;
-
     // if we dont hear back in time provide feedback to user
     // we're waiting for the server to wake up
-    setTimeout(() => {
-      if (this.isServerSleeping) {
-        this.snackBar.open(
-          'Waking up server, please wait...',
-          'Sweet!',
-          this.SnackBarOptions
-        );
-      }
+    const uiFeedbackTimeoutId = setTimeout(() => {
+      this.snackBar.open(
+        'Waking up server, please wait...',
+        'Sweet!',
+        this.SnackBarOptions
+      );
     }, 3000);
 
     this.emailControl.disable();
@@ -138,7 +132,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.displaySendingEmailButtonText = false;
-          this.isServerSleeping = false;
+          clearTimeout(uiFeedbackTimeoutId);
 
           this.snackBar.open(
             'We\'ve emailed your login link!',
@@ -149,7 +143,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this.displaySendingEmailButtonText = false;
-          this.isServerSleeping = false;
+          clearTimeout(uiFeedbackTimeoutId);
 
           this.snackBar.open(
             'An error occurred, please refresh and try again.',

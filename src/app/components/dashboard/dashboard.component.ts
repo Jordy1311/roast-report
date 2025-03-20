@@ -203,19 +203,17 @@ export class DashboardComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.roastService.getUsersRoasts();
-
     // if we have been waiting for the request for some time
     // show the user some feedback
-    setTimeout(() => {
-      if (this.roastService.requestingRoasts()) {
-        this.snackBar.open(
-          'Waking up server, please wait...',
-          'Sweet!',
-          this.SnackBarOptions
-        );
-      }
+    const uiFeedbackTimeoutId = setTimeout(() => {
+      this.snackBar.open(
+        'Waking up server, please wait...',
+        'Sweet!',
+        this.SnackBarOptions
+      );
     }, 3000);
+
+    this.roastService.getUsersRoasts(uiFeedbackTimeoutId);
 
     const storedSortField = localStorage.getItem('sortField') as SortFields | '';
     if (storedSortField) {

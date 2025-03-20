@@ -32,13 +32,15 @@ export class RoastService {
     });
   }
 
-  public getUsersRoasts(): void {
+  public getUsersRoasts(timeoutId: NodeJS.Timeout): void {
     this.requestingRoasts.set(true);
 
     this.http
       .get<Roast[]>(`${API_URL}/v1/roasts`)
       .subscribe((roasts) => {
+        clearTimeout(timeoutId);
         this.requestingRoasts.set(false);
+
         return this.roastsSignal.set(roasts);
       });
   }
