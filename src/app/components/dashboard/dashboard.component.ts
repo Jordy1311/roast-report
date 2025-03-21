@@ -19,9 +19,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
+import { AlertService } from '../../services/alert.service';
 import { HeaderNavigationComponent } from '../header-navigation/header-navigation.component';
 import { Roast } from '../../types/roast.type';
 import { RoastService } from '../../services/roast.service';
@@ -137,12 +137,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
 export class DashboardComponent implements OnInit {
   protected roastService = inject(RoastService);
   private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar)
-
-  readonly SnackBarOptions: MatSnackBarConfig = {
-    verticalPosition: 'bottom',
-    horizontalPosition: 'center',
-  }
+  private alertService = inject(AlertService);
 
   readonly sortFields: { value: SortFields | '', viewValue: string }[] = [
     { value: '', viewValue: '-' },
@@ -206,11 +201,7 @@ export class DashboardComponent implements OnInit {
     // if we have been waiting for the request for some time
     // show the user some feedback
     const uiFeedbackTimeoutId = setTimeout(() => {
-      this.snackBar.open(
-        'Waking up server, please wait...',
-        'Sweet!',
-        this.SnackBarOptions
-      );
+      this.alertService.showOnly('Waking up server, please wait...');
     }, 3000);
 
     this.roastService.getUsersRoasts(uiFeedbackTimeoutId);

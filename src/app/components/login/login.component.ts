@@ -11,9 +11,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 import { AuthService } from '../../services/auth.service';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -81,12 +81,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
-  private snackBar = inject(MatSnackBar);
-
-  readonly SnackBarOptions: MatSnackBarConfig = {
-    verticalPosition: 'bottom',
-    horizontalPosition: 'center',
-  }
+  private alertService = inject(AlertService);
 
   protected disableButton = false;
   protected displaySendingEmailButtonText = false
@@ -116,11 +111,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // if we dont hear back in time provide feedback to user
     // we're waiting for the server to wake up
     const uiFeedbackTimeoutId = setTimeout(() => {
-      this.snackBar.open(
-        'Waking up server, please wait...',
-        'Sweet!',
-        this.SnackBarOptions
-      );
+      this.alertService.showOnly('Waking up server, please wait...');
     }, 3000);
 
     this.emailControl.disable();
@@ -134,10 +125,9 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.displaySendingEmailButtonText = false;
           clearTimeout(uiFeedbackTimeoutId);
 
-          this.snackBar.open(
+          this.alertService.showOnly(
             'We\'ve emailed your login link!',
             'Sweet!',
-            this.SnackBarOptions
           );
           return;
         },
@@ -145,10 +135,9 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.displaySendingEmailButtonText = false;
           clearTimeout(uiFeedbackTimeoutId);
 
-          this.snackBar.open(
+          this.alertService.showWithActionRefresh(
             'An error occurred, please refresh and try again.',
-            undefined,
-            this.SnackBarOptions
+            'Refresh'
           );
           return;
         },
