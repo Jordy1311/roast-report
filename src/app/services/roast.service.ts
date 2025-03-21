@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 
 import { AlertService } from './alert.service';
@@ -49,7 +49,10 @@ export class RoastService {
     });
   }
 
-  public updateRoast(roastId: string, updates: Partial<NewRoast>): Promise<void> {
+  public updateRoast(
+    roastId: string,
+    updates: Partial<NewRoast>
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
       this.http
         .patch<Roast>(`${API_URL}/v1/roasts/${roastId}`, updates)
@@ -96,17 +99,19 @@ export class RoastService {
     });
   }
 
-  private handleAndReject(err: any, reject: any): void {
+  private handleAndReject(
+    err: HttpErrorResponse,
+    reject: any
+  ): void {
     console.error(err);
 
     if (err.status === 401) {
       return this.authService.logout();
     }
 
-    const alertSubMessage = err.status ? `status: ${err.status}.` : 'please try again soon.';
-    const alertMessage = `Something went wrong, ${alertSubMessage}`;
-
-    this.alertService.showOnly(alertMessage);
+    this.alertService.showOnly(
+      'Something went wrong, please refresh and try again.'
+    );
 
     reject();
   }

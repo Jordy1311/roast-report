@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
 
+import { AlertService } from './alert.service';
 import { API_URL } from '../variables';
 
 export const accessTokenAddress = 'access_token';
@@ -11,26 +11,35 @@ export const accessTokenAddress = 'access_token';
 })
 export class AuthService {
   private http = inject(HttpClient);
+  private alertService = inject(AlertService);
 
-  requestLogin(email: string) {
-    return this.http
-      .post(`${API_URL}/v1/login`, { email })
-      .pipe(catchError((error) => this.handleError(error)));
+  public requestLogin(email: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(`${API_URL}/v1/login`, { email })
+        .subscribe({
+          next: () => resolve(),
+          error: (err) => this.handleAndReject(err, reject)
+        });
+    });
   }
 
-  storeToken(accessToken: string): void {
-    localStorage.setItem(accessTokenAddress, accessToken);
+  public confirmLogin(confirmationCode: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http
+        .post<{ accessToken: string; }>(
+          `${API_URL}/v1/login/confirm/${confirmationCode}`, {}
+        ).subscribe({
+          next: ({ accessToken }) => {
+            localStorage.setItem(accessTokenAddress, accessToken);
+            resolve();
+          },
+          error: (err) => this.handleAndReject(err, reject)
+        });
+    });
   }
 
-  confirmLogin(confirmationCode: string): Observable<{ accessToken: string }> {
-    return this.http
-      .post<{ accessToken: string; }>(
-        `${API_URL}/v1/login/confirm/${confirmationCode}`, {}
-      )
-      .pipe(catchError((error) => this.handleError(error)));
-  }
-
-  logout(): void {
+  public logout(): void {
     localStorage.removeItem(accessTokenAddress);
     location.reload();
   }
@@ -43,16 +52,13 @@ export class AuthService {
     return !this.isLoggedIn;
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // Client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      console.error(`Backend returned status code ${error.status}, body was: `, error.error);
-    }
-    return throwError(
-      () => new Error('Login failed. Please check your credentials or try again later.')
+  private handleAndReject(err: HttpErrorResponse, reject: any) {
+    console.error(err);
+
+    this.alertService.showOnly(
+      'Something went wrong, please refresh and try again.'
     );
+
+    reject();
   }
 }

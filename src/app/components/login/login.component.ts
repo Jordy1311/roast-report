@@ -1,11 +1,10 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   FormControl,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -78,15 +77,13 @@ import { AlertService } from '../../services/alert.service';
     </main>
   `,
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private alertService = inject(AlertService);
 
   protected disableButton = false;
   protected displaySendingEmailButtonText = false
-
-  private authServiceLoginSubscription?: Subscription;
 
   protected emailControl = new FormControl<string>('', {
     validators: [Validators.required, Validators.email],
@@ -97,10 +94,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.authService.isLoggedIn) {
       this.router.navigate(['/']);
     }
-  }
-
-  ngOnDestroy(): void {
-    this.authServiceLoginSubscription?.unsubscribe();
   }
 
   protected requestLogin(): void {
@@ -118,29 +111,20 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.disableButton = true;
     this.displaySendingEmailButtonText = true;
 
-    this.authServiceLoginSubscription = this.authService
+    this.authService
       .requestLogin(this.emailControl.value)
-      .subscribe({
-        next: () => {
-          this.displaySendingEmailButtonText = false;
-          clearTimeout(uiFeedbackTimeoutId);
+      .then(() => {
+        this.displaySendingEmailButtonText = false;
+        clearTimeout(uiFeedbackTimeoutId);
 
-          this.alertService.showOnly(
-            'We\'ve emailed your login link!',
-            'Sweet!',
-          );
-          return;
-        },
-        error: () => {
-          this.displaySendingEmailButtonText = false;
-          clearTimeout(uiFeedbackTimeoutId);
-
-          this.alertService.showWithActionRefresh(
-            'An error occurred, please refresh and try again.',
-            'Refresh'
-          );
-          return;
-        },
+        this.alertService.showOnly(
+          'We\'ve emailed your login link!',
+          'Sweet!',
+        );
+      })
+      .catch(() => {
+        this.displaySendingEmailButtonText = false;
+        clearTimeout(uiFeedbackTimeoutId);
       });
   }
 }
