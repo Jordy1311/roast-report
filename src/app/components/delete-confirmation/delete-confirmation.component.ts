@@ -51,7 +51,8 @@ export class DeleteConfirmationComponent {
   }
 
   deleteRoast(id: string): void {
-    this.roastService.deleteRoast(id);
-    this.dialogRef.close();
+    this.roastService.deleteRoast(id).then(
+      () => this.dialogRef.close()
+    );
   }
 }

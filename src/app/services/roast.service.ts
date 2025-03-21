@@ -1,80 +1,113 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 
+import { AlertService } from './alert.service';
+import { AuthService } from './auth.service';
 import { Roast, NewRoast } from '../types/roast.type';
 import { API_URL } from '../variables';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoastService {
   private http = inject(HttpClient);
+  private authService = inject(AuthService);
+  private alertService = inject(AlertService);
 
   public roastsSignal = signal<Roast[]>([]);
-  public requestingRoasts = signal<boolean>(false);
 
   public createRoast(newRoast: NewRoast): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.http.post<Roast>(`${API_URL}/v1/roasts`, newRoast).subscribe({
-        next: (newRoastObject) => {
-          this.roastsSignal.update((currentRoasts) => [
-            ...currentRoasts,
-            newRoastObject,
-          ]);
-          resolve();
-        },
-        error: (err) => {
-          console.log(err);
-          reject();
-        },
-      });
+      this.http
+        .post<Roast>(`${API_URL}/v1/roasts`, newRoast)
+        .subscribe({
+          next: (newRoastObject) => {
+            this.roastsSignal.update((currentRoasts) => [
+              ...currentRoasts,
+              newRoastObject,
+            ]);
+
+            resolve();
+          },
+          error: (err) => this.handleAndReject(err, reject),
+        });
     });
   }
 
-  public getUsersRoasts(timeoutId?: number): void {
-    this.requestingRoasts.set(true);
+  public getUsersRoasts(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http
+        .get<Roast[]>(`${API_URL}/v1/roasts`)
+        .subscribe({
+          next: (roasts) => {
+            this.roastsSignal.set(roasts);
 
-    this.http
-      .get<Roast[]>(`${API_URL}/v1/roasts`)
-      .subscribe((roasts) => {
-        clearTimeout(timeoutId);
-        this.requestingRoasts.set(false);
-
-        return this.roastsSignal.set(roasts);
-      });
+            resolve();
+          },
+          error: (err) => this.handleAndReject(err, reject),
+        });
+    });
   }
 
   public updateRoast(roastId: string, updates: Partial<NewRoast>): Promise<void> {
     return new Promise((resolve, reject) => {
       this.http
         .patch<Roast>(`${API_URL}/v1/roasts/${roastId}`, updates)
-        .subscribe((updatedRoastObject) => {
-          const roasts = this.roastsSignal();
-          const indexOfUpdatedRoast = roasts.findIndex(
-            (roast) => roast._id === updatedRoastObject._id
-          );
+        .subscribe({
+          next: (updatedRoastObject) => {
+            const roasts = this.roastsSignal();
+            const indexOfUpdatedRoast = roasts.findIndex(
+              (roast) => roast._id === updatedRoastObject._id
+            );
 
-          roasts[indexOfUpdatedRoast] = updatedRoastObject;
+            roasts[ indexOfUpdatedRoast ] = updatedRoastObject;
 
-          this.roastsSignal.set([ ...roasts ]);
+            this.roastsSignal.set([ ...roasts ]);
 
-          resolve();
+            resolve();
+          },
+          error: (err) => this.handleAndReject(err, reject),
         });
     });
   }
 
-  public deleteRoast(id: string): void {
-    this.http
-      .delete(`${API_URL}/v1/roasts/${id}`)
-      .subscribe(() =>
-        this.roastsSignal.update((currentRoasts) =>
-          currentRoasts.filter((roast) => roast._id !== id)
-        )
-      );
+  public deleteRoast(id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http
+        .delete(`${API_URL}/v1/roasts/${id}`)
+        .subscribe({
+          next: () => {
+            this.roastsSignal.update((currentRoasts) =>
+              currentRoasts.filter((roast) => roast._id !== id)
+            ),
+
+              resolve();
+          },
+          error: (err) => this.handleAndReject(err, reject),
+        });
+    });
   }
 
-  public getDistinctRoasters(): Observable<string[]> {
-    return this.http.get<string[]>(`${API_URL}/v1/roasts/roasters`);
+  public getDistinctRoasters(): Promise<string[]> {
+    return new Promise((resolve, _reject) => {
+      this.http
+        .get<string[]>(`${API_URL}/v1/roasts/roasters`)
+        .subscribe({ next: (distinctRoasters) => resolve(distinctRoasters) });
+    });
+  }
+
+  private handleAndReject(err: any, reject: any): void {
+    console.error(err);
+
+    if (err.status === 401) {
+      return this.authService.logout();
+    }
+
+    const alertSubMessage = err.status ? `status: ${err.status}.` : 'please try again soon.';
+    const alertMessage = `Something went wrong, ${alertSubMessage}`;
+
+    this.alertService.showOnly(alertMessage);
+
+    reject();
   }
 }

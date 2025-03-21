@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { map, Observable, startWith, Subscription } from 'rxjs';
+import { map, Observable, startWith } from 'rxjs';
 import {
   FormControl,
   FormGroup,
@@ -295,12 +295,11 @@ export class AddAmendRoastFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.roastService.getDistinctRoasters().subscribe(
-      (distinctRoasters) => {
-        this.roasters = Array.from(
-          new Set([...this.roasters, ...distinctRoasters])
-        );
-      }
+    // not worried about any errors - nice to have not need to have
+    this.roastService.getDistinctRoasters().then(
+      (distinctRoasters) => this.roasters = Array.from(
+        new Set([ ...this.roasters, ...distinctRoasters ])
+      )
     );
 
     if (this.isAnUpdate) {
@@ -385,10 +384,9 @@ export class AddAmendRoastFormComponent implements OnInit {
         notes,
       };
 
-      this.roastService
-        .createRoast(roastFormData)
-        .then(() => this.closeDialog())
-        .catch(() => console.log('Form says there was error!'));
+      this.roastService.createRoast(roastFormData).then(
+        () => this.closeDialog()
+      );
     }
   }
 
@@ -421,10 +419,8 @@ export class AddAmendRoastFormComponent implements OnInit {
         notes,
       };
 
-      this.roastService
-        .updateRoast(this.roastToUpdate._id, updateRoastFormData)
-        .then(() => this.closeDialog())
-        .catch(() => console.log('Form says there was error!'));
+      this.roastService.updateRoast(this.roastToUpdate._id, updateRoastFormData)
+        .then(() => this.closeDialog());
     }
   }
 

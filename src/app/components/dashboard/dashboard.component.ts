@@ -114,7 +114,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
         @for (roast of roastsSlicedByPaginator(); track roast._id) {
           <app-roast-summary [roast]="roast"></app-roast-summary>
         }
-        @if (roastService.requestingRoasts()) {
+        @if (requestingRoasts) {
           <mat-spinner [diameter]="32"></mat-spinner>
         }
       </div>
@@ -123,7 +123,7 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
         (click)="openAddRoastDialog($event)"
         mat-fab extended
         class="add-roast"
-        [@showHide]="isAddButtonHidden || roastService.requestingRoasts() ? 'hide' : 'show'"
+        [@showHide]="isAddButtonHidden || requestingRoasts ? 'hide' : 'show'"
         aria-label="Add coffee"
       >
         <span>{{ isMobileDevice() ? 'Add' : 'Add a coffee' }}</span>
@@ -157,6 +157,7 @@ export class DashboardComponent implements OnInit {
   protected pageSize = signal(10);
 
   protected isAddButtonHidden = false;
+  protected requestingRoasts = false;
   private lastScrollTop = 0;
 
   protected roastsWithSearchSort: Signal<Roast[]> = computed(() => {
@@ -204,7 +205,13 @@ export class DashboardComponent implements OnInit {
       this.alertService.showOnly('Waking up server, please wait...');
     }, 3000);
 
-    this.roastService.getUsersRoasts(uiFeedbackTimeoutId);
+    this.requestingRoasts = true;
+    this.roastService.getUsersRoasts()
+      .then(() => {
+        this.requestingRoasts = false;
+        clearTimeout(uiFeedbackTimeoutId);
+      })
+      .catch(() => clearTimeout(uiFeedbackTimeoutId));
 
     const storedSortField = localStorage.getItem('sortField') as SortFields | '';
     if (storedSortField) {
