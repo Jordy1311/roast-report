@@ -56,7 +56,7 @@ export class AuthService {
     console.error(err);
 
     this.alertService.showOnly(
-      'Something went wrong, please refresh and try again.'
+      'Something went wrong, refresh and try again.'
     );
 
     reject();
