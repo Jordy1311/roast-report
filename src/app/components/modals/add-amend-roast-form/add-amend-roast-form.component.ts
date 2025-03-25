@@ -31,14 +31,14 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 
-import { StarRatingComponent } from '../star-rating/star-rating.component';
-import { RoastService } from '../../services/roast.service';
+import { StarRatingComponent } from '../../star-rating/star-rating.component';
+import { RoastService } from '../../../services/roast.service';
 import {
   Roast,
   RoastCompositions,
   RoastProcessMethods,
-} from '../../types/roast.type';
-import { NZROASTERS } from '../../data';
+} from '../../../types/roast.type';
+import { NZROASTERS } from '../../../data';
 
 /*
   TODO:

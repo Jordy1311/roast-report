@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { LogoutConfirmationComponent } from '../logout-confirmation/logout-confirmation.component';
+import { LogoutConfirmationComponent } from '../modals/logout-confirmation/logout-confirmation.component';
 
 @Component({
   selector: 'app-header-navigation',

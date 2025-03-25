@@ -8,8 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { Roast } from '../../types/roast.type';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
-import { DeleteConfirmationComponent } from '../delete-confirmation/delete-confirmation.component';
-import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
+import { DeleteConfirmationComponent } from '../modals/delete-confirmation/delete-confirmation.component';
+import { AddAmendRoastFormComponent } from '../modals/add-amend-roast-form/add-amend-roast-form.component';
 
 @Component({
   selector: 'app-roast-summary',

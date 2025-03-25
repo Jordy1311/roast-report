@@ -10,7 +10,7 @@ import {
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
-import { RoastService } from '../../services/roast.service';
+import { RoastService } from '../../../services/roast.service';
 
 @Component({
   selector: 'app-delete-confirmation',

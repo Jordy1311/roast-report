@@ -20,7 +20,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 
-import { AddAmendRoastFormComponent } from '../add-amend-roast-form/add-amend-roast-form.component';
+import { AddAmendRoastFormComponent } from '../modals/add-amend-roast-form/add-amend-roast-form.component';
 import { AlertService } from '../../services/alert.service';
 import { HeaderNavigationComponent } from '../header-navigation/header-navigation.component';
 import { Roast } from '../../types/roast.type';
