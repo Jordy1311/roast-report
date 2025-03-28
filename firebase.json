@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "roastreport",
-    "public": "/dist/browser",
+    "public": "dist/browser/",
     "ignore": [
       "firebase.json",
       "**/.*",
