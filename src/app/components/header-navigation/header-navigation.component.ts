@@ -35,7 +35,7 @@ import { LogoutConfirmationComponent } from '../modals/logout-confirmation/logou
           color="primary"
           aria-label="Log out"
         >
-          <mat-icon class="material-symbols-rounded"> logout </mat-icon>
+          <mat-icon class="material-symbols-rounded">logout</mat-icon>
         </button>
       </mat-toolbar>
     </nav>

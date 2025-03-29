@@ -19,7 +19,10 @@ import { MatInputModule } from '@angular/material/input';
   template: `
     <mat-form-field appearance="outline">
       <mat-label>Search</mat-label>
-      <mat-icon matPrefix>search</mat-icon>
+      <mat-icon
+        class="material-symbols-rounded"
+        matPrefix
+      >search</mat-icon>
 
       <input
         matInput
@@ -36,7 +39,7 @@ import { MatInputModule } from '@angular/material/input';
           aria-label="Clear"
           (click)="newValue.emit('')"
         >
-          <mat-icon>close</mat-icon>
+          <mat-icon class="material-symbols-rounded">close</mat-icon>
         </button>
       }
     </mat-form-field>
