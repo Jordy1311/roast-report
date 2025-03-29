@@ -1,6 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 
-import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
+import {
+  MatSnackBarConfig,
+  MatSnackBar,
+  MatSnackBarRef,
+  TextOnlySnackBar,
+} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +21,8 @@ export class AlertService {
   public showOnly(
     message: string,
     dismissText?: string
-  ): void {
-    this.snackbar.open(
+  ): MatSnackBarRef<TextOnlySnackBar> {
+    return this.snackbar.open(
       message, dismissText, this.SnackBarOptions
     );
   }
@@ -25,7 +30,7 @@ export class AlertService {
   public showWithActionRefresh(
     message: string,
     dismissText: string
-  ): void {
+  ): MatSnackBarRef<TextOnlySnackBar> {
     const snackbarRef = this.snackbar.open(
       message, dismissText, this.SnackBarOptions
     );
@@ -33,5 +38,7 @@ export class AlertService {
     snackbarRef.onAction().subscribe(() => {
       location.reload();
     });
+
+    return snackbarRef;
   }
 }

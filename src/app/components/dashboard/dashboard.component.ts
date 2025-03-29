@@ -19,6 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 
 import { AddAmendRoastFormComponent } from '../modals/add-amend-roast-form/add-amend-roast-form.component';
 import { AlertService } from '../../services/alert.service';
@@ -207,14 +208,20 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     // if we have been waiting for the request for some time
     // show the user some feedback
+    let alertReference: MatSnackBarRef<TextOnlySnackBar>;
     const uiFeedbackTimeoutId = setTimeout(() => {
-      this.alertService.showOnly('Waking up server, please wait...');
+      alertReference = this.alertService.showOnly('Waking up server, please wait...');
     }, 3000);
 
     this.requestingRoasts = true;
     this.roastService.getUsersRoasts()
       .then(() => {
         this.requestingRoasts = false;
+
+        if (alertReference) {
+          alertReference.dismiss();
+        }
+
         clearTimeout(uiFeedbackTimeoutId);
       })
       .catch(() => clearTimeout(uiFeedbackTimeoutId));
