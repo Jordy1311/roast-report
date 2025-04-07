@@ -1,13 +1,13 @@
 :host {
   height: 100vh;
-  width: 100vw;
   display: grid;
   align-items: center;
   justify-content: center;
 
   main {
-    width: 90%;
+    width: 40vw;
     max-width: 400px;
+    min-width: 300px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -27,13 +27,6 @@
       img {
         @media (prefers-color-scheme: dark) {
           filter: invert(1);
-        }
-      }
-
-      /* small screen and below */
-      @media (max-width: 325px) {
-        img {
-          display: none;
         }
       }
     }
