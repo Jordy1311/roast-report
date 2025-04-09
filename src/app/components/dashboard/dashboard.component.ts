@@ -54,10 +54,6 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
         style({
           opacity: 1,
           transform: 'translateY(0)',
-          '-webkit-transform': 'translateY(0)',
-          '-moz-transform': 'translateY(0)',
-          '-ms-transform': 'translateY(0)',
-          '-o-transform': 'translateY(0)',
         }),
       ),
       state(
@@ -65,10 +61,6 @@ type SortFields = 'name' | 'roaster' | 'rating' | 'oldestToNewest' | 'recentlyUp
         style({
           opacity: 0,
           transform: 'translateY(100%)',
-          '-webkit-transform': 'translateY(100%)',
-          '-moz-transform': 'translateY(100%)',
-          '-ms-transform': 'translateY(100%)',
-          '-o-transform': 'translateY(100%)',
         }),
       ),
       transition('show => hide', [animate('250ms ease-in')]),
@@ -241,6 +233,7 @@ export class DashboardComponent implements OnInit {
 
     window.addEventListener('scroll', () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
       this.isAddButtonHidden = scrollTop > this.lastScrollTop;
       this.lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
     });
